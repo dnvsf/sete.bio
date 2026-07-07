@@ -1,7 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { getPartner } from "@/data/partners";
-import { eventsByPartner } from "@/data/events";
+import { eventsByPartner, type Event } from "@/data/events";
 import { EventCard } from "@/components/site/EventCard";
 import { SectionDivider } from "@/components/site/SectionDivider";
 import { RippleButton } from "@/components/site/RippleButton";
@@ -96,7 +96,7 @@ function PartnerPage() {
           </div>
         ) : (
           <div className="grid gap-3">
-            {events.map((e, i) => (
+            {events.map((e: Event, i: number) => (
               <EventCard key={e.id} event={e} index={i} />
             ))}
           </div>
