@@ -12,7 +12,7 @@ import { SectionDivider } from "@/components/site/SectionDivider";
 import { EventCard } from "@/components/site/EventCard";
 import { RippleButton } from "@/components/site/RippleButton";
 import { InstagramIcon, TikTokIcon, YouTubeIcon } from "@/components/site/icons";
-import { eventsThisWeek } from "@/data/events";
+import { nextEvents } from "@/data/events";
 import { partners } from "@/data/partners";
 import { Link } from "@tanstack/react-router";
 
@@ -28,11 +28,7 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const [ytOpen, setYtOpen] = useState(false);
-  const week = eventsThisWeek();
-  const dias = ["Todos", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
-  const [filter, setFilter] = useState("Todos");
-  const map = { Seg: 1, Ter: 2, Qua: 3, Qui: 4, Sex: 5, Sáb: 6, Dom: 0 } as Record<string, number>;
-  const filtered = filter === "Todos" ? week : week.filter((e) => new Date(e.date).getDay() === map[filter]);
+  const upcoming = nextEvents(6);
 
   return (
     <div className="relative min-h-screen grain">
@@ -48,19 +44,11 @@ function Home() {
           style={{ objectPosition: "center" }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
-        <motion.div
-          initial={{ opacity: 0, scale: 1.05 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2 }}
-          className="absolute right-4 top-4 select-none sm:right-10 sm:top-6"
-        >
-          <SevenGlyph size={140} outline />
-        </motion.div>
       </div>
 
       {/* Container */}
       <div className="relative mx-auto max-w-xl px-4 pb-24">
-        {/* Avatar - metade sobre a capa */}
+        {/* Avatar */}
         <div className="-mt-16 flex justify-center sm:-mt-20">
           <motion.div
             initial={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -92,7 +80,6 @@ function Home() {
             Sete
             <span className="ml-1 text-accent-red-glow">.</span>
           </h1>
-          <div className="mono mt-1 text-xs text-muted-foreground">@setexxl · sete.bio</div>
         </motion.div>
 
         {/* Twitch card */}
@@ -128,34 +115,19 @@ function Home() {
         <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} />
 
         {/* EVENTOS */}
-        <SectionDivider label="Rolês da semana" />
+        <SectionDivider label="Próximos rolês" />
 
-        <div className="mb-4 flex flex-wrap gap-2">
-          {dias.map((d) => (
-            <button
-              key={d}
-              onClick={() => setFilter(d)}
-              className={`rounded-full border px-3 py-1 text-xs uppercase tracking-wider transition ${
-                filter === d
-                  ? "border-accent-red-glow bg-accent-red/20 text-foreground"
-                  : "border-white/10 text-muted-foreground hover:border-white/25"
-              }`}
-            >
-              {d}
-            </button>
-          ))}
-        </div>
-
-        {filtered.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 py-12 text-center text-muted-foreground">
-            <SevenGlyph size={64} outline />
-            <div className="text-sm">
-              {filter === "Todos" ? "Semana livre. Volte em breve." : "Nada nesse dia."}
+        {upcoming.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 py-10 text-center text-muted-foreground">
+            <SevenGlyph size={56} outline />
+            <div className="text-sm">Nenhum rolê confirmado ainda.</div>
+            <div className="mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
+              em breve
             </div>
           </div>
         ) : (
           <div className="grid gap-3">
-            {filtered.map((e, i) => (
+            {upcoming.map((e, i) => (
               <EventCard key={e.id} event={e} index={i} />
             ))}
           </div>
@@ -163,20 +135,27 @@ function Home() {
 
         {/* PARCEIROS */}
         <SectionDivider label="Casas parceiras" />
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {partners.map((p) => (
-            <Link
-              key={p.slug}
-              to="/$slug"
-              params={{ slug: p.slug }}
-              className="hover-red-border group flex flex-col items-start gap-1 rounded-2xl border border-white/8 bg-card/50 p-4"
-            >
-              <div className="text-lg font-bold tracking-tight">{p.name}</div>
-              <div className="mono text-[10px] uppercase text-muted-foreground">/{p.slug}</div>
-              <div className="mt-1 text-xs text-muted-foreground">{p.city}</div>
-            </Link>
-          ))}
-        </div>
+        {partners.length === 0 ? (
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 py-10 text-center text-muted-foreground">
+            <SevenGlyph size={56} outline />
+            <div className="text-sm">Em breve.</div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {partners.map((p) => (
+              <Link
+                key={p.slug}
+                to="/$slug"
+                params={{ slug: p.slug }}
+                className="hover-red-border group flex flex-col items-start gap-1 rounded-2xl border border-white/8 bg-card/50 p-4"
+              >
+                <div className="text-lg font-bold tracking-tight">{p.name}</div>
+                <div className="mono text-[10px] uppercase text-muted-foreground">/{p.slug}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{p.city}</div>
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* CONTATO */}
         <SectionDivider label="Business" />
@@ -216,13 +195,6 @@ function Home() {
             </div>
           </div>
         </div>
-
-        {/* footer */}
-        <footer className="mt-16 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-          <span className="mono">sete.bio</span>
-          <SevenGlyph size={14} />
-          <span className="mono">{new Date().getFullYear()}</span>
-        </footer>
       </div>
     </div>
   );
