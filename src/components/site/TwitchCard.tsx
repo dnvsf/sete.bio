@@ -26,16 +26,9 @@ export function TwitchCard() {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: 0.1 }}
-      className="hover-red-border group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm"
-      style={{
-        // recorte circular à direita para o badge On/Off
-        WebkitMaskImage:
-          "radial-gradient(circle 26px at calc(100% - 28px) 50%, transparent 26px, #000 27px)",
-        maskImage:
-          "radial-gradient(circle 26px at calc(100% - 28px) 50%, transparent 26px, #000 27px)",
-      }}
+      className="hover-red-border group relative block rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm"
     >
-      <div className="flex items-center gap-4 p-5 pr-20">
+      <div className="flex items-center gap-4 p-5 pr-24">
         <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[oklch(0.28_0.14_290)] text-white">
           <TwitchIcon size={26} />
         </div>
