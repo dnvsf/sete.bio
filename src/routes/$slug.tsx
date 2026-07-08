@@ -7,6 +7,8 @@ import { SectionDivider } from "@/components/site/SectionDivider";
 import { RippleButton } from "@/components/site/RippleButton";
 import { BackgroundSevens, SevenGlyph } from "@/components/site/SevenGlyph";
 import { CursorGlow } from "@/components/site/CursorGlow";
+import { AuroraBackground } from "@/components/site/AuroraBackground";
+import { SplitText } from "@/components/site/SplitText";
 import { InstagramIcon } from "@/components/site/icons";
 
 export const Route = createFileRoute("/$slug")({
@@ -30,7 +32,9 @@ export const Route = createFileRoute("/$slug")({
   component: PartnerPage,
   notFoundComponent: () => (
     <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-4 px-4 text-center">
-      <SevenGlyph size={140} outline />
+      <span className="animate-seven-respire inline-block">
+        <SevenGlyph size={140} outline />
+      </span>
       <div className="text-xl font-bold">Parceiro não encontrado</div>
       <Link to="/" className="mono text-xs text-accent-red-glow underline">
         voltar para sete.bio
@@ -44,6 +48,7 @@ function PartnerPage() {
 
   return (
     <div className="relative min-h-screen grain">
+      <AuroraBackground />
       <BackgroundSevens />
       <CursorGlow />
 
@@ -56,15 +61,17 @@ function PartnerPage() {
         </Link>
 
         <motion.header
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.7 }}
           className="mt-6"
         >
           <div className="mono text-[10px] uppercase tracking-widest text-accent-red-glow">
             Sete × parceiro
           </div>
-          <h1 className="mt-1 text-5xl font-bold tracking-tight">{partner.name}</h1>
+          <h1 className="mt-1 text-5xl font-bold tracking-tight">
+            <SplitText text={partner.name} />
+          </h1>
           <p className="mt-2 text-sm text-muted-foreground">{partner.tagline}</p>
           <div className="mono mt-1 text-xs text-muted-foreground">{partner.city}</div>
         </motion.header>
@@ -72,7 +79,7 @@ function PartnerPage() {
         <div className="mt-6 flex flex-wrap gap-3">
           <RippleButton
             onClick={() => window.open(partner.contactUrl, "_blank")}
-            className="red-border-glow rounded-xl bg-accent-red px-5 py-3 text-sm font-bold uppercase tracking-wider text-white"
+            className="red-border-glow animate-cta-pulse rounded-xl bg-accent-red px-5 py-3 text-sm font-bold uppercase tracking-wider text-white"
           >
             Comprar ingresso / lista
           </RippleButton>
@@ -91,7 +98,9 @@ function PartnerPage() {
 
         {events.length === 0 ? (
           <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 py-12 text-center text-muted-foreground">
-            <SevenGlyph size={56} outline />
+            <span className="animate-seven-respire inline-block">
+              <SevenGlyph size={56} outline />
+            </span>
             <div className="text-sm">Nenhum evento programado por aqui.</div>
           </div>
         ) : (
@@ -104,7 +113,9 @@ function PartnerPage() {
 
         <footer className="mt-16 flex items-center justify-center gap-2 text-xs text-muted-foreground">
           <span className="mono">sete.bio/{partner.slug}</span>
-          <SevenGlyph size={14} />
+          <span className="animate-seven-fade">
+            <SevenGlyph size={14} />
+          </span>
         </footer>
       </div>
     </div>
