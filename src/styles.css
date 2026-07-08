@@ -52,10 +52,7 @@
     -webkit-font-smoothing: antialiased;
   }
   body {
-    background:
-      radial-gradient(ellipse 80% 50% at 50% -10%, oklch(0.45 0.19 25 / 0.18), transparent 60%),
-      radial-gradient(ellipse 60% 40% at 90% 10%, oklch(0.62 0.24 25 / 0.08), transparent 60%),
-      var(--color-background);
+    background: var(--color-background);
     min-height: 100vh;
   }
   ::selection {
@@ -93,9 +90,9 @@
   0%, 100% { transform: translateY(0) rotate(-2deg); opacity: 0.06; }
   50% { transform: translateY(-8px) rotate(2deg); opacity: 0.12; }
 }
-@keyframes pulse-red {
-  0%, 100% { opacity: 0.5; box-shadow: 0 0 0 0 oklch(0.62 0.24 25 / 0.6); }
-  50% { opacity: 1; box-shadow: 0 0 0 6px oklch(0.62 0.24 25 / 0); }
+@keyframes seven-fade {
+  0%, 100% { opacity: 0.45; }
+  50% { opacity: 1; }
 }
 @keyframes border-sweep {
   0% { background-position: 0% 50%; }
@@ -109,11 +106,54 @@
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.5; transform: scale(0.85); }
 }
+@keyframes live-halo {
+  0% { box-shadow: 0 0 0 0 oklch(0.72 0.19 145 / 0.7), 0 0 20px oklch(0.72 0.19 145 / 0.6); }
+  100% { box-shadow: 0 0 0 14px oklch(0.72 0.19 145 / 0), 0 0 20px oklch(0.72 0.19 145 / 0.6); }
+}
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.62 0.24 25 / 0.55); }
+  50% { box-shadow: 0 0 0 10px oklch(0.62 0.24 25 / 0); }
+}
+@keyframes seven-respire {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+@keyframes aurora-a {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6vw, 4vh) scale(1.08); }
+}
+@keyframes aurora-b {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-5vw, -3vh) scale(1.1); }
+}
+@keyframes shimmer-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+@keyframes draw-line {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes ripple-expand {
+  from { width: 12px; height: 12px; opacity: 0.9; }
+  to { width: 380px; height: 380px; opacity: 0; }
+}
+@keyframes ripple-flash {
+  from { opacity: 0.35; }
+  to { opacity: 0; }
+}
 
 @utility animate-seven-float { animation: seven-float 6s ease-in-out infinite; }
-@utility animate-pulse-red { animation: pulse-red 2.4s ease-in-out infinite; }
+@utility animate-seven-fade { animation: seven-fade 2.4s ease-in-out infinite; }
 @utility animate-rise-in { animation: rise-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 @utility animate-live-dot { animation: live-dot 1.4s ease-in-out infinite; }
+@utility animate-live-halo { animation: live-halo 1.8s ease-out infinite; }
+@utility animate-cta-pulse { animation: cta-pulse 2.6s ease-out infinite; }
+@utility animate-seven-respire { animation: seven-respire 3.2s ease-in-out infinite; }
+@utility animate-aurora-a { animation: aurora-a 40s ease-in-out infinite; }
+@utility animate-aurora-b { animation: aurora-b 55s ease-in-out infinite; }
+@utility animate-shimmer-slide { animation: shimmer-slide 1.6s ease-in-out infinite; }
+@utility animate-draw-line { animation: draw-line 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 
 @utility hover-red-border {
   position: relative;
@@ -145,5 +185,13 @@
   &:hover::before {
     opacity: 1;
     animation: border-sweep 2.4s linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
