@@ -1,80 +1,111 @@
-# sete.bio — Plano de construção
+# Melhorias sete.bio — Rodada 3
 
-Link-in-bio pessoal do "Sete" (setexxl). Dark, futurista, animações slim inspiradas na Hostinger, detalhes vermelhos discretos, motivo gráfico do número **𝟕**. Sem cara de IA, sem visual Linktree.
+## 1. Sistema de URLs de parceiros (pronto para admin futuro)
 
-## Estilo visual (design system)
+Manter estrutura atual em `src/data/partners.ts` + rota `/$slug`, mas reforçar o contrato para o futuro admin plugar sem refatorar:
 
-- **Fundo**: preto profundo (`#08080A`) com camadas sutis de ruído/grain e um "aurora" vermelho muito discreto no topo.
-- **Vermelho de acento**: `#B00000` (do XXL enviado) + brilho `#FF2A2A` só em hover/foco/clique.
-- **Tipografia**:
-  - Display: **Space Grotesk** (títulos, nomes de plataformas).
-  - Mono/tag: **JetBrains Mono** (usernames tipo `/setexxl`, timestamps de eventos).
-  - Número 7 renderizado como glifo especial usando **`𝟕`** (Mathematical Bold) em blocos decorativos animados.
-- **Motion** (via `framer-motion` + CSS): borda animada gradient-conic vermelha em hover dos cards, cursor-glow discreto, número 7 flutuando em paralax leve no fundo, entrada com blur+fade+translate, ripple vermelho ao clicar.
-- **Cards**: cantos arredondados (16px), borda 1px `white/8`, glass sutil, "recorte" circular (mask CSS) para o indicador On/Off e para a foto de perfil sobre a capa.
+- Tipo `Partner` completo já com todos campos que o admin vai preencher: `slug, name, tagline, city, instagram, contactUrl, logoUrl?, accent?, active, order`.
+- Helpers: `getPartner(slug)`, `listActivePartners()`, `eventsByPartner(slug)`.
+- Rota `/$slug` já valida e cai em `notFound` — manter.
+- Documentar no topo de `partners.ts` que o admin vai substituir o array por uma fonte remota mais tarde, sem mudar a assinatura das funções.
+- Nenhuma UI muda agora (lista continua vazia com estado "em breve").
 
-## Estrutura da home (`/`)
+## 2. Seção Mediakit
 
-1. **Capa** full-width (imagem enviada `IMG_20260707_150116.jpg` — bloco XXL vermelho), com overlay gradient para o preto e um 𝟕 gigante em outline vermelho translúcido animando devagar.
-2. **Foto de perfil** quadrada, cantos arredondados, centralizada, sobreposta 50/50 entre capa e fundo, com borda grossa da cor do fundo (efeito "recorte"). Usa `IMG_20260707_150616.jpg`.
-3. **Nome "Sete"** + handle `@setexxl` em mono. Sem descrição.
-4. **Card destaque — Twitch** (largura total):
-   - Ícone Twitch + `Twitch/` (Space Grotesk bold, maior) + `setexxl` (mono, menor, opacity 70%).
-   - No lado direito, **recorte circular** (mask) com badge **On/Off** — verde `#22C55E` quando live, vermelho quando offline. Status busca a API pública da Twitch via server function (Helix `GET /streams?user_login=setexxl`) usando Client-ID/Secret guardados como secret; enquanto não houver secret, fica em Off estático (sem quebrar).
-   - Hover: borda animada vermelha percorre o card.
-5. **Mini-cards em linha** (Instagram, TikTok, YouTube):
-   - Grid 3 colunas mobile, ícone grande, `Rede/` + `setexxl` no mesmo padrão tipográfico.
-   - **YouTube** abre **modal customizado** com duas opções: **Canal Principal** (`setexxl`) e **Cortes** (`seteclipes`).
-6. **Divisor de seção** — linha fina com um `𝟕` central pulsando em vermelho discreto.
-7. **Seção Eventos (foco principal)**:
-   - Título "Próximos rolês" + subtítulo curto.
-   - Lista dos eventos da semana como cards horizontais: data (dia/mês grande em mono), nome do evento, casa/parceiro, cidade, botões **Lista (ganho comissão)** e **Ingresso**.
-   - Filtro por dia da semana (chips).
-   - Dados vêm de um arquivo estático `src/data/events.ts` (array tipado) — fácil de editar manualmente até termos admin.
-   - Se não houver evento na semana, estado vazio elegante com 𝟕 e "Semana livre. Volte em breve."
-8. **Seção Parceiros / Casas** — grid de logos-texto (SIDE, etc.) que linkam para `/[slug]` da casa.
-9. **Contato comercial** — card único: "Parcerias & mídia" → botão que abre DM do Instagram `@setexxl` (`https://ig.me/m/setexxl`).
-10. **Mediakit** — card com badge "Em breve", desabilitado mas visível.
-11. **Rodapé** minimalista: `sete.bio` + `𝟕` + ano.
+Substituir o card "em breve" por uma seção `Mediakit` real e navegável:
 
-## Rotas de parceiros — `/[slug]` (ex.: `/side`)
+- Nova rota `src/routes/mediakit.tsx` com head próprio.
+- Conteúdo inicial: bio curta, números (seguidores IG/TikTok/YT/Twitch — placeholders editáveis em `src/data/mediakit.ts`), público (faixa etária/gênero/regiões — placeholders), formatos disponíveis (stories, reels, vídeo dedicado, presença em evento), cases (vazio + estado "em breve"), CTA "Falar comercial" → DM Instagram.
+- Na home, o card `Mediakit` vira link real para `/mediakit` (sem o "7" grande no canto — versão slim: só título, subtítulo curto e seta).
 
-Página dedicada por casa/parceiro. Dados em `src/data/partners.ts` (slug → { nome, logo/cor, instagram, contatoIngresso (WhatsApp/DM), próximos eventos filtrados pelo slug }).
+## 3. Fundo e detalhes vermelhos
 
-Conteúdo:
-- Header com nome da casa e cor de destaque.
-- **Próximos eventos daquela casa** (mesmos cards da home, filtrados).
-- **Comprar ingresso / entrar na lista** — CTA grande vermelho com ripple.
-- **Contato** (WhatsApp/DM) + **Instagram da casa**.
-- Botão voltar para `sete.bio`.
+- Remover os dois `radial-gradient` vermelhos do `body` em `src/styles.css` — deixar fundo preto puro (`--background`) com apenas o grão.
+- Remover a sobreposição vermelha da capa (o `bg-gradient-to-b` fica, mas sem tom vermelho residual).
+- Manter vermelho apenas em: badge Live, borda animada em hover, pulso dos "7" das divisórias, botões de ação, ponto do nome "Sete.".
 
-Slug desconhecido → 404 customizado no estilo do site (𝟕 grande, "rota não encontrada").
+## 4. Divisor de seção mais slim
 
-## SEO / metadata
+- Remover o círculo pulsante ao redor do "7" nas divisórias (`animate-pulse-red` + `rounded-full` no wrapper).
+- Manter só o glifo `𝟕` dos dois lados, com um leve fade in/out (opacity keyframe) — sem halo.
 
-- `__root.tsx`: title `sete.bio — setexxl`, description curta, og:type website, twitter card.
-- `/`: og:image = foto de capa (assinada via `lovable-assets`).
-- `/[slug]`: title dinâmico `Sete × {Parceiro}`.
+## 5. Card Mediakit slim
 
-## Detalhes técnicos
+- Retirar o `𝟕` grande no canto inferior direito do card.
+- Layout minimal: label mono, título, uma linha de descrição, seta `→`.
 
-- **Stack**: TanStack Start já configurado. Sem Lovable Cloud (não pedido / desabilitado); dados de eventos e parceiros em arquivos TS versionados.
-- **Assets**: fotos enviadas viram pointers via `lovable-assets create` a partir de `/mnt/user-uploads/` → `src/assets/*.asset.json`.
-- **Rotas**:
-  - `src/routes/__root.tsx` (atualizar meta + fontes via `<link>` no head).
-  - `src/routes/index.tsx` (home).
-  - `src/routes/$slug.tsx` (páginas de parceiros).
-- **Componentes** em `src/components/site/`: `Cover`, `Avatar`, `TwitchCard`, `MiniSocialCard`, `YouTubeModal`, `SectionDivider`, `EventCard`, `EventsList`, `PartnersGrid`, `ContactCard`, `MediakitCard`, `Footer`, `SevenGlyph`, `AnimatedBorder`, `RippleButton`, `CursorGlow`.
-- **Dados iniciais**: 3–4 eventos placeholder + 1 parceiro exemplo (`side`) para o sistema já funcionar.
-- **Twitch live status**: server function `getTwitchLive.functions.ts`; se `TWITCH_CLIENT_ID`/`TWITCH_CLIENT_SECRET` ausentes → retorna `{ live: false }` sem erro. Podemos adicionar os secrets depois.
-- **Fontes**: Space Grotesk + JetBrains Mono via `<link>` no head do root (regra Tailwind v4 — nunca `@import` remoto no CSS).
-- **Tokens**: definir em `src/styles.css` (`--background`, `--accent-red`, `--accent-red-glow`, `--font-display`, `--font-mono`, radius, shadows vermelhas).
+## 6. Bateria de animações (foco principal)
 
-## O que fica para depois (avisado no site quando aplicável)
+Adicionar sem poluir. Tudo com `prefers-reduced-motion` respeitado.
 
-- Painel admin (outro projeto, como você disse).
-- Mediakit real (card já mostra "em breve").
-- Contato comercial multi-canal (por ora só DM Instagram).
-- Integração real com API de venda de ingressos (por ora link externo por evento).
+### Entrada da página (stagger)
+- Wrapper `<StaggerReveal>` (framer-motion) na home e na página de parceiro: capa → avatar → nome → twitch card → mini socials → divisórias → eventos → mediakit → contato entram em cascata com blur+translate+fade (150ms de gap).
 
-Ao aprovar, eu construo tudo de uma vez — home + rota de parceiro + dados exemplo + animações + assets — para o site já ficar navegável.
+### Escrita (typewriter/decode)
+- Nome "Sete." com efeito *scramble/decode* (letras aleatórias mono viram o texto final em ~600ms) uma vez no load.
+- Handles (@setexxl) com fade-in por caractere.
+- Labels das divisórias com efeito "split text" (cada letra sobe do baseline).
+
+### Twitch On/Off
+- Trocar o texto por ícone + label; quando `live=true`: badge pulsa (halo vermelho→verde expandindo), ícone com micro-shake sutil a cada 4s, borda do card ganha o sweep vermelho em loop lento.
+- Quando `off`: badge estático, sem halo, ícone em opacidade menor.
+- Transição entre estados animada (crossfade + scale).
+
+### Cards
+- Hover: leve `translateY(-2px)` + brilho interno sutil + borda sweep (já existe).
+- Tap/click: `whileTap` scale 0.98.
+- Aparição por scroll: `whileInView` com fade+blur+translate (once).
+
+### Cliques (ripple aprimorado)
+- `RippleButton` ganha ripple duplo (círculo vermelho expandindo + flash rápido) e um pequeno "kick" haptic-visual (scale 0.96 → 1.02 → 1).
+- Adicionar ripple também nos cards principais (Twitch, mini socials, mediakit) via wrapper.
+
+### Loading
+- Twitch: skeleton shimmer no badge enquanto `getTwitchLive` resolve (em vez de aparecer "Off" e depois "On").
+- Home: SSR já entrega tudo, mas adicionar shimmer nos cards de evento quando lista estiver populada e imagem/dado carregando.
+
+### Cursor & ambient
+- Manter `CursorGlow`.
+- Adicionar "aurora" muito sutil (2 blobs pretos/cinza escuro se movendo em ~40s no fundo) — SEM vermelho, para o fundo não ficar morto agora que os gradientes vermelhos saíram.
+- Trilhas leves nos "7" flutuantes (opacity oscillation já existe — adicionar micro-rotação e drift horizontal).
+
+### Sessões / divisórias
+- Ao entrar na viewport, a linha da divisória "desenha" (scaleX 0→1 do centro para as bordas, 500ms).
+- Os dois `𝟕` aparecem depois da linha (delay 200ms) com fade+scale.
+
+### Estados vazios
+- "Nenhum rolê confirmado ainda" — o `𝟕` outline respira (scale 1↔1.05, 3s loop).
+
+### Página de parceiro
+- Herói com título fazendo split-text reveal.
+- Botão CTA com pulso vermelho suave a cada 3s (atrai olho sem irritar).
+
+## 7. Arquivos afetados
+
+**Editar:**
+- `src/styles.css` — remover gradients vermelhos do body; adicionar keyframes (`shimmer`, `draw-line`, `letter-rise`, `scramble-cursor`, `aurora-drift`, `ripple-flash`); adicionar `prefers-reduced-motion` guard.
+- `src/components/site/SectionDivider.tsx` — remover halo pulsante; linha "desenhada" ao entrar em view; letras animadas.
+- `src/components/site/TwitchCard.tsx` — badge com halo/pulso quando live; skeleton loading; ícone com micro-shake; crossfade de estados.
+- `src/components/site/SevenGlyph.tsx` — adicionar micro drift/rotação; expor variante `respire`.
+- `src/components/site/RippleButton.tsx` — ripple duplo + kick scale.
+- `src/routes/index.tsx` — envolver seções em `whileInView` reveal; substituir card mediakit; usar novo componente de nome com scramble.
+- `src/routes/$slug.tsx` — split-text no título, pulso no CTA.
+- `src/routes/__root.tsx` — adicionar `<Outlet />` (já existe) + garantir head padrão.
+
+**Criar:**
+- `src/routes/mediakit.tsx` — página completa.
+- `src/data/mediakit.ts` — dados (bio, números, formatos).
+- `src/components/site/StaggerReveal.tsx` — wrapper de cascata na entrada.
+- `src/components/site/RevealOnView.tsx` — wrapper `whileInView` genérico.
+- `src/components/site/ScrambleText.tsx` — efeito decode no nome.
+- `src/components/site/SplitText.tsx` — letras subindo do baseline (usado em títulos e labels).
+- `src/components/site/AuroraBackground.tsx` — 2 blobs cinza sutis derivando.
+- `src/components/site/Shimmer.tsx` — skeleton reutilizável.
+
+## Notas técnicas
+
+- Todas animações usam `framer-motion` (já no projeto) — sem novas dependências.
+- `prefers-reduced-motion: reduce` desliga scramble, split-text, ripple flash, aurora drift; mantém apenas fades curtos.
+- `whileInView` com `viewport={{ once: true, margin: "-10%" }}` para não re-disparar.
+- Nenhuma mudança no backend / dados reais — apenas apresentação + rota nova de mediakit + data file.
+- Twitch server function permanece igual; só a UI ganha estados de loading/live.
