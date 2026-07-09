@@ -29,67 +29,66 @@ export function TwitchCard() {
       transition={{ duration: 0.6, delay: 0.1 }}
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.985 }}
-      className="hover-red-border group relative block rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm"
+      className="hover-red-border animate-card-pulse group relative block rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm"
     >
-      <div className="flex items-center gap-4 p-5 pr-24">
+      <div className="flex items-center gap-4 p-5">
         <motion.div
-          animate={
-            live
-              ? { rotate: [0, -3, 3, -2, 0] }
-              : { rotate: 0 }
-          }
+          animate={live ? { rotate: [0, -3, 3, -2, 0] } : { rotate: 0 }}
           transition={{ duration: 0.9, repeat: live ? Infinity : 0, repeatDelay: 4 }}
           className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[oklch(0.28_0.14_290)] text-white"
         >
           <TwitchIcon size={26} />
         </motion.div>
         <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-1 truncate">
-            <span className="text-xl font-bold tracking-tight">Twitch/</span>
-            <span className="mono truncate text-sm text-muted-foreground">setexxl</span>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xl font-bold tracking-tight">Twitch</span>
+            <span className="mono inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2 py-[2px] text-[10px] uppercase tracking-wider text-muted-foreground">
+              setexxl
+            </span>
           </div>
-          <div className="mt-1 text-xs uppercase tracking-widest text-muted-foreground/80">
-            {live === null ? "verificando…" : live ? "ao vivo agora" : "live streaming"}
+
+          {/* Status pill */}
+          <div className="mt-2">
+            <AnimatePresence mode="wait">
+              {live === null ? (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <Shimmer className="h-[22px] w-[92px]" rounded="rounded-full" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={live ? "on" : "off"}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}
+                  className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${live ? "animate-live-halo text-white" : ""}`}
+                  style={{
+                    background: live ? "oklch(0.55 0.22 25)" : "oklch(0.22 0.01 260)",
+                    border: live
+                      ? "1px solid oklch(0.62 0.24 25 / 0.6)"
+                      : "1px solid oklch(1 0 0 / 0.1)",
+                    color: live ? "white" : "oklch(0.7 0.01 260)",
+                  }}
+                >
+                  <span
+                    className={`inline-block h-1.5 w-1.5 rounded-full ${live ? "animate-live-dot" : ""}`}
+                    style={{ background: live ? "white" : "oklch(0.55 0.02 260)" }}
+                  />
+                  {live ? "Ao vivo" : "Offline"}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
-      </div>
 
-      <div className="absolute right-24 top-1/2 -translate-y-1/2 text-muted-foreground opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100">
-        →
-      </div>
-
-      {/* Badge On/Off */}
-      <div className="absolute right-[5px] top-1/2 -translate-y-1/2">
-        <AnimatePresence mode="wait">
-          {live === null ? (
-            <motion.div
-              key="loading"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Shimmer className="h-[46px] w-[46px]" rounded="rounded-full" />
-            </motion.div>
-          ) : (
-            <motion.div
-              key={live ? "on" : "off"}
-              initial={{ opacity: 0, scale: 0.7 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.7 }}
-              transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}
-              className={`flex h-[46px] w-[46px] items-center justify-center rounded-full text-[10px] font-bold uppercase tracking-wider text-white ${live ? "animate-live-halo" : ""}`}
-              style={{
-                background: live ? "oklch(0.72 0.19 145)" : "oklch(0.45 0.19 25)",
-                boxShadow: live
-                  ? undefined
-                  : "0 0 20px oklch(0.62 0.24 25 / 0.5)",
-              }}
-            >
-              <span className={live ? "animate-live-dot" : ""}>{live ? "On" : "Off"}</span>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <div className="ml-2 text-muted-foreground opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100">
+          →
+        </div>
       </div>
     </motion.a>
   );
