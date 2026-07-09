@@ -1,8 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { motion } from "framer-motion";
-import avatarAsset from "@/assets/avatar.jpg.asset.json";
-import coverAsset from "@/assets/cover.jpg.asset.json";
 import { BackgroundSevens, SevenGlyph } from "@/components/site/SevenGlyph";
 import { CursorGlow } from "@/components/site/CursorGlow";
 import { AuroraBackground } from "@/components/site/AuroraBackground";
@@ -21,13 +19,9 @@ import { Link } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: Home,
-  head: () => ({
-    meta: [
-      { property: "og:image", content: coverAsset.url },
-      { name: "twitter:image", content: coverAsset.url },
-    ],
-  }),
 });
+
+const led = (offset: string): CSSProperties => ({ ["--led-offset" as never]: offset });
 
 function Home() {
   const [ytOpen, setYtOpen] = useState(false);
@@ -40,85 +34,57 @@ function Home() {
       <BackgroundSevens />
       <CursorGlow />
 
-      {/* Capa */}
-      <motion.div
-        initial={{ opacity: 0, scale: 1.03 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.1, ease: [0.2, 0.7, 0.2, 1] }}
-        className="relative h-48 w-full overflow-hidden sm:h-64"
-      >
-        <img
-          src={coverAsset.url}
-          alt=""
-          className="h-full w-full object-cover"
-          style={{ objectPosition: "center" }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
-      </motion.div>
-
-      <div className="relative mx-auto max-w-xl px-4 pb-24">
-        {/* Avatar */}
-        <div className="-mt-16 flex justify-center sm:-mt-20">
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.9, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.2, 0.7, 0.2, 1] }}
-            className="relative"
-          >
-            <div
-              className="h-32 w-32 overflow-hidden rounded-3xl sm:h-36 sm:w-36"
-              style={{
-                border: "6px solid var(--background)",
-                boxShadow:
-                  "0 0 0 1px oklch(1 0 0 / 0.08), 0 20px 60px -20px oklch(0.62 0.24 25 / 0.4)",
-              }}
-            >
-              <img src={avatarAsset.url} alt="Sete" className="h-full w-full object-cover" />
-            </div>
-          </motion.div>
-        </div>
-
+      <div className="relative mx-auto max-w-xl px-4 pb-24 pt-20 sm:pt-28">
         {/* Nome */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-4 text-center"
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="text-center"
         >
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+          <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
             <ScrambleText text="Sete" duration={650} />
             <span className="ml-1 text-accent-red-glow">.</span>
           </h1>
+          <div className="mono mt-2 text-[10px] uppercase tracking-[0.35em] text-muted-foreground">
+            hub · sete.bio
+          </div>
         </motion.div>
 
         {/* Twitch card */}
-        <div className="mt-8">
+        <div className="mt-10" style={led("0s")}>
           <TwitchCard />
         </div>
 
         {/* Mini socials */}
         <div className="mt-3 grid grid-cols-3 gap-3">
-          <MiniSocialCard
-            label="Instagram"
-            handle="setexxl"
-            icon={<InstagramIcon size={28} />}
-            href="https://instagram.com/setexxl"
-            delay={0.15}
-          />
-          <MiniSocialCard
-            label="TikTok"
-            handle="setexxl"
-            icon={<TikTokIcon size={28} />}
-            href="https://tiktok.com/@setexxl"
-            delay={0.22}
-          />
-          <MiniSocialCard
-            label="YouTube"
-            handle="setexxl"
-            icon={<YouTubeIcon size={28} />}
-            onClick={() => setYtOpen(true)}
-            delay={0.29}
-          />
+          <div style={led("1.5s")}>
+            <MiniSocialCard
+              label="Instagram"
+              handle="setexxl"
+              icon={<InstagramIcon size={28} />}
+              href="https://instagram.com/setexxl"
+              delay={0.15}
+            />
+          </div>
+          <div style={led("3s")}>
+            <MiniSocialCard
+              label="TikTok"
+              handle="setexxl"
+              icon={<TikTokIcon size={28} />}
+              href="https://tiktok.com/@setexxl"
+              delay={0.22}
+            />
+          </div>
+          <div style={led("4.5s")}>
+            <MiniSocialCard
+              label="YouTube"
+              handle="setexxl"
+              icon={<YouTubeIcon size={28} />}
+              onClick={() => setYtOpen(true)}
+              delay={0.29}
+            />
+          </div>
         </div>
 
         <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} />
@@ -174,7 +140,7 @@ function Home() {
         {/* CONTATO */}
         <SectionDivider label="Business" />
         <div className="grid gap-3 sm:grid-cols-2">
-          <RevealOnView>
+          <RevealOnView style={led("0s")}>
             <a
               href="https://ig.me/m/setexxl"
               target="_blank"
@@ -197,7 +163,7 @@ function Home() {
             </a>
           </RevealOnView>
 
-          <RevealOnView delay={0.08}>
+          <RevealOnView delay={0.08} style={led("3s")}>
             <Link
               to="/mediakit"
               className="hover-red-border group flex h-full flex-col justify-between rounded-2xl border border-white/8 bg-card/60 p-5"

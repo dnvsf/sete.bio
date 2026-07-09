@@ -19,14 +19,20 @@ export function MiniSocialCard({
   const inner = (
     <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-white/8 bg-card/60 p-4 backdrop-blur-sm transition-colors group-hover:bg-card/80">
       <div className="text-foreground/90">{icon}</div>
-      <div className="text-center">
-        <div className="text-sm font-bold leading-tight">{label}/</div>
-        <div className="mono text-[10px] leading-tight text-muted-foreground">{handle}</div>
+      <div className="flex flex-col items-center gap-1 text-center">
+        <div className="text-sm font-bold leading-tight">{label}</div>
+        <span className="mono inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2 py-[2px] text-[9px] uppercase tracking-wider text-muted-foreground">
+          {handle}
+        </span>
       </div>
     </div>
   );
   const cls = "hover-red-border group block h-full rounded-2xl";
-  const anim = { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, transition: { delay, duration: 0.5 } };
+  const anim = {
+    initial: { opacity: 0, y: 10 },
+    animate: { opacity: 1, y: 0 },
+    transition: { delay, duration: 0.5 },
+  };
   if (href) {
     return (
       <motion.a href={href} target="_blank" rel="noreferrer" className={cls} {...anim}>
