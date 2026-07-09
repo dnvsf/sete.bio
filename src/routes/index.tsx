@@ -163,7 +163,7 @@ function Home() {
             </a>
           </RevealOnView>
 
-          <RevealOnView delay={0.08}>
+          <RevealOnView delay={0.08} style={led("3s")}>
             <Link
               to="/mediakit"
               className="hover-red-border group flex h-full flex-col justify-between rounded-2xl border border-white/8 bg-card/60 p-5"
