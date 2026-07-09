@@ -140,7 +140,7 @@ function Home() {
         {/* CONTATO */}
         <SectionDivider label="Business" />
         <div className="grid gap-3 sm:grid-cols-2">
-          <RevealOnView>
+          <RevealOnView style={led("0s")}>
             <a
               href="https://ig.me/m/setexxl"
               target="_blank"
