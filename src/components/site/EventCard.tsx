@@ -15,6 +15,7 @@ export function EventCard({ event, index = 0 }: { event: Event; index?: number }
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.06 }}
       className="hover-red-border rounded-2xl border border-white/8 bg-card/60 p-4 backdrop-blur-sm"
+      style={{ ["--led-offset" as never]: `${(index * 0.75) % 6}s` }}
     >
       <div className="flex gap-4">
         <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-white/10 bg-black/40 p-2 text-center">
