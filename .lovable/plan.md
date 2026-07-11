@@ -1,111 +1,148 @@
-# Melhorias sete.bio — Rodada 3
+## Objetivo
+Enxugar a home como hub (contatos no topo + cards de redes + Twitch), criar página pública de parceiro em `/[slug]` e ler os dados diretamente do Supabase do painel `adm.sete.bio` para que qualquer alteração no painel reflita aqui em tempo real.
 
-## 1. Sistema de URLs de parceiros (pronto para admin futuro)
+---
 
-Manter estrutura atual em `src/data/partners.ts` + rota `/$slug`, mas reforçar o contrato para o futuro admin plugar sem refatorar:
+## 1. Conexão com o Supabase do adm (pré-requisito)
 
-- Tipo `Partner` completo já com todos campos que o admin vai preencher: `slug, name, tagline, city, instagram, contactUrl, logoUrl?, accent?, active, order`.
-- Helpers: `getPartner(slug)`, `listActivePartners()`, `eventsByPartner(slug)`.
-- Rota `/$slug` já valida e cai em `notFound` — manter.
-- Documentar no topo de `partners.ts` que o admin vai substituir o array por uma fonte remota mais tarde, sem mudar a assinatura das funções.
-- Nenhuma UI muda agora (lista continua vazia com estado "em breve").
+O painel `adm.sete.bio` roda em Lovable Cloud e já tem as tabelas prontas (`partners`, `events`, `socials`, `site_settings`, `mediakit*`, `short_links`, `cards`, `sessions`). Este projeto (`sete.bio`) está com Lovable Cloud desativado, por isso as mudanças no adm não aparecem aqui hoje.
 
-## 2. Seção Mediakit
+Para sincronizar, preciso que você faça **uma** destas ações antes do build:
 
-Substituir o card "em breve" por uma seção `Mediakit` real e navegável:
+- **Opção A (recomendada, sem custo extra):** ative Lovable Cloud neste projeto e me diga o `Project ID` do Supabase do adm. Eu conecto o mesmo banco (mesmas chaves publishable) — leituras públicas caem nas policies `USING (is_active)` já criadas no adm.
+- **Opção B:** você me passa manualmente `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY` (e as versões server `SUPABASE_URL` / `SUPABASE_PUBLISHABLE_KEY`) do projeto Supabase do adm; eu salvo como secrets e uso do mesmo jeito.
 
-- Nova rota `src/routes/mediakit.tsx` com head próprio.
-- Conteúdo inicial: bio curta, números (seguidores IG/TikTok/YT/Twitch — placeholders editáveis em `src/data/mediakit.ts`), público (faixa etária/gênero/regiões — placeholders), formatos disponíveis (stories, reels, vídeo dedicado, presença em evento), cases (vazio + estado "em breve"), CTA "Falar comercial" → DM Instagram.
-- Na home, o card `Mediakit` vira link real para `/mediakit` (sem o "7" grande no canto — versão slim: só título, subtítulo curto e seta).
+Enquanto isso não acontecer, o site continua funcional com os mocks atuais e eu deixo a camada de fetch pronta para plugar (troca de 1 arquivo).
 
-## 3. Fundo e detalhes vermelhos
+---
 
-- Remover os dois `radial-gradient` vermelhos do `body` em `src/styles.css` — deixar fundo preto puro (`--background`) com apenas o grão.
-- Remover a sobreposição vermelha da capa (o `bg-gradient-to-b` fica, mas sem tom vermelho residual).
-- Manter vermelho apenas em: badge Live, borda animada em hover, pulso dos "7" das divisórias, botões de ação, ponto do nome "Sete.".
+## 2. Camada de dados (nova)
 
-## 4. Divisor de seção mais slim
+Criar `src/integrations/supabase/` (client publishable server + client browser) e `src/data/*.functions.ts` com server functions públicas (sem `requireSupabaseAuth`, usando client publishable com `SUPABASE_PUBLISHABLE_KEY`, que respeita as policies `TO anon` do adm):
 
-- Remover o círculo pulsante ao redor do "7" nas divisórias (`animate-pulse-red` + `rounded-full` no wrapper).
-- Manter só o glifo `𝟕` dos dois lados, com um leve fade in/out (opacity keyframe) — sem halo.
+- `getSiteSettings()` → `site_settings` (display_name, tagline_short, business_contact_url/label…)
+- `listSocials()` → `socials` ordenado por `position` (platform, handle, url, youtube_video_id)
+- `listActivePartners()` → `partners WHERE is_active`
+- `getPartnerBySlug(slug)` → `partners`
+- `listUpcomingEventsByPartner(partnerId)` → `events WHERE partner_id = ? AND date >= now() AND is_active`
+- `listShortLinks()` → `short_links` (para redirecionamento `/[slug]` quando slug for short_link, ver §5)
 
-## 5. Card Mediakit slim
+Cada função retorna DTO plano. Loaders chamam via TanStack Query (`ensureQueryData` + `useSuspenseQuery`). Remover `src/data/events.ts`, `src/data/partners.ts`, `src/data/mediakit.ts` (mocks) — não são mais usados.
 
-- Retirar o `𝟕` grande no canto inferior direito do card.
-- Layout minimal: label mono, título, uma linha de descrição, seta `→`.
+---
 
-## 6. Bateria de animações (foco principal)
+## 3. Home (`src/routes/index.tsx`) — reestruturação
 
-Adicionar sem poluir. Tudo com `prefers-reduced-motion` respeitado.
+Layout novo, de cima pra baixo:
 
-### Entrada da página (stagger)
-- Wrapper `<StaggerReveal>` (framer-motion) na home e na página de parceiro: capa → avatar → nome → twitch card → mini socials → divisórias → eventos → mediakit → contato entram em cascata com blur+translate+fade (150ms de gap).
+1. **Barra de contatos (topo)** — 3 pílulas com ícone + label curta, discretas, acima do "Sete.":
+   - `Email` → `mailto:fala@setexxl.com`
+   - `Direct` → `https://ig.me/m/setexxl`
+   - `WhatsApp` → `https://wa.me/5511939244516`
+   
+   Componente novo `TopContactBar.tsx` com micro-hover (borda LED sincronizada, ver §6). Ícones do lucide.
+2. **Título "Sete."** (mantém ScrambleText).
+3. **TwitchCard** — refinado (§4).
+4. **MiniSocialCards** (Instagram, TikTok, YouTube) — layout novo (§4).
+5. **Modal do YouTube** (mantém).
 
-### Escrita (typewriter/decode)
-- Nome "Sete." com efeito *scramble/decode* (letras aleatórias mono viram o texto final em ~600ms) uma vez no load.
-- Handles (@setexxl) com fade-in por caractere.
-- Labels das divisórias com efeito "split text" (cada letra sobe do baseline).
+**Removido da home:** seções "Próximos rolês", "Casas parceiras", "Business" (cards "Contato comercial" + "Mediakit"). O `Business` some porque os contatos foram para o topo; parceiros/eventos ficam acessíveis apenas via URL direta `/[slug]` (o painel controla a lista real).
 
-### Twitch On/Off
-- Trocar o texto por ícone + label; quando `live=true`: badge pulsa (halo vermelho→verde expandindo), ícone com micro-shake sutil a cada 4s, borda do card ganha o sweep vermelho em loop lento.
-- Quando `off`: badge estático, sem halo, ícone em opacidade menor.
-- Transição entre estados animada (crossfade + scale).
+---
 
-### Cards
-- Hover: leve `translateY(-2px)` + brilho interno sutil + borda sweep (já existe).
-- Tap/click: `whileTap` scale 0.98.
-- Aparição por scroll: `whileInView` com fade+blur+translate (once).
+## 4. Cards de rede — nova hierarquia (sem pílula)
 
-### Cliques (ripple aprimorado)
-- `RippleButton` ganha ripple duplo (círculo vermelho expandindo + flash rápido) e um pequeno "kick" haptic-visual (scale 0.96 → 1.02 → 1).
-- Adicionar ripple também nos cards principais (Twitch, mini socials, mediakit) via wrapper.
+Alterar `MiniSocialCard.tsx` e `TwitchCard.tsx` para o layout escolhido:
 
-### Loading
-- Twitch: skeleton shimmer no badge enquanto `getTwitchLive` resolve (em vez de aparecer "Off" e depois "On").
-- Home: SSR já entrega tudo, mas adicionar shimmer nos cards de evento quando lista estiver populada e imagem/dado carregando.
+**MiniSocialCard** (Instagram / TikTok / YouTube):
+- Ícone grande centralizado.
+- Nome da plataforma em bold, tamanho maior (destaque).
+- `@handle` pequeno, mono, cor `text-muted-foreground` logo abaixo — sem pílula, sem borda.
+- Vem de `listSocials()` filtrado por `platform`.
 
-### Cursor & ambient
-- Manter `CursorGlow`.
-- Adicionar "aurora" muito sutil (2 blobs pretos/cinza escuro se movendo em ~40s no fundo) — SEM vermelho, para o fundo não ficar morto agora que os gradientes vermelhos saíram.
-- Trilhas leves nos "7" flutuantes (opacity oscillation já existe — adicionar micro-rotação e drift horizontal).
+**TwitchCard**:
+- Ícone Twitch à esquerda.
+- Coluna central: "Twitch" em bold + `@setexxl` pequeno mono muted abaixo.
+- **Indicador de status à direita** (removida a pílula): um bloco vertical com dot + label ("AO VIVO" / "OFFLINE") — ocupa o canto direito do card.
+  - AO VIVO: cor `accent-red-glow`, dot com halo pulsante (`animate-live-halo`), texto em bold com leve shimmer.
+  - OFFLINE: cor `muted-foreground`, dot estático, texto discreto.
+  - Transição entre estados com `AnimatePresence` (crossfade + slide sutil da direita).
+- Loading (enquanto o server fn resolve): shimmer no lugar do indicador.
+- Card inteiro mantém pulse sutil (`animate-card-pulse`) e borda LED.
 
-### Sessões / divisórias
-- Ao entrar na viewport, a linha da divisória "desenha" (scaleX 0→1 do centro para as bordas, 500ms).
-- Os dois `𝟕` aparecem depois da linha (delay 200ms) com fade+scale.
+---
 
-### Estados vazios
-- "Nenhum rolê confirmado ainda" — o `𝟕` outline respira (scale 1↔1.05, 3s loop).
+## 5. Rota `/[slug]` — página pública de parceiro/redirect
 
-### Página de parceiro
-- Herói com título fazendo split-text reveal.
-- Botão CTA com pulso vermelho suave a cada 3s (atrai olho sem irritar).
+Reescrever `src/routes/$slug.tsx`:
 
-## 7. Arquivos afetados
+Loader (`ensureQueryData`):
+1. Tenta `short_links` primeiro. Se ativo → `throw redirect({ href: destination_url })` server-side + incrementa `clicks` (via server fn separada, fire-and-forget).
+2. Caso contrário busca `getPartnerBySlug(slug)`. Se não existir/inativo → `throw notFound()`.
+3. Se encontrar partner: também busca `listUpcomingEventsByPartner(partner.id)`.
 
-**Editar:**
-- `src/styles.css` — remover gradients vermelhos do body; adicionar keyframes (`shimmer`, `draw-line`, `letter-rise`, `scramble-cursor`, `aurora-drift`, `ripple-flash`); adicionar `prefers-reduced-motion` guard.
-- `src/components/site/SectionDivider.tsx` — remover halo pulsante; linha "desenhada" ao entrar em view; letras animadas.
-- `src/components/site/TwitchCard.tsx` — badge com halo/pulso quando live; skeleton loading; ícone com micro-shake; crossfade de estados.
-- `src/components/site/SevenGlyph.tsx` — adicionar micro drift/rotação; expor variante `respire`.
-- `src/components/site/RippleButton.tsx` — ripple duplo + kick scale.
-- `src/routes/index.tsx` — envolver seções em `whileInView` reveal; substituir card mediakit; usar novo componente de nome com scramble.
-- `src/routes/$slug.tsx` — split-text no título, pulso no CTA.
-- `src/routes/__root.tsx` — adicionar `<Outlet />` (já existe) + garantir head padrão.
+Renderiza:
+- Header do parceiro: nome (SplitText), tagline/bio, cidade.
+- **CTA fixo no topo**: botão único "Contato do parceiro" (usa `contact_url` do partner — WhatsApp/Instagram/qualquer URL) com estilo vermelho principal, animate-cta-pulse.
+- **Seção "Programação"**: lista de eventos (`EventCard` simplificado):
+  - Data em bloco esquerdo (mantém).
+  - Título + cidade.
+  - Único botão por evento: **"Entrar na lista"** → `list_url`. Remover o botão "Ingresso" (não pedido na v1).
+  - Se `list_url` estiver vazio, o card fica sem CTA (só informativo).
+- Estado vazio: bloco "Sem programação por enquanto" (mantém estilo atual com `SevenGlyph` respirando).
+- `head()` dinâmico: `Sete × {partner.name}`, description do partner.tagline, `og:image` = `partner.logo_url` se houver (absoluto).
 
-**Criar:**
-- `src/routes/mediakit.tsx` — página completa.
-- `src/data/mediakit.ts` — dados (bio, números, formatos).
-- `src/components/site/StaggerReveal.tsx` — wrapper de cascata na entrada.
-- `src/components/site/RevealOnView.tsx` — wrapper `whileInView` genérico.
-- `src/components/site/ScrambleText.tsx` — efeito decode no nome.
-- `src/components/site/SplitText.tsx` — letras subindo do baseline (usado em títulos e labels).
-- `src/components/site/AuroraBackground.tsx` — 2 blobs cinza sutis derivando.
-- `src/components/site/Shimmer.tsx` — skeleton reutilizável.
+---
 
-## Notas técnicas
+## 6. Borda "fita LED" — reação a scroll + hover
 
-- Todas animações usam `framer-motion` (já no projeto) — sem novas dependências.
-- `prefers-reduced-motion: reduce` desliga scramble, split-text, ripple flash, aurora drift; mantém apenas fades curtos.
-- `whileInView` com `viewport={{ once: true, margin: "-10%" }}` para não re-disparar.
-- Nenhuma mudança no backend / dados reais — apenas apresentação + rota nova de mediakit + data file.
-- Twitch server function permanece igual; só a UI ganha estados de loading/live.
+Ajustar `src/styles.css` (utility `.hover-red-border`) + criar hook `useScrollLedOffset()`:
+
+- Hoje cada card recebe `--led-offset` estático (por índice). Passar a atualizar `--led-offset` do container global via `requestAnimationFrame` conforme `window.scrollY` (velocidade lenta, ~0.02 * scroll), fazendo a "onda" percorrer todos os cards juntos quando o usuário rola.
+- No `:hover` de qualquer card, aumentar levemente a opacidade/velocidade da borda (via CSS custom prop `--led-intensity`) — efeito localmente, sem afetar os vizinhos.
+- Manter `prefers-reduced-motion` desligando o efeito.
+- Aplicar `.hover-red-border` em todos os novos cards (contatos topo, socials, Twitch, event cards da página do parceiro).
+
+---
+
+## 7. Metadata / SEO
+
+- `src/routes/__root.tsx`: manter title/description já ajustados; garantir que não haja `og:image` no root (já removido).
+- Home: `og:title` "sete.bio — hub", description curta.
+- `/[slug]`: como descrito em §5.
+
+---
+
+## 8. Ajustes técnicos / limpeza
+
+- Remover rota `/mediakit` (`src/routes/mediakit.tsx`) e o card correspondente.
+- Remover `src/data/mediakit.ts`, `src/data/events.ts`, `src/data/partners.ts` mocks.
+- Adicionar `@supabase/supabase-js` (se ainda não estiver) via `bun add`.
+- Gerar `src/integrations/supabase/types.ts` a partir das tabelas do adm (posso escrever à mão os tipos das tabelas usadas — evita depender de CLI).
+- Nenhuma escrita neste projeto: só leitura pública. Sem `requireSupabaseAuth`, sem admin client, sem auth middleware.
+
+---
+
+## Arquivos afetados
+
+**Novos**
+- `src/integrations/supabase/client.ts` (browser publishable)
+- `src/integrations/supabase/server.ts` (server publishable dentro do handler)
+- `src/integrations/supabase/types.ts`
+- `src/data/site.functions.ts`, `src/data/socials.functions.ts`, `src/data/partners.functions.ts`, `src/data/events.functions.ts`, `src/data/shortlinks.functions.ts`
+- `src/components/site/TopContactBar.tsx`
+- `src/hooks/useScrollLedOffset.ts`
+
+**Editados**
+- `src/routes/index.tsx`, `src/routes/$slug.tsx`, `src/routes/__root.tsx`
+- `src/components/site/TwitchCard.tsx`, `MiniSocialCard.tsx`, `EventCard.tsx`
+- `src/styles.css` (LED reativo, keyframes do status Twitch lateral)
+- `src/lib/getTwitchLive.functions.ts` (mantém)
+
+**Removidos**
+- `src/routes/mediakit.tsx`, `src/data/mediakit.ts`, `src/data/events.ts`, `src/data/partners.ts`
+
+---
+
+## O que preciso de você antes de implementar
+Escolher A ou B da §1 (ativar Lovable Cloud + Project ID do adm, ou me passar as chaves manualmente). Sem isso eu implemento tudo mas as leituras ficam apontando pra `SUPABASE_URL` inexistente e o site fica vazio.
