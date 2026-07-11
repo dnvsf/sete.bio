@@ -135,7 +135,7 @@ function PartnerPage() {
           </div>
         ) : (
           <div className="grid gap-3">
-            {events.map((e, i) => (
+            {events.map((e: typeof events[number], i: number) => (
               <EventCard key={e.id} event={e} index={i} />
             ))}
           </div>

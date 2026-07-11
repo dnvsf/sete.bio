@@ -117,7 +117,8 @@ function Home() {
           </div>
         </div>
 
-        <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} videoId={yt?.youtube_video_id ?? undefined} />
+        <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} />
+        {void yt}
       </div>
     </div>
   );
