@@ -77,25 +77,28 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "sete.bio — setexxl" },
+      { title: "Sete | sete.bio" },
       {
         name: "description",
         content:
-          "Sete · setexxl — todos os meus links, lives da Twitch e listas de eventos em um só lugar.",
+          "Todas as redes sociais do Sete.",
       },
       { property: "og:site_name", content: "sete.bio" },
-      { property: "og:title", content: "sete.bio — setexxl" },
+      { property: "og:title", content: "Sete | sete.bio" },
       {
         property: "og:description",
-        content: "Lives, redes sociais e listas de eventos do Sete.",
+        content: "Todas as redes sociais do Sete.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#08080A" },
+      { name: "twitter:title", content: "Sete | sete.bio" },
+      { name: "twitter:description", content: "Todas as redes sociais do Sete." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/24abd2b4-bf09-4464-aaed-a743b76a59ea/id-preview-89820cdb--510edd41-b553-4c57-9015-20863570bbc5.lovable.app-1783747407751.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/24abd2b4-bf09-4464-aaed-a743b76a59ea/id-preview-89820cdb--510edd41-b553-4c57-9015-20863570bbc5.lovable.app-1783747407751.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
   shellComponent: RootShell,

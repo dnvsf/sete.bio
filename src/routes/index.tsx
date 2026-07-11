@@ -17,10 +17,10 @@ import { listSocials, getSiteSettings, type SocialDTO } from "@/lib/publicData.f
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "sete.bio — hub" },
-      { name: "description", content: "Todos os links, lives e contatos do Sete em um só lugar." },
-      { property: "og:title", content: "sete.bio — hub" },
-      { property: "og:description", content: "Lives, redes sociais e contatos do Sete." },
+      { title: "Sete | sete.bio" },
+      { name: "description", content: "Todas as redes sociais do Sete." },
+      { property: "og:title", content: "Sete | sete.bio" },
+      { property: "og:description", content: "Todas as redes sociais do Sete." },
     ],
   }),
   component: Home,
