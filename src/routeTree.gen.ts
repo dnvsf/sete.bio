@@ -9,15 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as MediakitRouteImport } from './routes/mediakit'
 import { Route as SlugRouteImport } from './routes/$slug'
 import { Route as IndexRouteImport } from './routes/index'
 
-const MediakitRoute = MediakitRouteImport.update({
-  id: '/mediakit',
-  path: '/mediakit',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const SlugRoute = SlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -32,42 +26,31 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
-  '/mediakit': typeof MediakitRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
-  '/mediakit': typeof MediakitRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/$slug': typeof SlugRoute
-  '/mediakit': typeof MediakitRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/$slug' | '/mediakit'
+  fullPaths: '/' | '/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/$slug' | '/mediakit'
-  id: '__root__' | '/' | '/$slug' | '/mediakit'
+  to: '/' | '/$slug'
+  id: '__root__' | '/' | '/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SlugRoute: typeof SlugRoute
-  MediakitRoute: typeof MediakitRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/mediakit': {
-      id: '/mediakit'
-      path: '/mediakit'
-      fullPath: '/mediakit'
-      preLoaderRoute: typeof MediakitRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/$slug': {
       id: '/$slug'
       path: '/$slug'
@@ -88,7 +71,6 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SlugRoute: SlugRoute,
-  MediakitRoute: MediakitRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
