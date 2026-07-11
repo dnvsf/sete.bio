@@ -118,7 +118,6 @@ function Home() {
         </div>
 
         <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} />
-        {void yt}
       </div>
     </div>
   );
