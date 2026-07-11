@@ -1,27 +1,23 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "framer-motion";
 import { TwitchIcon } from "./icons";
 import { Shimmer } from "./Shimmer";
 import { getTwitchLive } from "@/lib/getTwitchLive.functions";
 
-export function TwitchCard() {
+export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
   const fetchLive = useServerFn(getTwitchLive);
-  const [live, setLive] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    let mounted = true;
-    fetchLive()
-      .then((r) => mounted && setLive(!!r.live))
-      .catch(() => mounted && setLive(false));
-    return () => {
-      mounted = false;
-    };
-  }, [fetchLive]);
+  const { data } = useQuery({
+    queryKey: ["twitch-live", handle],
+    queryFn: () => fetchLive(),
+    refetchInterval: 60_000,
+    staleTime: 30_000,
+  });
+  const live = data == null ? null : !!data.live;
 
   return (
     <motion.a
-      href="https://twitch.tv/setexxl"
+      href={`https://twitch.tv/${handle}`}
       target="_blank"
       rel="noreferrer"
       initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
@@ -29,9 +25,9 @@ export function TwitchCard() {
       transition={{ duration: 0.6, delay: 0.1 }}
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.985 }}
-      className="hover-red-border animate-card-pulse group relative block rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm"
+      className="hover-red-border animate-card-pulse group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm"
     >
-      <div className="flex items-center gap-4 p-5">
+      <div className="flex items-stretch gap-4 p-5">
         <motion.div
           animate={live ? { rotate: [0, -3, 3, -2, 0] } : { rotate: 0 }}
           transition={{ duration: 0.9, repeat: live ? Infinity : 0, repeatDelay: 4 }}
@@ -39,55 +35,54 @@ export function TwitchCard() {
         >
           <TwitchIcon size={26} />
         </motion.div>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xl font-bold tracking-tight">Twitch</span>
-            <span className="mono inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2 py-[2px] text-[10px] uppercase tracking-wider text-muted-foreground">
-              setexxl
-            </span>
-          </div>
 
-          {/* Status pill */}
-          <div className="mt-2">
-            <AnimatePresence mode="wait">
-              {live === null ? (
-                <motion.div
-                  key="loading"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <Shimmer className="h-[22px] w-[92px]" rounded="rounded-full" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key={live ? "on" : "off"}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}
-                  className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest ${live ? "animate-live-halo text-white" : ""}`}
-                  style={{
-                    background: live ? "oklch(0.55 0.22 25)" : "oklch(0.22 0.01 260)",
-                    border: live
-                      ? "1px solid oklch(0.62 0.24 25 / 0.6)"
-                      : "1px solid oklch(1 0 0 / 0.1)",
-                    color: live ? "white" : "oklch(0.7 0.01 260)",
-                  }}
-                >
-                  <span
-                    className={`inline-block h-1.5 w-1.5 rounded-full ${live ? "animate-live-dot" : ""}`}
-                    style={{ background: live ? "white" : "oklch(0.55 0.02 260)" }}
-                  />
-                  {live ? "Ao vivo" : "Offline"}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+        <div className="min-w-0 flex-1 self-center">
+          <div className="text-xl font-bold tracking-tight leading-none">Twitch</div>
+          <div className="mono mt-1 text-[11px] text-muted-foreground">@{handle}</div>
         </div>
 
-        <div className="ml-2 text-muted-foreground opacity-0 transition-all duration-300 group-hover:translate-x-1 group-hover:opacity-100">
-          →
+        {/* Live status indicator — lateral */}
+        <div className="flex shrink-0 items-center">
+          <AnimatePresence mode="wait">
+            {live === null ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+              >
+                <Shimmer className="h-6 w-20" rounded="rounded-md" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key={live ? "on" : "off"}
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}
+                className="flex items-center gap-2"
+              >
+                <span
+                  className={`inline-block h-2 w-2 rounded-full ${live ? "animate-live-dot" : ""}`}
+                  style={{
+                    background: live ? "oklch(0.62 0.24 25)" : "oklch(0.45 0.02 260)",
+                    boxShadow: live
+                      ? "0 0 12px 2px oklch(0.62 0.24 25 / 0.7)"
+                      : "none",
+                  }}
+                />
+                <span
+                  className="mono text-[10px] font-bold uppercase tracking-widest"
+                  style={{
+                    color: live ? "oklch(0.72 0.24 25)" : "oklch(0.55 0.02 260)",
+                    textShadow: live ? "0 0 12px oklch(0.62 0.24 25 / 0.6)" : "none",
+                  }}
+                >
+                  {live ? "Ao vivo" : "Offline"}
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </motion.a>

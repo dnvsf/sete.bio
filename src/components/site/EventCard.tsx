@@ -1,12 +1,11 @@
 import { motion } from "framer-motion";
-import { Link } from "@tanstack/react-router";
-import type { Event } from "@/data/events";
 import { RippleButton } from "./RippleButton";
+import type { EventDTO } from "@/lib/publicData.functions";
 
 const DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 const MESES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-export function EventCard({ event, index = 0 }: { event: Event; index?: number }) {
+export function EventCard({ event, index = 0 }: { event: EventDTO; index?: number }) {
   const d = new Date(event.date);
   return (
     <motion.div
@@ -28,36 +27,22 @@ export function EventCard({ event, index = 0 }: { event: Event; index?: number }
         <div className="min-w-0 flex-1">
           <div className="truncate text-base font-bold">{event.title}</div>
           <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-            <Link
-              to="/$slug"
-              params={{ slug: event.partnerSlug }}
-              className="mono uppercase tracking-wider text-foreground/80 hover:text-accent-red-glow"
-            >
-              {event.partnerName}
-            </Link>
-            <span>·</span>
-            <span>{event.city}</span>
-            <span>·</span>
+            {event.city && <span>{event.city}</span>}
+            {event.city && <span>·</span>}
             <span className="mono">
               {String(d.getHours()).padStart(2, "0")}:{String(d.getMinutes()).padStart(2, "0")}
             </span>
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <RippleButton
-              onClick={() => window.open(event.listUrl, "_blank")}
-              className="rounded-lg bg-accent-red px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white"
-            >
-              Entrar na lista
-            </RippleButton>
-            {event.ticketUrl && (
+          {event.list_url && (
+            <div className="mt-3 flex flex-wrap gap-2">
               <RippleButton
-                onClick={() => window.open(event.ticketUrl, "_blank")}
-                className="rounded-lg border border-white/15 px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-foreground/90 hover:border-accent-red-glow"
+                onClick={() => window.open(event.list_url!, "_blank")}
+                className="rounded-lg bg-accent-red px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white"
               >
-                Ingresso
+                Entrar na lista
               </RippleButton>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
