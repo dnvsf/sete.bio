@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Mail, Send, MessageCircle } from "lucide-react";
+import { Mail } from "lucide-react";
 import type { ReactNode } from "react";
+import { InstagramIcon, WhatsAppIcon } from "./icons";
 
 function Pill({
   href,
@@ -33,8 +34,9 @@ export function TopContactBar() {
   return (
     <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
       <Pill href="mailto:fala@setexxl.com" label="Email" icon={<Mail size={12} />} delay={0} />
-      <Pill href="https://ig.me/m/setexxl" label="Direct" icon={<Send size={12} />} delay={0.06} />
-      <Pill href="https://wa.me/5511939244516" label="WhatsApp" icon={<MessageCircle size={12} />} delay={0.12} />
+      <Pill href="https://ig.me/m/setexxl" label="Direct" icon={<InstagramIcon size={12} />} delay={0.06} />
+      <Pill href="https://wa.me/5511939244516" label="WhatsApp" icon={<WhatsAppIcon size={12} />} delay={0.12} />
     </div>
   );
 }
+
