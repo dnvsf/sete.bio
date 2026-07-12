@@ -62,24 +62,21 @@ function Home() {
       <CursorGlow />
 
       <div className="relative mx-auto max-w-xl px-4 pb-24 pt-14 sm:pt-20">
-        {/* Top contact bar */}
-        <TopContactBar />
-
         {/* Nome */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
-          className="mt-8 text-center"
+          className="text-center"
         >
           <h1 className="text-5xl font-bold tracking-tight sm:text-6xl">
             <ScrambleText text={displayName} duration={650} />
             <span className="ml-1 text-accent-red-glow">.</span>
           </h1>
-          <div className="mono mt-2 text-[10px] uppercase tracking-[0.35em] text-muted-foreground">
-            hub · sete.bio
-          </div>
         </motion.div>
+
+        {/* Contact pills */}
+        <TopContactBar />
 
         {/* Twitch card */}
         <div className="mt-10" style={led("0s")}>
