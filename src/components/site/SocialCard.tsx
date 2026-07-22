@@ -19,7 +19,7 @@ export function SocialCard({
   delay?: number;
 }) {
   const inner = (
-    <div className="flex items-stretch gap-4 p-5">
+    <div className="flex items-center gap-4 p-5">
       <motion.div
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
@@ -31,8 +31,10 @@ export function SocialCard({
       </motion.div>
 
       <div className="min-w-0 flex-1 self-center">
-        <div className="text-xl font-bold tracking-tight leading-none">{label}</div>
-        <div className="mono mt-1 text-[11px] text-muted-foreground">@{handle}</div>
+        <div className="flex items-baseline gap-2">
+          <span className="text-xl font-bold tracking-tight leading-none">{label}</span>
+          <span className="text-sm font-normal tracking-tight text-foreground/50">@{handle}</span>
+        </div>
       </div>
     </div>
   );

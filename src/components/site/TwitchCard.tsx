@@ -15,6 +15,12 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
   });
   const live = data == null ? null : !!data.live;
 
+  // Classes dinâmicas baseado no estado da live
+  const pulseClass = live ? "animate-green-pulse" : "";
+  const borderColor = live
+    ? "border-green-500/40"
+    : "border-white/8";
+
   return (
     <motion.a
       href={`https://twitch.tv/${handle}`}
@@ -25,9 +31,9 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
       transition={{ duration: 0.6, delay: 0.1 }}
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.985 }}
-      className="hover-red-border animate-card-pulse group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm"
+      className={`hover-red-border group relative block overflow-hidden rounded-2xl border bg-card/60 backdrop-blur-sm ${pulseClass} ${borderColor}`}
     >
-      <div className="flex items-stretch gap-4 p-5">
+      <div className="flex items-center gap-4 p-5">
         <motion.div
           animate={live ? { rotate: [0, -3, 3, -2, 0] } : { rotate: 0 }}
           transition={{ duration: 0.9, repeat: live ? Infinity : 0, repeatDelay: 4 }}
@@ -37,11 +43,13 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
         </motion.div>
 
         <div className="min-w-0 flex-1 self-center">
-          <div className="text-xl font-bold tracking-tight leading-none">Twitch</div>
-          <div className="mono mt-1 text-[11px] text-muted-foreground">@{handle}</div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-xl font-bold tracking-tight leading-none">Twitch</span>
+            <span className="text-sm font-normal tracking-tight text-foreground/50">@{handle}</span>
+          </div>
         </div>
 
-        {/* Live status indicator — lateral */}
+        {/* Status indicator — lateral */}
         <div className="flex shrink-0 items-center">
           <AnimatePresence mode="wait">
             {live === null ? (
@@ -62,20 +70,20 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
                 transition={{ duration: 0.3, ease: [0.2, 0.7, 0.2, 1] }}
                 className="flex items-center gap-2"
               >
+                {live && (
+                  <span
+                    className="inline-block h-2 w-2 rounded-full animate-live-dot"
+                    style={{
+                      background: "oklch(0.72 0.19 145)",
+                      boxShadow: "0 0 12px 2px oklch(0.72 0.19 145 / 0.7)",
+                    }}
+                  />
+                )}
                 <span
-                  className={`inline-block h-2 w-2 rounded-full ${live ? "animate-live-dot" : ""}`}
+                  className="text-[11px] font-semibold uppercase tracking-wide"
                   style={{
-                    background: live ? "oklch(0.62 0.24 25)" : "oklch(0.45 0.02 260)",
-                    boxShadow: live
-                      ? "0 0 12px 2px oklch(0.62 0.24 25 / 0.7)"
-                      : "none",
-                  }}
-                />
-                <span
-                  className="mono text-[10px] font-bold uppercase tracking-widest"
-                  style={{
-                    color: live ? "oklch(0.72 0.24 25)" : "oklch(0.55 0.02 260)",
-                    textShadow: live ? "0 0 12px oklch(0.62 0.24 25 / 0.6)" : "none",
+                    color: live ? "oklch(0.72 0.19 145)" : "oklch(0.45 0.02 260)",
+                    textShadow: live ? "0 0 12px oklch(0.72 0.19 145 / 0.5)" : "none",
                   }}
                 >
                   {live ? "Ao vivo" : "Offline"}
