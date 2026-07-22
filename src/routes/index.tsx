@@ -3,7 +3,7 @@ import { useState, type CSSProperties } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { TwitchCard } from "@/components/site/TwitchCard";
-import { MiniSocialCard } from "@/components/site/MiniSocialCard";
+import { SocialCard } from "@/components/site/SocialCard";
 import { YouTubeModal } from "@/components/site/YouTubeModal";
 import { InstagramIcon, TikTokIcon, YouTubeIcon } from "@/components/site/icons";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
@@ -43,38 +43,42 @@ function Home() {
   return (
     <div className="relative min-h-screen grain">
       <div className="relative mx-auto max-w-xl px-4 pb-24 pt-14 sm:pt-20">
-        {/* Twitch card */}
-        <div className="mt-10" style={led("0s")}>
-          <TwitchCard handle={tw?.handle || "setexxl"} />
-        </div>
+        {/* Lista de cards */}
+        <div className="flex flex-col gap-3">
+          <div style={led("0s")}>
+            <TwitchCard handle={tw?.handle || "setexxl"} />
+          </div>
 
-        {/* Mini socials */}
-        <div className="mt-3 grid grid-cols-3 gap-3">
-          <div style={led("1.5s")}>
-            <MiniSocialCard
+          <div style={led("0.8s")}>
+            <SocialCard
               label="Instagram"
               handle={ig?.handle || "setexxl"}
-              icon={<InstagramIcon size={28} />}
+              icon={<InstagramIcon size={26} />}
+              iconBgColor="oklch(0.45 0.18 330)"
               href={ig?.url || `https://instagram.com/${ig?.handle || "setexxl"}`}
               delay={0.15}
             />
           </div>
-          <div style={led("3s")}>
-            <MiniSocialCard
+
+          <div style={led("1.6s")}>
+            <SocialCard
               label="TikTok"
               handle={tk?.handle || "setexxl"}
-              icon={<TikTokIcon size={28} />}
+              icon={<TikTokIcon size={26} />}
+              iconBgColor="oklch(0.35 0.12 280)"
               href={tk?.url || `https://tiktok.com/@${tk?.handle || "setexxl"}`}
-              delay={0.22}
+              delay={0.25}
             />
           </div>
-          <div style={led("4.5s")}>
-            <MiniSocialCard
+
+          <div style={led("2.4s")}>
+            <SocialCard
               label="YouTube"
               handle={yt?.handle || "setexxl"}
-              icon={<YouTubeIcon size={28} />}
+              icon={<YouTubeIcon size={26} />}
+              iconBgColor="oklch(0.55 0.22 30)"
               onClick={() => setYtOpen(true)}
-              delay={0.29}
+              delay={0.35}
             />
           </div>
         </div>
