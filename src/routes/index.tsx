@@ -41,7 +41,7 @@ function Home() {
   const tw = pickSocial(socials, "twitch");
 
   return (
-    <div className="relative min-h-screen grain">
+    <div className="relative min-h-screen">
       <div className="relative mx-auto max-w-xl px-4 pb-24 pt-14 sm:pt-20">
         {/* Lista de cards */}
         <div className="flex flex-col gap-3">
