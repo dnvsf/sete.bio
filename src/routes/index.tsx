@@ -38,21 +38,26 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 }
 
 function ScrollBounce() {
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    const checkScrollable = () => {
+      const hasOverflow = document.documentElement.scrollHeight > window.innerHeight + 10;
+      setVisible(hasOverflow);
+    };
+    checkScrollable();
     const timer = setTimeout(() => setVisible(false), 6000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    if (!visible) return;
     const handleScroll = () => {
       if (window.scrollY > 100) setVisible(false);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [visible]);
+    window.addEventListener("resize", checkScrollable);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", checkScrollable);
+    };
+  }, []);
 
   return (
     <AnimatePresence>

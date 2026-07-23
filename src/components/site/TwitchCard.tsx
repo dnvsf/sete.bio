@@ -37,7 +37,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
         <motion.div
           animate={live ? { rotate: [0, -3, 3, -2, 0] } : { rotate: 0 }}
           transition={{ duration: 0.9, repeat: live ? Infinity : 0, repeatDelay: 4 }}
-          className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[oklch(0.28_0.14_290)] text-white"
+          className="grid h-12 w-12 shrink-0 place-items-center text-white"
         >
           <TwitchIcon size={26} />
         </motion.div>
