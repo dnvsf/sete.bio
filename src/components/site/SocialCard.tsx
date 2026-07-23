@@ -24,8 +24,8 @@ export function SocialCard({
         initial={{ opacity: 0, y: 6 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay }}
-        className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-white"
-        style={{ background: iconBgColor }}
+        className="grid h-12 w-12 shrink-0 place-items-center text-white"
+        style={{ color: iconBgColor }}
       >
         {icon}
       </motion.div>

@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, type CSSProperties } from "react";
+import { useState, useEffect, type CSSProperties } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { TwitchCard } from "@/components/site/TwitchCard";
 import { SocialCard } from "@/components/site/SocialCard";
 import { YouTubeModal } from "@/components/site/YouTubeModal";
-import { InstagramIcon, TikTokIcon, YouTubeIcon, TwitchIcon } from "@/components/site/icons";
+import { InstagramIcon, TikTokIcon, YouTubeIcon } from "@/components/site/icons";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 
 export const Route = createFileRoute("/")({
@@ -29,12 +29,52 @@ function pickSocial(list: SocialDTO[] | undefined, platform: string) {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mt-8 mb-3 flex items-center gap-3">
-      <span className="mono text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/40">
+    <div className="mt-8 mb-3 text-center">
+      <span className="mono text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
         {children}
       </span>
-      <div className="h-px flex-1 bg-foreground/10" />
     </div>
+  );
+}
+
+function ScrollBounce() {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setVisible(false), 6000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!visible) return;
+    const handleScroll = () => {
+      if (window.scrollY > 100) setVisible(false);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [visible]);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="pointer-events-none fixed bottom-16 left-1/2 z-20 -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center gap-1"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="oklch(0.98 0.005 260 / 0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
 
@@ -118,6 +158,8 @@ function Home() {
             Fechar Parceria
           </span>
         </motion.a>
+
+        <ScrollBounce />
 
         <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} />
       </div>
