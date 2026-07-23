@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState, type CSSProperties } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { motion } from "framer-motion";
 import { TwitchCard } from "@/components/site/TwitchCard";
 import { SocialCard } from "@/components/site/SocialCard";
 import { YouTubeModal } from "@/components/site/YouTubeModal";
-import { InstagramIcon, TikTokIcon, YouTubeIcon } from "@/components/site/icons";
+import { InstagramIcon, TikTokIcon, YouTubeIcon, TwitchIcon } from "@/components/site/icons";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 
 export const Route = createFileRoute("/")({
@@ -26,6 +27,17 @@ function pickSocial(list: SocialDTO[] | undefined, platform: string) {
   return list?.find((s) => s.platform.toLowerCase() === platform.toLowerCase());
 }
 
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="mt-8 mb-3 flex items-center gap-3">
+      <span className="mono text-[11px] font-bold uppercase tracking-[0.2em] text-foreground/40">
+        {children}
+      </span>
+      <div className="h-px flex-1 bg-foreground/10" />
+    </div>
+  );
+}
+
 function Home() {
   const [ytOpen, setYtOpen] = useState(false);
 
@@ -43,45 +55,69 @@ function Home() {
   return (
     <div className="relative min-h-screen">
       <div className="relative mx-auto max-w-xl px-4 pb-24 pt-14 sm:pt-20">
-        {/* Lista de cards */}
+
+        {/* CANAL E LIVES */}
+        <SectionLabel>Canal e Lives</SectionLabel>
         <div className="flex flex-col gap-3">
           <div style={led("0s")}>
             <TwitchCard handle={tw?.handle || "setexxl"} />
           </div>
-
-          <div style={led("0.8s")}>
-            <SocialCard
-              label="Instagram"
-              handle={ig?.handle || "setexxl"}
-              icon={<InstagramIcon size={26} />}
-              iconBgColor="oklch(0.45 0.18 330)"
-              href={ig?.url || `https://instagram.com/${ig?.handle || "setexxl"}`}
-              delay={0.15}
-            />
-          </div>
-
-          <div style={led("1.6s")}>
-            <SocialCard
-              label="TikTok"
-              handle={tk?.handle || "setexxl"}
-              icon={<TikTokIcon size={26} />}
-              iconBgColor="oklch(0.35 0.12 280)"
-              href={tk?.url || `https://tiktok.com/@${tk?.handle || "setexxl"}`}
-              delay={0.25}
-            />
-          </div>
-
-          <div style={led("2.4s")}>
+          <div style={led("0.5s")}>
             <SocialCard
               label="YouTube"
               handle={yt?.handle || "setexxl"}
               icon={<YouTubeIcon size={26} />}
               iconBgColor="oklch(0.55 0.22 30)"
               onClick={() => setYtOpen(true)}
-              delay={0.35}
+              delay={0.1}
             />
           </div>
         </div>
+
+        {/* REDES SOCIAIS */}
+        <SectionLabel>Redes Sociais</SectionLabel>
+        <div className="flex flex-col gap-3">
+          <div style={led("1s")}>
+            <SocialCard
+              label="Instagram"
+              handle={ig?.handle || "setexxl"}
+              icon={<InstagramIcon size={26} />}
+              iconBgColor="oklch(0.45 0.18 330)"
+              href={ig?.url || `https://instagram.com/${ig?.handle || "setexxl"}`}
+              delay={0.2}
+            />
+          </div>
+          <div style={led("1.5s")}>
+            <SocialCard
+              label="TikTok"
+              handle={tk?.handle || "setexxl"}
+              icon={<TikTokIcon size={26} />}
+              iconBgColor="oklch(0.35 0.12 280)"
+              href={tk?.url || `https://tiktok.com/@${tk?.handle || "setexxl"}`}
+              delay={0.3}
+            />
+          </div>
+        </div>
+
+        {/* PARCERIAS */}
+        <SectionLabel>Parcerias</SectionLabel>
+        <motion.a
+          href="https://ig.me/m/setexxl"
+          target="_blank"
+          rel="noreferrer"
+          initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.985 }}
+          className="mt-3 flex items-center justify-center gap-3 rounded-2xl border border-white/8 bg-card/60 px-5 py-4 backdrop-blur-sm transition-colors hover:bg-card/80"
+          style={led("2s")}
+        >
+          <span className="text-foreground/60"><InstagramIcon size={20} /></span>
+          <span className="text-sm font-semibold tracking-tight text-foreground/60">
+            Fechar Parceria
+          </span>
+        </motion.a>
 
         <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} />
       </div>
