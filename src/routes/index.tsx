@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect, type CSSProperties } from "react";
+import { useState, useEffect, useMemo, type CSSProperties } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,6 +25,111 @@ const led = (offset: string): CSSProperties => ({ ["--led-offset" as never]: off
 
 function pickSocial(list: SocialDTO[] | undefined, platform: string) {
   return list?.find((s) => s.platform.toLowerCase() === platform.toLowerCase());
+}
+
+/* ===== Floating Particles ===== */
+function FloatingParticles() {
+  const particles = useMemo(() => {
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 2 + 1,
+      duration: Math.random() * 15 + 10,
+      delay: Math.random() * 10,
+      opacity: Math.random() * 0.15 + 0.05,
+    }));
+  }, []);
+
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full"
+          style={{
+            left: `${p.x}%`,
+            top: `${p.y}%`,
+            width: p.size,
+            height: p.size,
+            background: "oklch(0.95 0.01 260)",
+            opacity: p.opacity,
+          }}
+          animate={{
+            y: [0, -30, 0],
+            x: [0, 10, -10, 0],
+            opacity: [p.opacity, p.opacity * 1.5, p.opacity],
+          }}
+          transition={{
+            duration: p.duration,
+            delay: p.delay,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* ===== Page Fade In ===== */
+function PageWrapper({ children }: { children: React.ReactNode }) {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoaded(true), 100);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: loaded ? 1 : 0 }}
+      transition={{ duration: 1.2, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ===== Cursor Glow (desktop only) ===== */
+function CursorGlow() {
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsDesktop(window.innerWidth >= 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  useEffect(() => {
+    if (!isDesktop) return;
+    const handleMove = (e: MouseEvent) => {
+      setPos({ x: e.clientX, y: e.clientY });
+    };
+    window.addEventListener("mousemove", handleMove, { passive: true });
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, [isDesktop]);
+
+  if (!isDesktop) return null;
+
+  return (
+    <motion.div
+      className="fixed pointer-events-none z-0"
+      style={{
+        left: pos.x,
+        top: pos.y,
+        width: 300,
+        height: 300,
+        borderRadius: "50%",
+        background: "radial-gradient(circle, oklch(0.95 0.01 260 / 0.03), transparent 70%)",
+        transform: "translate(-50%, -50%)",
+      }}
+      transition={{ type: "spring", stiffness: 500, damping: 40 }}
+    />
+  );
 }
 
 function AnimatedSeparator() {
@@ -109,56 +214,61 @@ function Home() {
   const tw = pickSocial(socials, "twitch");
 
   return (
-    <div className="relative min-h-screen">
-      <div className="relative mx-auto max-w-xl px-4 pb-24 pt-14 sm:pt-20">
+    <PageWrapper>
+      <CursorGlow />
+      <FloatingParticles />
 
-        <div className="flex flex-col gap-3">
+      <div className="relative min-h-screen z-10">
+        <div className="relative mx-auto max-w-xl px-4 pb-24 pt-14 sm:pt-20">
 
-          {/* Twitch Card — destacado */}
-          <div style={led("0s")}>
-            <TwitchCard handle={tw?.handle || "setexxl"} />
+          <div className="flex flex-col gap-3">
+
+            {/* Twitch Card — destacado */}
+            <div style={led("0s")}>
+              <TwitchCard handle={tw?.handle || "setexxl"} />
+            </div>
+
+            {/* Linha separadora animada */}
+            <AnimatedSeparator />
+
+            {/* Demais cards */}
+            <div style={led("0.4s")}>
+              <SocialCard
+                label="YouTube"
+                handle={yt?.handle || "setexxl"}
+                icon={<YouTubeIcon size={26} />}
+                iconBgColor="oklch(0.55 0.22 30)"
+                onClick={() => setYtOpen(true)}
+                delay={0.15}
+              />
+            </div>
+            <div style={led("0.5s")}>
+              <SocialCard
+                label="Instagram"
+                handle={ig?.handle || "setexxl"}
+                icon={<InstagramIcon size={26} />}
+                iconBgColor="oklch(0.45 0.18 330)"
+                href={ig?.url || `https://instagram.com/${ig?.handle || "setexxl"}`}
+                delay={0.25}
+              />
+            </div>
+            <div style={led("0.6s")}>
+              <SocialCard
+                label="TikTok"
+                handle={tk?.handle || "setexxl"}
+                icon={<TikTokIcon size={26} />}
+                iconBgColor="oklch(0.35 0.12 280)"
+                href={tk?.url || `https://tiktok.com/@${tk?.handle || "setexxl"}`}
+                delay={0.35}
+              />
+            </div>
           </div>
 
-          {/* Linha separadora animada */}
-          <AnimatedSeparator />
+          <ScrollBounce />
 
-          {/* Demais cards */}
-          <div style={led("0.4s")}>
-            <SocialCard
-              label="YouTube"
-              handle={yt?.handle || "setexxl"}
-              icon={<YouTubeIcon size={26} />}
-              iconBgColor="oklch(0.55 0.22 30)"
-              onClick={() => setYtOpen(true)}
-              delay={0.15}
-            />
-          </div>
-          <div style={led("0.5s")}>
-            <SocialCard
-              label="Instagram"
-              handle={ig?.handle || "setexxl"}
-              icon={<InstagramIcon size={26} />}
-              iconBgColor="oklch(0.45 0.18 330)"
-              href={ig?.url || `https://instagram.com/${ig?.handle || "setexxl"}`}
-              delay={0.25}
-            />
-          </div>
-          <div style={led("0.6s")}>
-            <SocialCard
-              label="TikTok"
-              handle={tk?.handle || "setexxl"}
-              icon={<TikTokIcon size={26} />}
-              iconBgColor="oklch(0.35 0.12 280)"
-              href={tk?.url || `https://tiktok.com/@${tk?.handle || "setexxl"}`}
-              delay={0.35}
-            />
-          </div>
+          <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} />
         </div>
-
-        <ScrollBounce />
-
-        <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} />
       </div>
-    </div>
+    </PageWrapper>
   );
 }
