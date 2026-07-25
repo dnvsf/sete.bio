@@ -27,6 +27,26 @@ function pickSocial(list: SocialDTO[] | undefined, platform: string) {
   return list?.find((s) => s.platform.toLowerCase() === platform.toLowerCase());
 }
 
+function AnimatedSeparator() {
+  return (
+    <div className="relative h-px my-1.5 overflow-hidden">
+      <motion.div
+        className="absolute inset-0 bg-white/10"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.8, delay: 0.6, ease: [0.2, 0.7, 0.2, 1] }}
+        style={{ originX: 0 }}
+      />
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+        initial={{ x: "-100%" }}
+        animate={{ x: "100%" }}
+        transition={{ duration: 2, delay: 0.8, ease: "easeInOut", repeat: Infinity, repeatDelay: 8 }}
+      />
+    </div>
+  );
+}
+
 function ScrollBounce() {
   const [visible, setVisible] = useState(false);
 
@@ -53,17 +73,18 @@ function ScrollBounce() {
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, delay: 2 }}
           className="pointer-events-none fixed bottom-16 left-1/2 z-20 -translate-x-1/2"
         >
           <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="flex flex-col items-center gap-1"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="oklch(0.98 0.005 260 / 0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="oklch(0.98 0.005 260 / 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="6 9 12 15 18 9" />
             </svg>
           </motion.div>
@@ -98,8 +119,8 @@ function Home() {
             <TwitchCard handle={tw?.handle || "setexxl"} />
           </div>
 
-          {/* Linha separadora sutil */}
-          <div className="h-px bg-white/10 my-1" />
+          {/* Linha separadora animada */}
+          <AnimatedSeparator />
 
           {/* Demais cards */}
           <div style={led("0.4s")}>
@@ -109,27 +130,27 @@ function Home() {
               icon={<YouTubeIcon size={26} />}
               iconBgColor="oklch(0.55 0.22 30)"
               onClick={() => setYtOpen(true)}
-              delay={0.05}
+              delay={0.15}
             />
           </div>
-          <div style={led("0.6s")}>
+          <div style={led("0.5s")}>
             <SocialCard
               label="Instagram"
               handle={ig?.handle || "setexxl"}
               icon={<InstagramIcon size={26} />}
               iconBgColor="oklch(0.45 0.18 330)"
               href={ig?.url || `https://instagram.com/${ig?.handle || "setexxl"}`}
-              delay={0.1}
+              delay={0.25}
             />
           </div>
-          <div style={led("0.8s")}>
+          <div style={led("0.6s")}>
             <SocialCard
               label="TikTok"
               handle={tk?.handle || "setexxl"}
               icon={<TikTokIcon size={26} />}
               iconBgColor="oklch(0.35 0.12 280)"
               href={tk?.url || `https://tiktok.com/@${tk?.handle || "setexxl"}`}
-              delay={0.15}
+              delay={0.35}
             />
           </div>
         </div>
