@@ -27,16 +27,6 @@ function pickSocial(list: SocialDTO[] | undefined, platform: string) {
   return list?.find((s) => s.platform.toLowerCase() === platform.toLowerCase());
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="mt-8 mb-3 text-center">
-      <span className="mono text-[11px] font-bold uppercase tracking-[0.2em] text-white/80">
-        {children}
-      </span>
-    </div>
-  );
-}
-
 function ScrollBounce() {
   const [visible, setVisible] = useState(false);
 
@@ -101,68 +91,48 @@ function Home() {
     <div className="relative min-h-screen">
       <div className="relative mx-auto max-w-xl px-4 pb-24 pt-14 sm:pt-20">
 
-        {/* CANAL E LIVES */}
-        <SectionLabel>Canal e Lives</SectionLabel>
         <div className="flex flex-col gap-3">
+
+          {/* Twitch Card — destacado */}
           <div style={led("0s")}>
             <TwitchCard handle={tw?.handle || "setexxl"} />
           </div>
-          <div style={led("0.5s")}>
+
+          {/* Linha separadora sutil */}
+          <div className="h-px bg-white/10 my-1" />
+
+          {/* Demais cards */}
+          <div style={led("0.4s")}>
             <SocialCard
               label="YouTube"
               handle={yt?.handle || "setexxl"}
               icon={<YouTubeIcon size={26} />}
               iconBgColor="oklch(0.55 0.22 30)"
               onClick={() => setYtOpen(true)}
-              delay={0.1}
+              delay={0.05}
             />
           </div>
-        </div>
-
-        {/* REDES SOCIAIS */}
-        <SectionLabel>Redes Sociais</SectionLabel>
-        <div className="flex flex-col gap-3">
-          <div style={led("1s")}>
+          <div style={led("0.6s")}>
             <SocialCard
               label="Instagram"
               handle={ig?.handle || "setexxl"}
               icon={<InstagramIcon size={26} />}
               iconBgColor="oklch(0.45 0.18 330)"
               href={ig?.url || `https://instagram.com/${ig?.handle || "setexxl"}`}
-              delay={0.2}
+              delay={0.1}
             />
           </div>
-          <div style={led("1.5s")}>
+          <div style={led("0.8s")}>
             <SocialCard
               label="TikTok"
               handle={tk?.handle || "setexxl"}
               icon={<TikTokIcon size={26} />}
               iconBgColor="oklch(0.35 0.12 280)"
               href={tk?.url || `https://tiktok.com/@${tk?.handle || "setexxl"}`}
-              delay={0.3}
+              delay={0.15}
             />
           </div>
         </div>
-
-        {/* PARCERIAS */}
-        <SectionLabel>Parcerias</SectionLabel>
-        <motion.a
-          href="https://ig.me/m/setexxl"
-          target="_blank"
-          rel="noreferrer"
-          initial={{ opacity: 0, y: 12, filter: "blur(6px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          whileHover={{ y: -2 }}
-          whileTap={{ scale: 0.985 }}
-          className="mt-3 flex items-center justify-center gap-3 rounded-2xl border border-white/8 bg-card/60 px-5 py-4 backdrop-blur-sm transition-colors hover:bg-card/80"
-          style={led("2s")}
-        >
-          <span className="text-foreground/60"><InstagramIcon size={20} /></span>
-          <span className="text-sm font-semibold tracking-tight text-foreground/60">
-            Fechar Parceria
-          </span>
-        </motion.a>
 
         <ScrollBounce />
 

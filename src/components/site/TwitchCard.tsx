@@ -16,10 +16,13 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
   const live = data == null ? null : !!data.live;
 
   // Classes dinâmicas baseado no estado da live
+  const bgClass = live
+    ? "bg-[oklch(0.28_0.12_145_/0.55)]"
+    : "bg-[oklch(0.30_0.15_25_/0.55)]";
+  const borderClass = live
+    ? "border-[oklch(0.72_0.19_145_/0.5)]"
+    : "border-[oklch(0.62_0.24_25_/0.5)]";
   const pulseClass = live ? "animate-green-pulse" : "";
-  const borderColor = live
-    ? "border-green-500/40"
-    : "border-white/8";
 
   return (
     <motion.a
@@ -31,7 +34,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
       transition={{ duration: 0.6, delay: 0.1 }}
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.985 }}
-      className={`hover-red-border group relative block overflow-hidden rounded-2xl border bg-card/60 backdrop-blur-sm ${pulseClass} ${borderColor}`}
+      className={`hover-red-border group relative block overflow-hidden rounded-2xl border backdrop-blur-sm ${bgClass} ${borderClass} ${pulseClass}`}
     >
       <div className="flex items-center gap-4 p-5">
         <motion.div
@@ -44,8 +47,8 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
 
         <div className="min-w-0 flex-1 self-center">
           <div className="flex items-baseline gap-2">
-            <span className="text-xl font-bold tracking-tight leading-none">Twitch</span>
-            <span className="text-sm font-normal tracking-tight text-foreground/50">@{handle}</span>
+            <span className="text-xl font-bold tracking-tight leading-none text-white">Twitch</span>
+            <span className="text-sm font-normal tracking-tight text-white/50">@{handle}</span>
           </div>
         </div>
 
@@ -80,9 +83,8 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
                   />
                 )}
                 <span
-                  className="text-[11px] font-semibold uppercase tracking-wide"
+                  className="text-[11px] font-semibold uppercase tracking-wide text-white"
                   style={{
-                    color: live ? "oklch(0.72 0.19 145)" : "oklch(0.45 0.02 260)",
                     textShadow: live ? "0 0 12px oklch(0.72 0.19 145 / 0.5)" : "none",
                   }}
                 >
