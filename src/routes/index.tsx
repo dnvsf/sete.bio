@@ -54,6 +54,18 @@ const projects: ProjectData[] = [
       { label: "@freelancersp", url: "https://instagram.com/freelancersp", type: "instagram", handle: "@freelancersp" },
     ],
   },
+  {
+    name: "ROLESP",
+    description: "Faça rolês e amizades em São Paulo.",
+    links: [
+      { label: "rolesp.com.br", url: "https://rolesp.com.br", type: "website" },
+      { label: "@rolesp_oficial", url: "https://instagram.com/rolesp_oficial", type: "instagram", handle: "@rolesp_oficial" },
+      { label: "@rolesp_oficial", url: "https://tiktok.com/@rolesp_oficial", type: "tiktok", handle: "@rolesp_oficial" },
+      { label: "@rolesp_oficial", url: "https://youtube.com/@rolesp_oficial", type: "youtube", handle: "@rolesp_oficial" },
+      { label: "@rolesp_oficial", url: "https://facebook.com/rolesp_oficial", type: "facebook", handle: "@rolesp_oficial" },
+      { label: "@rolesp_oficial", url: "https://reddit.com/u/rolesp_oficial", type: "reddit", handle: "@rolesp_oficial" },
+    ],
+  },
 ];
 
 /* ===== Floating Particles ===== */

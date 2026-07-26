@@ -1,11 +1,19 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect } from "react";
-import { InstagramIcon, TikTokIcon, FacebookIcon, GlobeIcon } from "./icons";
+import { InstagramIcon, TikTokIcon, YouTubeIcon, FacebookIcon, GlobeIcon } from "./icons";
+
+function RedditIcon({ size = 24, className }: { size?: number; className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-4.14-9.19c.98-.54 2.21-.86 3.59-.92.23 0 .45-.01.67-.01.22 0 .44.01.67.01 1.38.06 2.61.38 3.59.92.15.08.23.26.15.41-.08.15-.26.23-.41.15-.91-.5-2.06-.79-3.34-.85-.22-.01-.45-.01-.67-.01-.22 0-.45 0-.67.01-1.28.06-2.43.35-3.34.85-.15.08-.33 0-.41-.15-.08-.15 0-.33.15-.41zM10.5 13c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5.67 1.5 1.5 1.5 1.5-.67 1.5-1.5zm4.5 0c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5.67 1.5 1.5 1.5 1.5-.67 1.5-1.5zm-1.24 3.12c.42.42 1.14.72 1.93.72s1.51-.3 1.93-.72c.12-.12.31-.12.43 0s.12.31 0 .43c-.54.54-1.42.9-2.36.9s-1.82-.36-2.36-.9c-.12-.12-.12-.31 0-.43s.31-.12.43 0z"/>
+    </svg>
+  );
+}
 
 export interface ProjectLink {
   label: string;
   url: string;
-  type: "instagram" | "tiktok" | "facebook" | "website";
+  type: "instagram" | "tiktok" | "facebook" | "website" | "youtube" | "reddit";
   handle?: string;
 }
 
@@ -32,6 +40,10 @@ function PlatformIcon({ type }: { type: string }) {
       return <FacebookIcon size={iconSize} />;
     case "website":
       return <GlobeIcon size={iconSize} />;
+    case "youtube":
+      return <YouTubeIcon size={iconSize} />;
+    case "reddit":
+      return <RedditIcon size={iconSize} />;
     default:
       return null;
   }
