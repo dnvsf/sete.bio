@@ -5,7 +5,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "framer-motion";
 import { TwitchCard } from "@/components/site/TwitchCard";
 import { SocialCard } from "@/components/site/SocialCard";
-
+import { ProjectCard } from "@/components/site/ProjectCard";
+import { ProjectModal, type ProjectData } from "@/components/site/ProjectModal";
 import { InstagramIcon, TikTokIcon, YouTubeIcon } from "@/components/site/icons";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 
@@ -26,6 +27,34 @@ const led = (offset: string): CSSProperties => ({ ["--led-offset" as never]: off
 function pickSocial(list: SocialDTO[] | undefined, platform: string) {
   return list?.find((s) => s.platform.toLowerCase() === platform.toLowerCase());
 }
+
+/* ===== Projects data ===== */
+const projects: ProjectData[] = [
+  {
+    name: "Marketing Digital",
+    description: "Página de serviços de marketing digital — área de atuação principal.",
+    links: [
+      { label: "danielp.com.br", url: "https://danielp.com.br", type: "website" },
+    ],
+  },
+  {
+    name: "Perdane",
+    description: "Marca de roupa em desenvolvimento. @useperdane no TikTok, Instagram e Facebook.",
+    links: [
+      { label: "perdane.com.br", url: "https://perdane.com.br", type: "website" },
+      { label: "@useperdane", url: "https://instagram.com/useperdane", type: "instagram", handle: "@useperdane" },
+      { label: "@useperdane", url: "https://tiktok.com/@useperdane", type: "tiktok", handle: "@useperdane" },
+      { label: "@useperdane", url: "https://facebook.com/useperdane", type: "facebook", handle: "@useperdane" },
+    ],
+  },
+  {
+    name: "Freelancer SP",
+    description: "Plataforma para divulgação de vagas freelancer em São Paulo.",
+    links: [
+      { label: "@freelancersp", url: "https://instagram.com/freelancersp", type: "instagram", handle: "@freelancersp" },
+    ],
+  },
+];
 
 /* ===== Floating Particles ===== */
 function FloatingParticles() {
@@ -132,21 +161,21 @@ function CursorGlow() {
   );
 }
 
-function AnimatedSeparator() {
+function AnimatedSeparator({ delay = 0.6 }: { delay?: number }) {
   return (
     <div className="relative h-px my-1.5 overflow-hidden">
       <motion.div
         className="absolute inset-0 bg-white/10"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
-        transition={{ duration: 0.8, delay: 0.6, ease: [0.2, 0.7, 0.2, 1] }}
+        transition={{ duration: 0.8, delay, ease: [0.2, 0.7, 0.2, 1] }}
         style={{ originX: 0 }}
       />
       <motion.div
         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
         initial={{ x: "-100%" }}
         animate={{ x: "100%" }}
-        transition={{ duration: 2, delay: 0.8, ease: "easeInOut", repeat: Infinity, repeatDelay: 8 }}
+        transition={{ duration: 2, delay: delay + 0.2, ease: "easeInOut", repeat: Infinity, repeatDelay: 8 }}
       />
     </div>
   );
@@ -200,6 +229,8 @@ function ScrollBounce() {
 }
 
 function Home() {
+  const [modalProject, setModalProject] = useState<ProjectData | null>(null);
+
   const listSocialsFn = useServerFn(listSocials);
   const { data: socials } = useQuery({
     queryKey: ["socials"],
@@ -227,7 +258,7 @@ function Home() {
             </div>
 
             {/* Linha separadora animada */}
-            <AnimatedSeparator />
+            <AnimatedSeparator delay={0.6} />
 
             {/* Demais cards */}
             <div style={led("0.4s")}>
@@ -260,12 +291,34 @@ function Home() {
                 delay={0.35}
               />
             </div>
+
+            {/* Linha separadora — antes dos projetos */}
+            <AnimatedSeparator delay={0.8} />
+
+            {/* Meus Projetos */}
+            <div className="flex flex-col gap-3 pt-1">
+              {projects.map((project, i) => (
+                <div key={project.name} style={led(`${0.9 + i * 0.1}s`)}>
+                  <ProjectCard
+                    label={project.name}
+                    description={project.description}
+                    onClick={() => setModalProject(project)}
+                    delay={0.5 + i * 0.12}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           <ScrollBounce />
-
         </div>
       </div>
+
+      <ProjectModal
+        open={modalProject !== null}
+        project={modalProject}
+        onClose={() => setModalProject(null)}
+      />
     </PageWrapper>
   );
 }
