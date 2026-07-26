@@ -31,15 +31,15 @@ function pickSocial(list: SocialDTO[] | undefined, platform: string) {
 /* ===== Projects data ===== */
 const projects: ProjectData[] = [
   {
-    name: "Marketing Digital",
-    description: "Página de serviços de marketing digital — área de atuação principal.",
+    name: "DANIEL PEREIRA",
+    description: "Serviços de Marketing Digital para empresas.",
     links: [
       { label: "danielp.com.br", url: "https://danielp.com.br", type: "website" },
     ],
   },
   {
-    name: "Perdane",
-    description: "Marca de roupa em desenvolvimento. @useperdane no TikTok, Instagram e Facebook.",
+    name: "PERDANE",
+    description: "Vestuários premium e exclusivos.",
     links: [
       { label: "perdane.com.br", url: "https://perdane.com.br", type: "website" },
       { label: "@useperdane", url: "https://instagram.com/useperdane", type: "instagram", handle: "@useperdane" },
@@ -48,8 +48,8 @@ const projects: ProjectData[] = [
     ],
   },
   {
-    name: "Freelancer SP",
-    description: "Plataforma para divulgação de vagas freelancer em São Paulo.",
+    name: "FREELANCER-SP",
+    description: "Plataforma de vagas Freelancer em São Paulo.",
     links: [
       { label: "@freelancersp", url: "https://instagram.com/freelancersp", type: "instagram", handle: "@freelancersp" },
     ],

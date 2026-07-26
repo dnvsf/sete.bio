@@ -165,7 +165,7 @@ export function ProjectCard({
         </motion.div>
 
         <motion.span
-          className="text-lg font-bold tracking-tight text-foreground"
+          className="text-lg font-bold tracking-tight text-foreground uppercase"
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: delay + 0.15 }}
