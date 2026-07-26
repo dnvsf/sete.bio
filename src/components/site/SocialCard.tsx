@@ -182,27 +182,14 @@ export function SocialCard({
       </motion.div>
 
       <div className="min-w-0 flex-1 self-center relative z-10">
-        <div className="flex items-baseline gap-2">
-          <motion.span
-            className="text-xl font-bold tracking-tight leading-none"
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: delay + 0.2 }}
-          >
-            {label}
-          </motion.span>
-          <motion.span
-            className="text-sm font-normal tracking-tight"
-            initial={{ opacity: 0 }}
-            animate={{
-              opacity: isHovered ? 0.7 : 0.5,
-            }}
-            transition={{ duration: 0.3 }}
-            style={{ color: "oklch(0.98 0.005 260)" }}
-          >
-            @{handle}
-          </motion.span>
-        </div>
+        <motion.span
+          className="text-xl font-bold tracking-tight leading-none"
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: delay + 0.2 }}
+        >
+          {label}
+        </motion.span>
       </div>
 
       {/* Arrow that appears on hover */}

@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "framer-motion";
 import { TwitchCard } from "@/components/site/TwitchCard";
 import { SocialCard } from "@/components/site/SocialCard";
-import { YouTubeModal } from "@/components/site/YouTubeModal";
+
 import { InstagramIcon, TikTokIcon, YouTubeIcon } from "@/components/site/icons";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 
@@ -200,8 +200,6 @@ function ScrollBounce() {
 }
 
 function Home() {
-  const [ytOpen, setYtOpen] = useState(false);
-
   const listSocialsFn = useServerFn(listSocials);
   const { data: socials } = useQuery({
     queryKey: ["socials"],
@@ -238,7 +236,7 @@ function Home() {
                 handle={yt?.handle || "setexxl"}
                 icon={<YouTubeIcon size={26} />}
                 iconBgColor="oklch(0.55 0.22 30)"
-                onClick={() => setYtOpen(true)}
+                href={yt?.url || `https://youtube.com/@${yt?.handle || "setexxl"}`}
                 delay={0.15}
               />
             </div>
@@ -266,7 +264,6 @@ function Home() {
 
           <ScrollBounce />
 
-          <YouTubeModal open={ytOpen} onClose={() => setYtOpen(false)} />
         </div>
       </div>
     </PageWrapper>
