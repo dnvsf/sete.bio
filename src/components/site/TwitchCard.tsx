@@ -222,8 +222,8 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
           </motion.span>
         </div>
 
-        {/* Status indicator — lateral */}
-        <div className="flex shrink-0 items-center">
+        {/* Status indicator — canto direito */}
+        <div className="flex shrink-0 items-center ml-auto">
           <AnimatePresence mode="wait">
             {live === null ? (
               <motion.div
