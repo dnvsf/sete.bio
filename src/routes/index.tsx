@@ -5,7 +5,6 @@ import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "framer-motion";
 import { TwitchCard } from "@/components/site/TwitchCard";
 import { SocialCard } from "@/components/site/SocialCard";
-import { ProjectCard } from "@/components/site/ProjectCard";
 import { InstagramIcon, TikTokIcon, YouTubeIcon } from "@/components/site/icons";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 
@@ -26,9 +25,6 @@ const led = (offset: string): CSSProperties => ({ ["--led-offset" as never]: off
 function pickSocial(list: SocialDTO[] | undefined, platform: string) {
   return list?.find((s) => s.platform.toLowerCase() === platform.toLowerCase());
 }
-
-/* ===== Projects data ===== */
-const projectNames = ["DANIEL PEREIRA", "PERDANE", "FREELANCER-SP", "ROLESP"];
 
 /* ===== Floating Particles ===== */
 function FloatingParticles() {
@@ -266,20 +262,6 @@ function Home() {
               />
             </div>
 
-            {/* Linha separadora — antes dos projetos */}
-            <AnimatedSeparator delay={0.8} />
-
-            {/* Meus Projetos */}
-            <div className="flex flex-col gap-3 pt-1">
-              {projectNames.map((name, i) => (
-                <div key={name} style={led(`${0.9 + i * 0.1}s`)}>
-                  <ProjectCard
-                    label={name}
-                    delay={0.5 + i * 0.12}
-                  />
-                </div>
-              ))}
-            </div>
           </div>
 
           <ScrollBounce />
