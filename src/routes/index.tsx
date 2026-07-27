@@ -6,7 +6,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TwitchCard } from "@/components/site/TwitchCard";
 import { SocialCard } from "@/components/site/SocialCard";
 import { ProjectCard } from "@/components/site/ProjectCard";
-import { ProjectModal, type ProjectData } from "@/components/site/ProjectModal";
 import { InstagramIcon, TikTokIcon, YouTubeIcon } from "@/components/site/icons";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 
@@ -29,44 +28,7 @@ function pickSocial(list: SocialDTO[] | undefined, platform: string) {
 }
 
 /* ===== Projects data ===== */
-const projects: ProjectData[] = [
-  {
-    name: "DANIEL PEREIRA",
-    description: "Serviços de Marketing Digital para empresas.",
-    links: [
-      { label: "danielp.com.br", url: "https://danielp.com.br", type: "website" },
-    ],
-  },
-  {
-    name: "PERDANE",
-    description: "Vestuários premium e exclusivos.",
-    links: [
-      { label: "perdane.com.br", url: "https://perdane.com.br", type: "website" },
-      { label: "@useperdane", url: "https://instagram.com/useperdane", type: "instagram", handle: "@useperdane" },
-      { label: "@useperdane", url: "https://tiktok.com/@useperdane", type: "tiktok", handle: "@useperdane" },
-      { label: "@useperdane", url: "https://facebook.com/useperdane", type: "facebook", handle: "@useperdane" },
-    ],
-  },
-  {
-    name: "FREELANCER-SP",
-    description: "Plataforma de vagas Freelancer em São Paulo.",
-    links: [
-      { label: "@freelancersp", url: "https://instagram.com/freelancersp", type: "instagram", handle: "@freelancersp" },
-    ],
-  },
-  {
-    name: "ROLESP",
-    description: "Faça rolês e amizades em São Paulo.",
-    links: [
-      { label: "rolesp.com.br", url: "https://rolesp.com.br", type: "website" },
-      { label: "@rolesp_oficial", url: "https://instagram.com/rolesp_oficial", type: "instagram", handle: "@rolesp_oficial" },
-      { label: "@rolesp_oficial", url: "https://tiktok.com/@rolesp_oficial", type: "tiktok", handle: "@rolesp_oficial" },
-      { label: "@rolesp_oficial", url: "https://youtube.com/@rolesp_oficial", type: "youtube", handle: "@rolesp_oficial" },
-      { label: "@rolesp_oficial", url: "https://facebook.com/rolesp_oficial", type: "facebook", handle: "@rolesp_oficial" },
-      { label: "@rolesp_oficial", url: "https://reddit.com/u/rolesp_oficial", type: "reddit", handle: "@rolesp_oficial" },
-    ],
-  },
-];
+const projectNames = ["DANIEL PEREIRA", "PERDANE", "FREELANCER-SP", "ROLESP"];
 
 /* ===== Floating Particles ===== */
 function FloatingParticles() {
@@ -241,7 +203,7 @@ function ScrollBounce() {
 }
 
 function Home() {
-  const [modalProject, setModalProject] = useState<ProjectData | null>(null);
+
 
   const listSocialsFn = useServerFn(listSocials);
   const { data: socials } = useQuery({
@@ -309,12 +271,10 @@ function Home() {
 
             {/* Meus Projetos */}
             <div className="flex flex-col gap-3 pt-1">
-              {projects.map((project, i) => (
-                <div key={project.name} style={led(`${0.9 + i * 0.1}s`)}>
+              {projectNames.map((name, i) => (
+                <div key={name} style={led(`${0.9 + i * 0.1}s`)}>
                   <ProjectCard
-                    label={project.name}
-                    description={project.description}
-                    onClick={() => setModalProject(project)}
+                    label={name}
                     delay={0.5 + i * 0.12}
                   />
                 </div>
@@ -326,11 +286,6 @@ function Home() {
         </div>
       </div>
 
-      <ProjectModal
-        open={modalProject !== null}
-        project={modalProject}
-        onClose={() => setModalProject(null)}
-      />
     </PageWrapper>
   );
 }

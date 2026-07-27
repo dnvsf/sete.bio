@@ -211,19 +211,17 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
           </motion.div>
         </motion.div>
 
-        <div className="min-w-0 flex-1 self-center">
-          <motion.span
-            className="text-xl font-bold tracking-tight leading-none text-white"
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.4, delay: 0.4 }}
-          >
-            Twitch
-          </motion.span>
-        </div>
+        <motion.span
+          className="text-xl font-bold tracking-tight leading-none text-white"
+          initial={{ opacity: 0, x: -12 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
+        >
+          Twitch
+        </motion.span>
 
-        {/* Status indicator — canto direito */}
-        <div className="flex shrink-0 items-center ml-auto">
+        {/* Status indicator — canto direito, absoluto */}
+        <div className="absolute right-5 top-1/2 -translate-y-1/2">
           <AnimatePresence mode="wait">
             {live === null ? (
               <motion.div

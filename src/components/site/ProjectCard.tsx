@@ -1,24 +1,13 @@
 import { motion, useMotionValue, useSpring, animate } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
-
-interface Ripple {
-  x: number;
-  y: number;
-  id: number;
-}
+import { useEffect, useState } from "react";
 
 export function ProjectCard({
   label,
-  description,
-  onClick,
   delay = 0,
 }: {
   label: string;
-  description: string;
-  onClick: () => void;
   delay?: number;
 }) {
-  const cardRef = useRef<HTMLButtonElement | null>(null);
   const [isHovered, setIsHovered] = useState(false);
 
   // 3D tilt
@@ -26,13 +15,6 @@ export function ProjectCard({
   const tiltY = useMotionValue(0);
   const springTiltX = useSpring(tiltX, { stiffness: 200, damping: 25 });
   const springTiltY = useSpring(tiltY, { stiffness: 200, damping: 25 });
-
-  // Glow position follows mouse
-  const glowX = useMotionValue(50);
-  const glowY = useMotionValue(50);
-
-  // Ripple state
-  const [ripples, setRipples] = useState<Ripple[]>([]);
 
   // Breathing animation
   useEffect(() => {
@@ -55,63 +37,30 @@ export function ProjectCard({
     }
   }, [isHovered, delay]);
 
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      const el = cardRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      tiltX.set(((y - centerY) / centerY) * -5);
-      tiltY.set(((x - centerX) / centerX) * 5);
-      glowX.set((x / rect.width) * 100);
-      glowY.set((y / rect.height) * 100);
-    },
-    [tiltX, tiltY, glowX, glowY]
-  );
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const el = e.currentTarget;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    tiltX.set(((y - centerY) / centerY) * -5);
+    tiltY.set(((x - centerX) / centerX) * 5);
+  };
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = () => {
     setIsHovered(false);
     tiltX.set(0);
     tiltY.set(0);
-    glowX.set(50);
-    glowY.set(50);
-  }, [tiltX, tiltY, glowX, glowY]);
-
-  const handleClick = useCallback(
-    (e: React.MouseEvent) => {
-      const el = cardRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const ripple: Ripple = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        id: Date.now(),
-      };
-      setRipples((prev) => [...prev, ripple]);
-      setTimeout(() => {
-        setRipples((prev) => prev.filter((r) => r.id !== ripple.id));
-      }, 700);
-      onClick();
-    },
-    [onClick]
-  );
+  };
 
   return (
-    <motion.button
-      ref={cardRef}
-      type="button"
-      onClick={handleClick}
+    <div
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      whileTap={{ scale: 0.98 }}
-      initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: 0.7, delay, type: "spring" as const, stiffness: 60, damping: 18 }}
-      className="hover-red-border group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm w-full text-left cursor-pointer"
+      className="hover-white-border group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm w-full text-left"
       style={{
         transform: `perspective(1000px) rotateX(${springTiltX.get()}deg) rotateY(${springTiltY.get()}deg)`,
       }}
@@ -121,67 +70,42 @@ export function ProjectCard({
         className="absolute inset-0 pointer-events-none transition-opacity duration-500"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(circle 250px at ${glowX.get()}% ${glowY.get()}%, oklch(0.95 0.01 260 / 0.05), transparent)`,
+          background: `radial-gradient(circle 250px at ${isHovered ? 50 : 50}% ${isHovered ? 50 : 50}%, oklch(0.95 0.01 260 / 0.05), transparent)`,
         }}
       />
 
-      {/* Ripples */}
-      {ripples.map((ripple) => (
+      {/* Blur overlay + Lock icon */}
+      <div className="relative flex flex-col items-center justify-center gap-3 p-6 min-h-[5.5rem]">
+        {/* Lock icon */}
         <motion.div
-          key={ripple.id}
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            left: ripple.x,
-            top: ripple.y,
-            width: 0,
-            height: 0,
-            background: "radial-gradient(circle, oklch(0.95 0.01 260 / 0.3), transparent 70%)",
-            transform: "translate(-50%, -50%)",
-          }}
-          animate={{
-            width: [0, 300],
-            height: [0, 300],
-            opacity: [0.4, 0],
-          }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-        />
-      ))}
-
-      {/* Content — centered */}
-      <div className="relative flex flex-col items-center gap-2 p-6 z-10">
-        {/* Arrow hint on hover */}
-        <motion.div
-          className="absolute top-4 right-4"
-          animate={{
-            opacity: isHovered ? 0.4 : 0,
-            x: isHovered ? 0 : -4,
-          }}
-          transition={{ duration: 0.3 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: delay + 0.1, type: "spring", stiffness: 200, damping: 15 }}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-foreground">
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-foreground/30"
+          >
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
         </motion.div>
 
-        <motion.span
-          className="text-lg font-bold tracking-tight text-foreground uppercase"
-          initial={{ opacity: 0, y: -6 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: delay + 0.15 }}
+        {/* Blurred label */}
+        <div
+          className="text-lg font-bold tracking-tight text-foreground/10 uppercase select-none"
+          style={{ filter: "blur(4px)" }}
         >
           {label}
-        </motion.span>
-
-        <motion.p
-          className="text-sm text-muted-foreground text-center max-w-xs leading-relaxed"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.4, delay: delay + 0.25 }}
-        >
-          {description}
-        </motion.p>
+        </div>
       </div>
-    </motion.button>
+    </div>
   );
 }
