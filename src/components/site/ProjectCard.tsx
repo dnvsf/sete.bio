@@ -55,12 +55,15 @@ export function ProjectCard({
     tiltY.set(0);
   };
 
+  // Render placeholder lines instead of real text
+  const placeholderLines = label.split(" ").map(() => 0);
+
   return (
     <div
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="hover-white-border group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm w-full text-left"
+      className="hover-white-border group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm w-full text-left select-none"
       style={{
         transform: `perspective(1000px) rotateX(${springTiltX.get()}deg) rotateY(${springTiltY.get()}deg)`,
       }}
@@ -70,12 +73,12 @@ export function ProjectCard({
         className="absolute inset-0 pointer-events-none transition-opacity duration-500"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(circle 250px at ${isHovered ? 50 : 50}% ${isHovered ? 50 : 50}%, oklch(0.95 0.01 260 / 0.05), transparent)`,
+          background: `radial-gradient(circle 250px at 50% 50%, oklch(0.95 0.01 260 / 0.05), transparent)`,
         }}
       />
 
-      {/* Blur overlay + Lock icon */}
-      <div className="relative flex flex-col items-center justify-center gap-3 p-6 min-h-[5.5rem]">
+      {/* Content — placeholder only, no real text in DOM */}
+      <div className="relative flex flex-col items-center gap-3 p-6 min-h-[5.5rem]">
         {/* Lock icon */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -91,19 +94,25 @@ export function ProjectCard({
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="text-foreground/30"
+            className="text-foreground/20"
           >
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
             <path d="M7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
         </motion.div>
 
-        {/* Blurred label */}
-        <div
-          className="text-lg font-bold tracking-tight text-foreground/10 uppercase select-none"
-          style={{ filter: "blur(4px)" }}
-        >
-          {label}
+        {/* Placeholder lines — no actual text content */}
+        <div className="flex gap-1.5">
+          {placeholderLines.map((_, i) => (
+            <div
+              key={i}
+              className="h-2.5 rounded-full bg-foreground/10"
+              style={{
+                width: `${40 + Math.random() * 25}px`,
+                filter: "blur(3px)",
+              }}
+            />
+          ))}
         </div>
       </div>
     </div>
