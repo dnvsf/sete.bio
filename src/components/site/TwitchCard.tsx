@@ -16,14 +16,14 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
   });
   const live = data == null ? null : !!data.live;
 
-  // Cor padrão igual aos outros cards; muda só quando ao vivo
+  // Estilos baseados no estado live
   const bgClass = live
-    ? "bg-[oklch(0.28_0.12_145_/0.55)]"
-    : "bg-card/60";
+    ? "bg-card/80"
+    : "bg-card/40";
   const borderClass = live
-    ? "border-[oklch(0.72_0.19_145_/0.5)]"
-    : "border-white/8";
-  const pulseClass = live ? "animate-green-pulse" : "";
+    ? "border-white/20 shadow-[0_0_30px_rgba(255,0,0,0.1)]"
+    : "border-white/10";
+  const pulseClass = live ? "animate-red-pulse" : "";
 
   // 3D tilt
   const tiltX = useMotionValue(0);
@@ -40,19 +40,23 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
 
   // Breathing
   useEffect(() => {
-    animate(tiltX, [0, 0.2, -0.2, 0], {
+    const controlsX = animate(tiltX, [0, 0.2, -0.2, 0], {
       duration: 9,
       repeat: Infinity,
       ease: "easeInOut",
       delay: 2,
     });
-    animate(tiltY, [0, 0.15, -0.15, 0], {
+    const controlsY = animate(tiltY, [0, 0.15, -0.15, 0], {
       duration: 11,
       repeat: Infinity,
       ease: "easeInOut",
       delay: 3,
     });
-  }, []);
+    return () => {
+      controlsX.stop();
+      controlsY.stop();
+    };
+  }, [tiltX, tiltY]);
 
   const cardRef = useRef<HTMLAnchorElement | null>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -108,7 +112,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
       animate={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
       transition={{ duration: 0.8, delay: 0, type: "spring" as const, stiffness: 50, damping: 15 }}
       whileTap={{ scale: 0.98 }}
-      className={`hover-red-border group relative block overflow-hidden rounded-2xl border backdrop-blur-sm ${bgClass} ${borderClass} ${pulseClass}`}
+      className={`hover-red-border group relative block overflow-hidden rounded-2xl border backdrop-blur-md transition-all duration-500 ${bgClass} ${borderClass} ${pulseClass}`}
       style={{
         transform: `perspective(1000px) rotateX(${springTiltX.get()}deg) rotateY(${springTiltY.get()}deg)`,
       }}
@@ -121,38 +125,14 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(circle 300px at ${glowX.get()}% ${glowY.get()}%, ${
-            live
-              ? "oklch(0.72 0.19 145 / 0.12)"
-              : "oklch(0.95 0.01 260 / 0.05)"
-          }, transparent 70%)`,
-          opacity: isHovered ? 1 : 0.5,
+          background: `radial-gradient(circle 300px at ${glowX.get()}% ${glowY.get()}%, oklch(0.55 0.22 25 / 0.1), transparent 70%)`,
+          opacity: isHovered ? 1 : 0.4,
         }}
         animate={{
           scale: live ? [1, 1.08, 1] : [1, 1.03, 1],
         }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       />
-
-      {/* Scanline effect when live */}
-      {live && (
-        <motion.div
-          className="absolute inset-0 pointer-events-none overflow-hidden"
-          style={{ opacity: 0.06 }}
-        >
-          <motion.div
-            className="absolute left-0 right-0 h-px bg-white"
-            animate={{
-              y: ["-10%", "110%"],
-            }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          />
-        </motion.div>
-      )}
 
       {/* Ripples */}
       {ripples.map((ripple) => (
@@ -164,21 +144,19 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
             top: ripple.y,
             width: 0,
             height: 0,
-            background: live
-              ? "radial-gradient(circle, oklch(0.72 0.19 145 / 0.35), transparent 70%)"
-              : "radial-gradient(circle, oklch(0.95 0.01 260 / 0.3), transparent 70%)",
+            background: "radial-gradient(circle, oklch(0.55 0.22 25 / 0.3), transparent 70%)",
             transform: "translate(-50%, -50%)",
           }}
           animate={{
-            width: [0, 350],
-            height: [0, 350],
+            width: [0, 400],
+            height: [0, 400],
             opacity: [0.5, 0],
           }}
           transition={{ duration: 0.7, ease: "easeOut" }}
         />
       ))}
 
-      <div className="relative flex items-center gap-4 p-5 z-10">
+      <div className="relative flex items-center gap-5 p-6 z-10">
         {/* Twitch icon */}
         <motion.div
           className="grid h-12 w-12 shrink-0 place-items-center relative"
@@ -186,44 +164,28 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 0.7, delay: 0.3, type: "spring", stiffness: 150, damping: 12 }}
         >
-          {/* Glow behind icon when live */}
-          {live && (
-            <motion.div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: "radial-gradient(circle, oklch(0.72 0.19 145 / 0.3), transparent 70%)",
-                filter: "blur(10px)",
-              }}
-              animate={{
-                opacity: [0.3, 0.7, 0.3],
-                scale: [0.9, 1.2, 0.9],
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            />
-          )}
+          <div className="absolute inset-0 rounded-full bg-white/5 border border-white/10" />
           <motion.div
             animate={live ? { rotate: [0, -4, 4, -3, 0] } : { rotate: 0 }}
             transition={{ duration: 1.2, repeat: live ? Infinity : 0, repeatDelay: 5 }}
             whileHover={{ scale: 1.15, rotate: 5 }}
-            className="relative z-10"
-            style={{ color: live ? undefined : "currentColor" }}
+            className="relative z-10 text-white"
           >
             <TwitchIcon size={26} />
           </motion.div>
         </motion.div>
 
         <motion.span
-          className="text-xl font-bold tracking-tight leading-none"
+          className="text-lg font-bold tracking-tight leading-none text-white/90"
           initial={{ opacity: 0, x: -12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-          style={{ color: live ? undefined : "oklch(0.98 0.005 260)" }}
         >
           Twitch
         </motion.span>
 
         {/* Status indicator */}
-        <div className="absolute right-5 top-1/2 -translate-y-1/2">
+        <div className="absolute right-6 top-1/2 -translate-y-1/2">
           <AnimatePresence mode="wait">
             {live === null ? (
               <motion.div
@@ -241,28 +203,18 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: -12, scale: 0.8 }}
                 transition={{ duration: 0.4, type: "spring", stiffness: 200, damping: 18 }}
-                className="flex items-center gap-2"
+                className="flex items-center gap-2.5"
               >
                 {live && (
-                  <span
-                    className="inline-block h-2 w-2 rounded-full"
-                    style={{
-                      background: "oklch(0.72 0.19 145)",
-                      boxShadow: "0 0 12px 2px oklch(0.72 0.19 145 / 0.7)",
-                    }}
-                  >
-                    <motion.span
-                      className="block w-full h-full rounded-full"
-                      animate={{ opacity: [1, 0.4, 1], scale: [1, 0.7, 1] }}
-                      transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-                    />
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-red opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-red shadow-[0_0_10px_var(--accent-red)]"></span>
                   </span>
                 )}
                 <span
-                  className="text-[11px] font-semibold uppercase tracking-wide"
+                  className="text-[11px] font-bold uppercase tracking-widest"
                   style={{
-                    color: live ? "oklch(0.72 0.19 145)" : "oklch(0.65 0.01 260)",
-                    textShadow: live ? "0 0 12px oklch(0.72 0.19 145 / 0.5)" : "none",
+                    color: live ? "var(--accent-red)" : "var(--muted-foreground)",
                   }}
                 >
                   {live ? "Ao vivo" : "Offline"}
@@ -271,21 +223,6 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
             )}
           </AnimatePresence>
         </div>
-
-        {/* Arrow */}
-        <motion.div
-          className="absolute right-4"
-          animate={{
-            opacity: isHovered ? 0.6 : 0,
-            x: isHovered ? 0 : -4,
-          }}
-          transition={{ duration: 0.3 }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "oklch(0.65 0.01 260)" }}>
-            <path d="M5 12h14" />
-            <path d="m12 5 7 7-7 7" />
-          </svg>
-        </motion.div>
       </div>
     </motion.a>
   );

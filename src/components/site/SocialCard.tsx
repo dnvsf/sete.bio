@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useTransform, animate, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, animate } from "framer-motion";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 
 interface Ripple {
@@ -9,9 +9,7 @@ interface Ripple {
 
 export function SocialCard({
   label,
-  handle,
   icon,
-  iconBgColor,
   onClick,
   href,
   delay = 0,
@@ -43,23 +41,24 @@ export function SocialCard({
   // Breathing animation for idle state
   useEffect(() => {
     if (!isHovered) {
-      animate(tiltX, [0, 0.3, -0.3, 0], {
+      const controlsX = animate(tiltX, [0, 0.3, -0.3, 0], {
         duration: 8,
         repeat: Infinity,
         ease: "easeInOut",
         delay: delay + 2,
       });
-      animate(tiltY, [0, 0.2, -0.2, 0], {
+      const controlsY = animate(tiltY, [0, 0.2, -0.2, 0], {
         duration: 10,
         repeat: Infinity,
         ease: "easeInOut",
         delay: delay + 3,
       });
-    } else {
-      tiltX.stop();
-      tiltY.stop();
+      return () => {
+        controlsX.stop();
+        controlsY.stop();
+      };
     }
-  }, [isHovered, delay]);
+  }, [isHovered, delay, tiltX, tiltY]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
@@ -70,10 +69,8 @@ export function SocialCard({
       const y = e.clientY - rect.top;
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
-      // Tilt values (in degrees)
       tiltX.set(((y - centerY) / centerY) * -6);
       tiltY.set(((x - centerX) / centerX) * 6);
-      // Glow position (percentage)
       glowX.set((x / rect.width) * 100);
       glowY.set((y / rect.height) * 100);
     },
@@ -114,7 +111,7 @@ export function SocialCard({
   const inner = (
     <div
       ref={cardRef}
-      className="relative flex items-center gap-4 p-5 overflow-hidden rounded-2xl"
+      className="relative flex items-center gap-5 p-6 overflow-hidden rounded-2xl"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
@@ -125,7 +122,7 @@ export function SocialCard({
         className="absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-500"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(circle 250px at ${glowX.get()}% ${glowY.get()}%, oklch(0.95 0.01 260 / 0.05), transparent)`,
+          background: `radial-gradient(circle 250px at ${glowX.get()}% ${glowY.get()}%, oklch(0.55 0.22 25 / 0.08), transparent)`,
         }}
       />
 
@@ -139,51 +136,37 @@ export function SocialCard({
             top: ripple.y,
             width: 0,
             height: 0,
-            background: "radial-gradient(circle, oklch(0.95 0.01 260 / 0.3), transparent 70%)",
+            background: "radial-gradient(circle, oklch(0.55 0.22 25 / 0.3), transparent 70%)",
             transform: "translate(-50%, -50%)",
           }}
           animate={{
-            width: [0, 300],
-            height: [0, 300],
+            width: [0, 400],
+            height: [0, 400],
             opacity: [0.4, 0],
           }}
           transition={{ duration: 0.7, ease: "easeOut" }}
         />
       ))}
 
-      {/* Icon with subtle glow */}
+      {/* Icon Container */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: delay + 0.1, type: "spring", stiffness: 120 }}
         className="grid h-12 w-12 shrink-0 place-items-center text-white relative"
       >
-        {/* Glow behind icon */}
         <motion.div
-          className="absolute inset-0 rounded-full"
-          style={{
-            background: "radial-gradient(circle, oklch(0.95 0.01 260 / 0.4), transparent 70%)",
-            filter: "blur(8px)",
-          }}
+          className="absolute inset-0 rounded-full bg-white/5 border border-white/10"
           animate={{
-            opacity: isHovered ? 0.4 : 0,
-            scale: isHovered ? 1.3 : 1,
+            borderColor: isHovered ? "oklch(0.55 0.22 25 / 0.4)" : "oklch(1 0 0 / 10%)",
           }}
-          transition={{ duration: 0.4 }}
         />
-        <motion.div
-          whileHover={{ scale: 1.15, rotate: 5 }}
-          className="relative z-10"
-          animate={isHovered ? { y: 0 } : { y: [0, -1, 0, 1, 0] }}
-          transition={isHovered ? { type: "spring" as const, stiffness: 300, damping: 15 } : { duration: 6, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
-        >
-          {icon}
-        </motion.div>
+        <div className="relative z-10">{icon}</div>
       </motion.div>
 
       <div className="min-w-0 flex-1 self-center relative z-10">
         <motion.span
-          className="text-xl font-bold tracking-tight leading-none"
+          className="text-lg font-bold tracking-tight text-white/90 group-hover:text-white transition-colors"
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: delay + 0.2 }}
@@ -192,16 +175,16 @@ export function SocialCard({
         </motion.span>
       </div>
 
-      {/* Arrow that appears on hover */}
+      {/* Arrow */}
       <motion.div
-        className="absolute right-4"
+        className="absolute right-6"
         animate={{
-          opacity: isHovered ? 0.6 : 0,
-          x: isHovered ? 0 : -4,
+          opacity: isHovered ? 0.8 : 0,
+          x: isHovered ? 0 : -8,
         }}
         transition={{ duration: 0.3 }}
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-foreground">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/60">
           <path d="M5 12h14" />
           <path d="m12 5 7 7-7 7" />
         </svg>
@@ -209,7 +192,7 @@ export function SocialCard({
     </div>
   );
 
-  const cls = "hover-red-border group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm";
+  const cls = "hover-red-border group relative block overflow-hidden rounded-2xl border border-white/10 bg-card backdrop-blur-md shadow-2xl";
   const anim = {
     initial: { opacity: 0, y: 20, filter: "blur(8px)" },
     animate: { opacity: 1, y: 0, filter: "blur(0px)" },

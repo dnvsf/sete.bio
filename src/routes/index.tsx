@@ -11,6 +11,7 @@ import { SocialCard } from "@/components/site/SocialCard";
 import { SocialIconsBar } from "@/components/site/SocialIconsBar";
 import { LivePixFloating } from "@/components/site/LivePixFloating";
 import { DiscordIcon } from "@/components/site/icons";
+import { BackgroundSevens } from "@/components/site/SevenGlyph";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 import { getTwitchLive } from "@/lib/getTwitchLive.functions";
 import { getKickLive } from "@/lib/getKickLive.functions";
@@ -36,14 +37,14 @@ function pickSocial(list: SocialDTO[] | undefined, platform: string) {
 /* ===== Floating Particles ===== */
 function FloatingParticles() {
   const particles = useMemo(() => {
-    return Array.from({ length: 20 }, (_, i) => ({
+    return Array.from({ length: 15 }, (_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      size: Math.random() * 2 + 1,
-      duration: Math.random() * 15 + 10,
+      size: Math.random() * 1.5 + 0.5,
+      duration: Math.random() * 20 + 15,
       delay: Math.random() * 10,
-      opacity: Math.random() * 0.15 + 0.05,
+      opacity: Math.random() * 0.1 + 0.05,
     }));
   }, []);
 
@@ -58,13 +59,13 @@ function FloatingParticles() {
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
-            background: "oklch(0.95 0.01 260)",
+            background: "var(--accent-red)",
             opacity: p.opacity,
           }}
           animate={{
-            y: [0, -30, 0],
-            x: [0, 10, -10, 0],
-            opacity: [p.opacity, p.opacity * 1.5, p.opacity],
+            y: [0, -40, 0],
+            x: [0, 15, -15, 0],
+            opacity: [p.opacity, p.opacity * 2, p.opacity],
           }}
           transition={{
             duration: p.duration,
@@ -91,7 +92,7 @@ function PageWrapper({ children }: { children: React.ReactNode }) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: loaded ? 1 : 0 }}
-      transition={{ duration: 1.2, ease: "easeOut" }}
+      transition={{ duration: 1.5, ease: [0.2, 0.8, 0.2, 1] }}
     >
       {children}
     </motion.div>
@@ -127,32 +128,32 @@ function CursorGlow() {
       style={{
         left: pos.x,
         top: pos.y,
-        width: 300,
-        height: 300,
+        width: 400,
+        height: 400,
         borderRadius: "50%",
-        background: "radial-gradient(circle, oklch(0.95 0.01 260 / 0.03), transparent 70%)",
+        background: "radial-gradient(circle, oklch(0.55 0.22 25 / 0.04), transparent 70%)",
         transform: "translate(-50%, -50%)",
       }}
-      transition={{ type: "spring", stiffness: 500, damping: 40 }}
+      transition={{ type: "spring", stiffness: 500, damping: 50 }}
     />
   );
 }
 
 function AnimatedSeparator({ delay = 0.6 }: { delay?: number }) {
   return (
-    <div className="relative h-px my-1.5 overflow-hidden">
+    <div className="relative h-px my-4 overflow-hidden">
       <motion.div
-        className="absolute inset-0 bg-white/10"
+        className="absolute inset-0 bg-white/5"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
-        transition={{ duration: 0.8, delay, ease: [0.2, 0.7, 0.2, 1] }}
+        transition={{ duration: 1, delay, ease: [0.2, 0.8, 0.2, 1] }}
         style={{ originX: 0 }}
       />
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-accent-red/20 to-transparent"
         initial={{ x: "-100%" }}
         animate={{ x: "100%" }}
-        transition={{ duration: 2, delay: delay + 0.2, ease: "easeInOut", repeat: Infinity, repeatDelay: 8 }}
+        transition={{ duration: 3, delay: delay + 0.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 5 }}
       />
     </div>
   );
@@ -227,9 +228,10 @@ function Home() {
     <PageWrapper>
       <CursorGlow />
       <FloatingParticles />
+      <BackgroundSevens />
 
       <div className="relative min-h-screen z-10">
-        <div className="relative mx-auto max-w-xl px-4 pb-28 pt-14 sm:pt-20">
+        <div className="relative mx-auto max-w-xl px-4 pb-32 pt-16 sm:pt-24">
 
           {/* ===== ÍCONES DAS REDES PESSOAIS (TOPO) ===== */}
           <SocialIconsBar
@@ -238,7 +240,7 @@ function Home() {
             tiktok={{ handle: tk?.handle || "setexxl", url: tk?.url || "" }}
           />
 
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
 
             {/* ===== LIVE CARDS (Twitch + Kick) — reordenados dinamicamente ===== */}
             {liveCards.map((card) => (
@@ -265,7 +267,7 @@ function Home() {
                 label="Discord"
                 handle="Em breve"
                 icon={<DiscordIcon size={26} />}
-                iconBgColor="oklch(0.45 0.15 270)"
+                iconBgColor="var(--accent-red)"
                 delay={0.3}
               />
             </div>

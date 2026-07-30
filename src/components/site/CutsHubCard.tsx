@@ -33,24 +33,23 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
 
   // Breathing
   useEffect(() => {
-    if (!isHovered) {
-      animate(tiltX, [0, 0.3, -0.3, 0], {
-        duration: 8,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: delay + 2,
-      });
-      animate(tiltY, [0, 0.2, -0.2, 0], {
-        duration: 10,
-        repeat: Infinity,
-        ease: "easeInOut",
-        delay: delay + 3,
-      });
-    } else {
-      tiltX.stop();
-      tiltY.stop();
-    }
-  }, [isHovered, delay]);
+    const controlsX = animate(tiltX, [0, 0.3, -0.3, 0], {
+      duration: 8,
+      repeat: Infinity,
+      ease: "easeInOut",
+      delay: delay + 2,
+    });
+    const controlsY = animate(tiltY, [0, 0.2, -0.2, 0], {
+      duration: 10,
+      repeat: Infinity,
+      ease: "easeInOut",
+      delay: delay + 3,
+    });
+    return () => {
+      controlsX.stop();
+      controlsY.stop();
+    };
+  }, [delay, tiltX, tiltY]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent) => {
@@ -109,7 +108,7 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.7, delay, type: "spring" as const, stiffness: 60, damping: 18 }}
         whileTap={{ scale: 0.98 }}
-        className="hover-red-border group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm w-full text-left"
+        className="hover-red-border group relative block overflow-hidden rounded-2xl border border-white/10 bg-card backdrop-blur-md w-full text-left shadow-2xl"
         style={{
           transform: `perspective(1000px) rotateX(${springTiltX.get()}deg) rotateY(${springTiltY.get()}deg)`,
         }}
@@ -119,7 +118,7 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
           className="absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-500"
           style={{
             opacity: isHovered ? 1 : 0,
-            background: `radial-gradient(circle 250px at ${glowX.get()}% ${glowY.get()}%, oklch(0.60 0.20 30 / 0.08), transparent)`,
+            background: `radial-gradient(circle 250px at ${glowX.get()}% ${glowY.get()}%, oklch(0.55 0.22 25 / 0.08), transparent)`,
           }}
         />
 
@@ -133,20 +132,20 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
               top: ripple.y,
               width: 0,
               height: 0,
-              background: "radial-gradient(circle, oklch(0.60 0.20 30 / 0.3), transparent 70%)",
+              background: "radial-gradient(circle, oklch(0.55 0.22 25 / 0.3), transparent 70%)",
               transform: "translate(-50%, -50%)",
             }}
             animate={{
-              width: [0, 300],
-              height: [0, 300],
+              width: [0, 400],
+              height: [0, 400],
               opacity: [0.4, 0],
             }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           />
         ))}
 
-        <div className="relative flex items-center gap-4 p-5 overflow-hidden">
-          {/* Icon with glow */}
+        <div className="relative flex items-center gap-5 p-6 overflow-hidden">
+          {/* Icon Container */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -154,30 +153,19 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
             className="grid h-12 w-12 shrink-0 place-items-center text-white relative"
           >
             <motion.div
-              className="absolute inset-0 rounded-full"
-              style={{
-                background: "radial-gradient(circle, oklch(0.60 0.20 30 / 0.4), transparent 70%)",
-                filter: "blur(8px)",
-              }}
+              className="absolute inset-0 rounded-full bg-white/5 border border-white/10"
               animate={{
-                opacity: isHovered ? 0.4 : 0,
-                scale: isHovered ? 1.3 : 1,
+                borderColor: isHovered ? "oklch(0.55 0.22 25 / 0.4)" : "oklch(1 0 0 / 10%)",
               }}
-              transition={{ duration: 0.4 }}
             />
-            <motion.div
-              whileHover={{ scale: 1.15, rotate: 5 }}
-              className="relative z-10"
-              animate={isHovered ? { y: 0 } : { y: [0, -1, 0, 1, 0] }}
-              transition={isHovered ? { type: "spring" as const, stiffness: 300, damping: 15 } : { duration: 6, repeat: Infinity, ease: "easeInOut", delay: delay + 0.5 }}
-            >
+            <div className="relative z-10">
               <ScissorsIcon size={26} />
-            </motion.div>
+            </div>
           </motion.div>
 
           <motion.div className="min-w-0 flex-1 self-center relative z-10">
             <motion.span
-              className="text-xl font-bold tracking-tight leading-none"
+              className="text-lg font-bold tracking-tight leading-none text-white/90 group-hover:text-white transition-colors"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: delay + 0.2 }}
@@ -185,7 +173,7 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
               Cortes / Lives
             </motion.span>
             <motion.span
-              className="block mt-0.5 mono text-[10px] text-muted-foreground"
+              className="block mt-1 mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: delay + 0.35 }}
@@ -196,14 +184,14 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
 
           {/* Arrow */}
           <motion.div
-            className="absolute right-4"
+            className="absolute right-6"
             animate={{
-              opacity: isHovered ? 0.6 : 0,
-              x: isHovered ? 0 : -4,
+              opacity: isHovered ? 0.8 : 0,
+              x: isHovered ? 0 : -8,
             }}
             transition={{ duration: 0.3 }}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-foreground">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/60">
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </svg>
