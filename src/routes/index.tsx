@@ -8,6 +8,14 @@ import { KickCard } from "@/components/site/KickCard";
 import { LivePixCard } from "@/components/site/LivePixCard";
 import { LivePixModal } from "@/components/site/LivePixModal";
 import { CutsHubCard } from "@/components/site/CutsHubCard";
+import { SocialCard } from "@/components/site/SocialCard";
+import {
+  InstagramIcon,
+  TikTokIcon,
+  YouTubeIcon,
+  DiscordIcon,
+} from "@/components/site/icons";
+import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 import { getTwitchLive } from "@/lib/getTwitchLive.functions";
 import { getKickLive } from "@/lib/getKickLive.functions";
 
@@ -24,6 +32,10 @@ export const Route = createFileRoute("/")({
 });
 
 const led = (offset: string): CSSProperties => ({ ["--led-offset" as never]: offset });
+
+function pickSocial(list: SocialDTO[] | undefined, platform: string) {
+  return list?.find((s) => s.platform.toLowerCase() === platform.toLowerCase());
+}
 
 /* ===== Floating Particles ===== */
 function FloatingParticles() {
@@ -227,6 +239,17 @@ function Home() {
   const [livePixOpen, setLivePixOpen] = useState(false);
   const { twitchLive, kickLive } = useLiveStatus();
 
+  // Socials from DB (fallback to defaults)
+  const listSocialsFn = useServerFn(listSocials);
+  const { data: socials } = useQuery({
+    queryKey: ["socials"],
+    queryFn: () => listSocialsFn(),
+    staleTime: 60_000,
+  });
+  const ig = pickSocial(socials, "instagram");
+  const tk = pickSocial(socials, "tiktok");
+  const yt = pickSocial(socials, "youtube");
+
   // Reordenação dinâmica: live cards primeiro
   const liveCards = useMemo(() => {
     const cards: Array<{
@@ -245,10 +268,10 @@ function Home() {
 
     // Cards offline (apenas se não estão ao vivo)
     if (!twitchLive) {
-      cards.push({ type: "twitch", live: false, ledOffset: "0.4s" });
+      cards.push({ type: "twitch", live: false, ledOffset: "0s" });
     }
     if (!kickLive) {
-      cards.push({ type: "kick", live: false, ledOffset: "0.6s" });
+      cards.push({ type: "kick", live: false, ledOffset: "0.2s" });
     }
 
     return cards;
@@ -264,8 +287,8 @@ function Home() {
 
           <div className="flex flex-col gap-3">
 
-            {/* Live Cards (Twitch + Kick) — reordenados dinamicamente */}
-            {liveCards.map((card, i) => (
+            {/* ===== LIVE CARDS (Twitch + Kick) — reordenados dinamicamente ===== */}
+            {liveCards.map((card) => (
               <div key={card.type} style={led(card.ledOffset)}>
                 {card.type === "twitch" ? (
                   <TwitchCard handle="setexxl" />
@@ -275,20 +298,66 @@ function Home() {
               </div>
             ))}
 
-            {/* Linha separadora animada */}
-            <AnimatedSeparator delay={0.7} />
+            {/* Linha separadora */}
+            <AnimatedSeparator delay={0.5} />
 
-            {/* LivePix — Apoio */}
-            <div style={led("0.8s")}>
+            {/* ===== REDES PESSOAIS ===== */}
+            <div style={led("0.3s")}>
+              <SocialCard
+                label="YouTube"
+                handle={yt?.handle || "setexxl"}
+                icon={<YouTubeIcon size={26} />}
+                iconBgColor="oklch(0.55 0.22 30)"
+                href={yt?.url || `https://youtube.com/@${yt?.handle || "setexxl"}`}
+                delay={0.1}
+              />
+            </div>
+            <div style={led("0.4s")}>
+              <SocialCard
+                label="Instagram"
+                handle={ig?.handle || "setexxl"}
+                icon={<InstagramIcon size={26} />}
+                iconBgColor="oklch(0.45 0.18 330)"
+                href={ig?.url || `https://instagram.com/${ig?.handle || "setexxl"}`}
+                delay={0.2}
+              />
+            </div>
+            <div style={led("0.5s")}>
+              <SocialCard
+                label="TikTok"
+                handle={tk?.handle || "setexxl"}
+                icon={<TikTokIcon size={26} />}
+                iconBgColor="oklch(0.35 0.12 280)"
+                href={tk?.url || `https://tiktok.com/@${tk?.handle || "setexxl"}`}
+                delay={0.3}
+              />
+            </div>
+
+            {/* Linha separadora */}
+            <AnimatedSeparator delay={0.65} />
+
+            {/* ===== LIVEPIX — APOIO ===== */}
+            <div style={led("0.7s")}>
               <LivePixCard
                 onClick={() => setLivePixOpen(true)}
                 delay={0.4}
               />
             </div>
 
-            {/* Hub de Cortes / Lives — IG, TikTok, YouTube */}
-            <div style={led("0.9s")}>
+            {/* ===== HUB DE CORTES / LIVES (SeteLives) ===== */}
+            <div style={led("0.8s")}>
               <CutsHubCard delay={0.5} />
+            </div>
+
+            {/* ===== DISCORD ===== */}
+            <div style={led("0.9s")}>
+              <SocialCard
+                label="Discord"
+                handle="Em breve"
+                icon={<DiscordIcon size={26} />}
+                iconBgColor="oklch(0.45 0.15 270)"
+                delay={0.6}
+              />
             </div>
 
           </div>

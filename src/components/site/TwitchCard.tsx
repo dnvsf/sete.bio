@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence, useMotionValue, useSpring, animate } from "framer-motion";
-import { useCallback, useEffect, useRef, useState, type Ref } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { TwitchIcon } from "./icons";
 import { Shimmer } from "./Shimmer";
 import { getTwitchLive } from "@/lib/getTwitchLive.functions";
@@ -16,13 +16,13 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
   });
   const live = data == null ? null : !!data.live;
 
-  // Classes dinâmicas baseado no estado da live
+  // Cor padrão igual aos outros cards; muda só quando ao vivo
   const bgClass = live
     ? "bg-[oklch(0.28_0.12_145_/0.55)]"
-    : "bg-[oklch(0.30_0.15_25_/0.55)]";
+    : "bg-card/60";
   const borderClass = live
     ? "border-[oklch(0.72_0.19_145_/0.5)]"
-    : "border-[oklch(0.62_0.24_25_/0.5)]";
+    : "border-white/8";
   const pulseClass = live ? "animate-green-pulse" : "";
 
   // 3D tilt
@@ -124,7 +124,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
           background: `radial-gradient(circle 300px at ${glowX.get()}% ${glowY.get()}%, ${
             live
               ? "oklch(0.72 0.19 145 / 0.12)"
-              : "oklch(0.62 0.24 25 / 0.08)"
+              : "oklch(0.95 0.01 260 / 0.05)"
           }, transparent 70%)`,
           opacity: isHovered ? 1 : 0.5,
         }}
@@ -166,7 +166,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
             height: 0,
             background: live
               ? "radial-gradient(circle, oklch(0.72 0.19 145 / 0.35), transparent 70%)"
-              : "radial-gradient(circle, oklch(0.62 0.24 25 / 0.3), transparent 70%)",
+              : "radial-gradient(circle, oklch(0.95 0.01 260 / 0.3), transparent 70%)",
             transform: "translate(-50%, -50%)",
           }}
           animate={{
@@ -179,9 +179,9 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
       ))}
 
       <div className="relative flex items-center gap-4 p-5 z-10">
-        {/* Twitch icon with enhanced animation */}
+        {/* Twitch icon */}
         <motion.div
-          className="grid h-12 w-12 shrink-0 place-items-center text-white relative"
+          className="grid h-12 w-12 shrink-0 place-items-center relative"
           initial={{ opacity: 0, scale: 0, rotate: -15 }}
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 0.7, delay: 0.3, type: "spring", stiffness: 150, damping: 12 }}
@@ -206,21 +206,23 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
             transition={{ duration: 1.2, repeat: live ? Infinity : 0, repeatDelay: 5 }}
             whileHover={{ scale: 1.15, rotate: 5 }}
             className="relative z-10"
+            style={{ color: live ? undefined : "currentColor" }}
           >
             <TwitchIcon size={26} />
           </motion.div>
         </motion.div>
 
         <motion.span
-          className="text-xl font-bold tracking-tight leading-none text-white"
+          className="text-xl font-bold tracking-tight leading-none"
           initial={{ opacity: 0, x: -12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
+          style={{ color: live ? undefined : "oklch(0.98 0.005 260)" }}
         >
           Twitch
         </motion.span>
 
-        {/* Status indicator — canto direito, absoluto */}
+        {/* Status indicator */}
         <div className="absolute right-5 top-1/2 -translate-y-1/2">
           <AnimatePresence mode="wait">
             {live === null ? (
@@ -257,8 +259,9 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
                   </span>
                 )}
                 <span
-                  className="text-[11px] font-semibold uppercase tracking-wide text-white"
+                  className="text-[11px] font-semibold uppercase tracking-wide"
                   style={{
+                    color: live ? "oklch(0.72 0.19 145)" : "oklch(0.65 0.01 260)",
                     textShadow: live ? "0 0 12px oklch(0.72 0.19 145 / 0.5)" : "none",
                   }}
                 >
@@ -269,7 +272,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
           </AnimatePresence>
         </div>
 
-        {/* Arrow that appears on hover */}
+        {/* Arrow */}
         <motion.div
           className="absolute right-4"
           animate={{
@@ -278,7 +281,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
           }}
           transition={{ duration: 0.3 }}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: "oklch(0.65 0.01 260)" }}>
             <path d="M5 12h14" />
             <path d="m12 5 7 7-7 7" />
           </svg>
