@@ -61,3 +61,33 @@ export function GlobeIcon({ size = 24, className }: P) {
   );
 }
 
+export function KickIcon({ size = 24, className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
+      <path d="M3 2h4v7l6-7h5l-7 7.5L19 20h-5l-5-6.5V20H3V2z" />
+    </svg>
+  );
+}
+
+export function LivePixIcon({ size = 24, className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <rect x="4" y="4" width="16" height="16" rx="3" />
+      <path d="M9 8.5l3 3-3 3" />
+      <line x1="14" y1="14.5" x2="14.01" y2="14.5" />
+    </svg>
+  );
+}
+
+export function ScissorsIcon({ size = 24, className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <circle cx="6" cy="6" r="3" />
+      <circle cx="6" cy="18" r="3" />
+      <line x1="20" y1="4" x2="8.12" y2="15.88" />
+      <line x1="14.47" y1="14.48" x2="20" y2="20" />
+      <line x1="8.12" y1="8.12" x2="12" y2="12" />
+    </svg>
+  );
+}
+
