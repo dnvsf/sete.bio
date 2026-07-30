@@ -5,16 +5,12 @@ import { useServerFn } from "@tanstack/react-start";
 import { motion, AnimatePresence } from "framer-motion";
 import { TwitchCard } from "@/components/site/TwitchCard";
 import { KickCard } from "@/components/site/KickCard";
-import { LivePixCard } from "@/components/site/LivePixCard";
 import { LivePixModal } from "@/components/site/LivePixModal";
 import { CutsHubCard } from "@/components/site/CutsHubCard";
 import { SocialCard } from "@/components/site/SocialCard";
-import {
-  InstagramIcon,
-  TikTokIcon,
-  YouTubeIcon,
-  DiscordIcon,
-} from "@/components/site/icons";
+import { SocialIconsBar } from "@/components/site/SocialIconsBar";
+import { LivePixFloating } from "@/components/site/LivePixFloating";
+import { DiscordIcon } from "@/components/site/icons";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 import { getTwitchLive } from "@/lib/getTwitchLive.functions";
 import { getKickLive } from "@/lib/getKickLive.functions";
@@ -162,53 +158,6 @@ function AnimatedSeparator({ delay = 0.6 }: { delay?: number }) {
   );
 }
 
-function ScrollBounce() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const checkScrollable = () => {
-      const hasOverflow = document.documentElement.scrollHeight > window.innerHeight + 10;
-      setVisible(hasOverflow);
-    };
-    checkScrollable();
-    const timer = setTimeout(() => setVisible(false), 6000);
-    const handleScroll = () => {
-      if (window.scrollY > 100) setVisible(false);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    window.addEventListener("resize", checkScrollable);
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", checkScrollable);
-    };
-  }, []);
-
-  return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, delay: 2 }}
-          className="pointer-events-none fixed bottom-16 left-1/2 z-20 -translate-x-1/2"
-        >
-          <motion.div
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-1"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="oklch(0.98 0.005 260 / 0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
-
 /* ===== Live Status Hook ===== */
 function useLiveStatus() {
   const fetchTwitch = useServerFn(getTwitchLive);
@@ -239,7 +188,7 @@ function Home() {
   const [livePixOpen, setLivePixOpen] = useState(false);
   const { twitchLive, kickLive } = useLiveStatus();
 
-  // Socials from DB (fallback to defaults)
+  // Socials from DB
   const listSocialsFn = useServerFn(listSocials);
   const { data: socials } = useQuery({
     queryKey: ["socials"],
@@ -258,15 +207,12 @@ function Home() {
       ledOffset: string;
     }> = [];
 
-    // Se ambas estão ao vivo, Twitch primeiro (principal)
     if (twitchLive) {
       cards.push({ type: "twitch", live: true, ledOffset: "0s" });
     }
     if (kickLive) {
       cards.push({ type: "kick", live: true, ledOffset: cards.length === 0 ? "0s" : "0.2s" });
     }
-
-    // Cards offline (apenas se não estão ao vivo)
     if (!twitchLive) {
       cards.push({ type: "twitch", live: false, ledOffset: "0s" });
     }
@@ -283,7 +229,14 @@ function Home() {
       <FloatingParticles />
 
       <div className="relative min-h-screen z-10">
-        <div className="relative mx-auto max-w-xl px-4 pb-24 pt-14 sm:pt-20">
+        <div className="relative mx-auto max-w-xl px-4 pb-28 pt-14 sm:pt-20">
+
+          {/* ===== ÍCONES DAS REDES PESSOAIS (TOPO) ===== */}
+          <SocialIconsBar
+            youtube={{ handle: yt?.handle || "setexxl", url: yt?.url || "" }}
+            instagram={{ handle: ig?.handle || "setexxl", url: ig?.url || "" }}
+            tiktok={{ handle: tk?.handle || "setexxl", url: tk?.url || "" }}
+          />
 
           <div className="flex flex-col gap-3">
 
@@ -298,73 +251,31 @@ function Home() {
               </div>
             ))}
 
-            {/* Linha separadora */}
-            <AnimatedSeparator delay={0.5} />
-
-            {/* ===== REDES PESSOAIS ===== */}
-            <div style={led("0.3s")}>
-              <SocialCard
-                label="YouTube"
-                handle={yt?.handle || "setexxl"}
-                icon={<YouTubeIcon size={26} />}
-                iconBgColor="oklch(0.55 0.22 30)"
-                href={yt?.url || `https://youtube.com/@${yt?.handle || "setexxl"}`}
-                delay={0.1}
-              />
-            </div>
-            <div style={led("0.4s")}>
-              <SocialCard
-                label="Instagram"
-                handle={ig?.handle || "setexxl"}
-                icon={<InstagramIcon size={26} />}
-                iconBgColor="oklch(0.45 0.18 330)"
-                href={ig?.url || `https://instagram.com/${ig?.handle || "setexxl"}`}
-                delay={0.2}
-              />
-            </div>
-            <div style={led("0.5s")}>
-              <SocialCard
-                label="TikTok"
-                handle={tk?.handle || "setexxl"}
-                icon={<TikTokIcon size={26} />}
-                iconBgColor="oklch(0.35 0.12 280)"
-                href={tk?.url || `https://tiktok.com/@${tk?.handle || "setexxl"}`}
-                delay={0.3}
-              />
-            </div>
-
-            {/* Linha separadora */}
-            <AnimatedSeparator delay={0.65} />
-
-            {/* ===== LIVEPIX — APOIO ===== */}
-            <div style={led("0.7s")}>
-              <LivePixCard
-                onClick={() => setLivePixOpen(true)}
-                delay={0.4}
-              />
-            </div>
-
             {/* ===== HUB DE CORTES / LIVES (SeteLives) ===== */}
-            <div style={led("0.8s")}>
-              <CutsHubCard delay={0.5} />
+            <div style={led("0.3s")}>
+              <CutsHubCard delay={0.2} />
             </div>
+
+            {/* Linha separadora */}
+            <AnimatedSeparator delay={0.4} />
 
             {/* ===== DISCORD ===== */}
-            <div style={led("0.9s")}>
+            <div style={led("0.5s")}>
               <SocialCard
                 label="Discord"
                 handle="Em breve"
                 icon={<DiscordIcon size={26} />}
                 iconBgColor="oklch(0.45 0.15 270)"
-                delay={0.6}
+                delay={0.3}
               />
             </div>
 
           </div>
-
-          <ScrollBounce />
         </div>
       </div>
+
+      {/* Botão flutuante do LivePix */}
+      <LivePixFloating onClick={() => setLivePixOpen(true)} />
 
       {/* Modal LivePix */}
       <LivePixModal open={livePixOpen} onClose={() => setLivePixOpen(false)} />
