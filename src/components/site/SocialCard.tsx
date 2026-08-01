@@ -146,7 +146,7 @@ export function SocialCard({
           }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         />
-      ))
+      ))}
 
       {/* Icon Container */}
       <motion.div
