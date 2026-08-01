@@ -122,7 +122,7 @@ export function SocialCard({
         className="absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-500"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(circle 250px at ${glowX.get()}% ${glowY.get()}%, oklch(0.55 0.22 25 / 0.08), transparent)`,
+          background: `radial-gradient(circle 300px at ${glowX.get()}% ${glowY.get()}%, oklch(0.58 0.25 28 / 0.15), transparent)`,
         }}
       />
 
@@ -136,17 +136,17 @@ export function SocialCard({
             top: ripple.y,
             width: 0,
             height: 0,
-            background: "radial-gradient(circle, oklch(0.55 0.22 25 / 0.3), transparent 70%)",
+            background: "radial-gradient(circle, oklch(0.58 0.25 28 / 0.4), transparent 70%)",
             transform: "translate(-50%, -50%)",
           }}
           animate={{
-            width: [0, 400],
-            height: [0, 400],
-            opacity: [0.4, 0],
+            width: [0, 450],
+            height: [0, 450],
+            opacity: [0.5, 0],
           }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         />
-      ))}
+      ))
 
       {/* Icon Container */}
       <motion.div
@@ -156,10 +156,14 @@ export function SocialCard({
         className="grid h-12 w-12 shrink-0 place-items-center text-white relative"
       >
         <motion.div
-          className="absolute inset-0 rounded-full bg-white/5 border border-white/10"
+          className="absolute inset-0 rounded-full bg-white/8 border border-white/15 shadow-lg"
           animate={{
-            borderColor: isHovered ? "oklch(0.55 0.22 25 / 0.4)" : "oklch(1 0 0 / 10%)",
+            borderColor: isHovered ? "oklch(0.58 0.25 28 / 0.6)" : "oklch(1 0 0 / 15%)",
+            boxShadow: isHovered 
+              ? "0 0 20px oklch(0.58 0.25 28 / 0.3), inset 0 0 15px oklch(0.58 0.25 28 / 0.1)" 
+              : "0 0 0px oklch(0.58 0.25 28 / 0)",
           }}
+          transition={{ duration: 0.4 }}
         />
         <div className="relative z-10">{icon}</div>
       </motion.div>
@@ -192,7 +196,7 @@ export function SocialCard({
     </div>
   );
 
-  const cls = "hover-red-border group relative block overflow-hidden rounded-2xl border border-white/10 bg-card backdrop-blur-md shadow-2xl";
+  const cls = "hover-red-border group relative block overflow-hidden rounded-2xl border border-white/12 bg-card backdrop-blur-xl shadow-2xl transition-all duration-300";
   const anim = {
     initial: { opacity: 0, y: 20, filter: "blur(8px)" },
     animate: { opacity: 1, y: 0, filter: "blur(0px)" },

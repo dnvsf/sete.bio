@@ -45,19 +45,20 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
       const interval = setInterval(() => {
         if (current < icons.length) {
           setActiveIndex(current);
-          setTimeout(() => setActiveIndex(null), 1500);
+          // Mantém expandido por 2.5s, depois recolhe suavemente
+          setTimeout(() => setActiveIndex(null), 2500);
           current++;
         } else {
           clearInterval(interval);
         }
-      }, 2500);
+      }, 3500); // Intervalo maior entre cada ícone
     };
 
-    // Executa na carga (com delay de 1s)
-    const initialTimeout = setTimeout(runSequence, 1000);
+    // Executa na carga (com delay de 1.2s)
+    const initialTimeout = setTimeout(runSequence, 1200);
 
-    // Repete a cada 25s
-    const repeatInterval = setInterval(runSequence, 25000);
+    // Repete a cada 30s
+    const repeatInterval = setInterval(runSequence, 30000);
 
     return () => {
       clearTimeout(initialTimeout);
@@ -66,7 +67,7 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
   }, []);
 
   return (
-    <div className="flex items-center justify-center gap-3 mb-8 h-12">
+    <div className="flex items-center justify-center gap-4 mb-12 h-14">
       {icons.map((item, i) => {
         const isExpanded = activeIndex === i;
 
@@ -76,56 +77,88 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
             href={item.href}
             target="_blank"
             rel="noreferrer"
-            className="relative flex items-center h-11 bg-card/40 border border-white/10 backdrop-blur-md rounded-full overflow-hidden"
+            className="relative flex items-center h-12 bg-card/40 border border-white/10 backdrop-blur-xl rounded-full overflow-hidden cursor-pointer"
             initial={false}
             animate={{
-              width: isExpanded ? "140px" : "44px",
-              backgroundColor: isExpanded ? "oklch(0.18 0.02 20 / 0.8)" : "oklch(0.14 0.02 20 / 0.4)",
-              borderColor: isExpanded ? "oklch(0.55 0.22 25 / 0.4)" : "oklch(1 0 0 / 10%)",
+              width: isExpanded ? "160px" : "48px",
+              backgroundColor: isExpanded ? "oklch(0.20 0.03 20 / 0.9)" : "oklch(0.14 0.02 20 / 0.5)",
+              borderColor: isExpanded ? "oklch(0.55 0.22 25 / 0.5)" : "oklch(1 0 0 / 12%)",
+              boxShadow: isExpanded 
+                ? "0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px oklch(0.55 0.22 25 / 0.1)"
+                : "0 4px 12px rgba(0, 0, 0, 0.2)",
             }}
             transition={{
               type: "spring",
-              stiffness: 200,
-              damping: 25,
+              stiffness: 120,
+              damping: 18,
+              mass: 1,
             }}
-            whileHover={{ scale: 1.05, backgroundColor: "oklch(0.18 0.02 20 / 0.8)" }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ 
+              scale: 1.08, 
+              backgroundColor: "oklch(0.18 0.03 20 / 0.9)",
+              boxShadow: "0 12px 40px rgba(0, 0, 0, 0.3)",
+            }}
+            whileTap={{ scale: 0.92 }}
           >
             {/* Icon Container */}
-            <div className="flex-shrink-0 grid h-11 w-11 place-items-center text-white/80">
+            <motion.div 
+              className="flex-shrink-0 grid h-12 w-12 place-items-center text-white/85"
+              animate={{
+                scale: isExpanded ? 1 : 1,
+              }}
+              transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
+            >
               {item.icon}
-            </div>
+            </motion.div>
 
             {/* Label Container */}
             <AnimatePresence>
               {isExpanded && (
                 <motion.div
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -5 }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
-                  className="flex flex-col justify-center pr-4 overflow-hidden whitespace-nowrap"
+                  initial={{ opacity: 0, x: -15, filter: "blur(8px)" }}
+                  animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, x: -10, filter: "blur(6px)" }}
+                  transition={{ 
+                    duration: 0.5, 
+                    delay: 0.15,
+                    ease: [0.2, 0.8, 0.2, 1]
+                  }}
+                  className="flex flex-col justify-center pr-5 overflow-hidden whitespace-nowrap"
                 >
-                  <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold leading-none">
+                  <span className="text-[9px] uppercase tracking-widest text-white/60 font-bold leading-none">
                     {item.label}
                   </span>
-                  <span className="text-sm font-semibold text-white leading-tight">
+                  <span className="text-xs font-semibold text-white leading-tight mt-0.5">
                     {item.handle}
                   </span>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Subtle Glow */}
+            {/* Glow Effect - mais suave e elegante */}
             <motion.div
-              className="absolute inset-0 pointer-events-none"
+              className="absolute inset-0 pointer-events-none rounded-full"
               animate={{
                 opacity: isExpanded ? 1 : 0,
               }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
               style={{
-                background: `radial-gradient(circle at center, ${item.color} / 0.15, transparent 70%)`,
+                background: `radial-gradient(circle at center, ${item.color} / 0.2, transparent 65%)`,
               }}
             />
+
+            {/* Shimmer Effect on Expand */}
+            {isExpanded && (
+              <motion.div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                initial={{ x: "-100%" }}
+                animate={{ x: "100%" }}
+                transition={{ duration: 1.2, ease: "easeInOut" }}
+                style={{
+                  background: `linear-gradient(90deg, transparent, ${item.color} / 0.3, transparent)`,
+                }}
+              />
+            )}
           </motion.a>
         );
       })}
