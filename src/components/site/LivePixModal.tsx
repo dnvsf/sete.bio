@@ -96,11 +96,11 @@ export function LivePixModal({ open, onClose }: { open: boolean; onClose: () => 
             exit={{ y: 40, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md max-h-[85vh] overflow-y-auto rounded-t-3xl border border-black/10 bg-[oklch(0.14_0.008_260)] p-6 sm:rounded-3xl"
+            className="relative w-full max-w-md max-h-[85vh] overflow-y-auto rounded-t-3xl border border-black/10 bg-background p-6 sm:rounded-3xl"
           >
             {/* Header */}
             <div className="mb-5 flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[oklch(0.55_0.18_280)] text-foreground">
+              <div className="grid h-10 w-10 place-items-center rounded-xl text-foreground">
                 <LivePixIcon size={22} />
               </div>
               <div>

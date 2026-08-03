@@ -59,11 +59,11 @@ export function CutsHubModal({ open, onClose }: CutsHubModalProps) {
             exit={{ y: 40, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
             onClick={(e) => e.stopPropagation()}
-            className="black-border-glow relative w-full max-w-md rounded-t-3xl border border-black/10 bg-[oklch(0.14_0.008_260)] p-6 sm:rounded-3xl"
+            className="black-border-glow relative w-full max-w-md rounded-t-3xl border border-black/10 bg-background p-6 sm:rounded-3xl"
           >
             {/* Header */}
             <div className="mb-5 flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[oklch(0.50 0.20 30)] text-foreground">
+              <div className="grid h-10 w-10 place-items-center text-foreground">
                 <ScissorsIcon size={22} />
               </div>
               <div>
@@ -87,7 +87,7 @@ export function CutsHubModal({ open, onClose }: CutsHubModalProps) {
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="grid h-10 w-10 place-items-center rounded-xl text-foreground"
+                      className="grid h-10 w-10 place-items-center text-foreground"
                       style={{ background: p.iconBg }}
                     >
                       {p.icon}
