@@ -77,15 +77,10 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
             href={item.href}
             target="_blank"
             rel="noreferrer"
-            className="relative flex items-center h-12 bg-white/40 border border-black/8 backdrop-blur-xl rounded-full overflow-hidden cursor-pointer"
+            className="relative flex items-center h-12 rounded-2xl overflow-hidden cursor-pointer"
             initial={false}
             animate={{
-              width: isExpanded ? "160px" : "48px",
-              backgroundColor: isExpanded ? "oklch(0.96 0.003 0 / 0.95)" : "oklch(0.96 0.003 0 / 0.5)",
-              borderColor: isExpanded ? "oklch(0.15 0.01 0 / 0.4)" : "oklch(0 0 0 / 8%)",
-              boxShadow: isExpanded 
-                ? "0 8px 32px rgba(0, 0, 0, 0.08), inset 0 0 20px oklch(0.15 0.01 0 / 0.05)"
-                : "0 4px 12px rgba(0, 0, 0, 0.06)",
+              width: isExpanded ? "150px" : "44px",
             }}
             transition={{
               type: "spring",
@@ -93,18 +88,25 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
               damping: 18,
               mass: 1,
             }}
-            whileHover={{ 
-              scale: 1.08, 
-              backgroundColor: "oklch(0.96 0.003 0 / 0.95)",
-              boxShadow: "0 12px 40px rgba(0, 0, 0, 0.1)",
-            }}
+            whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.92 }}
           >
+            {/* Soft glow behind the icon */}
+            <motion.div
+              className="absolute left-0 top-0 h-12 w-12 pointer-events-none"
+              animate={{ opacity: isExpanded ? 1 : 0 }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
+              style={{
+                background: `radial-gradient(circle at center, oklch(0.15 0.01 0 / 0.12), transparent 70%)`,
+              }}
+            />
+
             {/* Icon Container */}
-            <motion.div 
-              className="flex-shrink-0 grid h-12 w-12 place-items-center text-black/80"
+            <motion.div
+              className="flex-shrink-0 grid h-12 w-11 place-items-center text-foreground/80 relative z-10"
               animate={{
-                scale: isExpanded ? 1 : 1,
+                scale: isExpanded ? 1.06 : 1,
+                color: isExpanded ? "oklch(0.15 0.01 0)" : "oklch(0.15 0.01 0 / 0.8)",
               }}
               transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
             >
@@ -123,42 +125,25 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
                     delay: 0.15,
                     ease: [0.2, 0.8, 0.2, 1]
                   }}
-                  className="flex flex-col justify-center pr-5 overflow-hidden whitespace-nowrap"
+                  className="relative z-10 flex flex-col justify-center pl-1 pr-3 overflow-hidden whitespace-nowrap"
                 >
-                  <span className="text-[9px] uppercase tracking-widest text-black/50 font-bold leading-none">
+                  <span className="text-[9px] uppercase tracking-widest text-muted-foreground font-bold leading-none">
                     {item.label}
                   </span>
-                  <span className="text-xs font-semibold text-black leading-tight mt-0.5">
+                  <span className="text-xs font-semibold text-foreground leading-tight mt-0.5">
                     {item.handle}
                   </span>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Glow Effect - mais suave e elegante */}
+            {/* Underline sweep on expand */}
             <motion.div
-              className="absolute inset-0 pointer-events-none rounded-full"
-              animate={{
-                opacity: isExpanded ? 1 : 0,
-              }}
-              transition={{ duration: 0.6, ease: "easeInOut" }}
-              style={{
-                background: `radial-gradient(circle at center, ${item.color} / 0.08, transparent 65%)`,
-              }}
+              className="absolute bottom-1 left-0 h-px bg-foreground/25 origin-left"
+              animate={{ scaleX: isExpanded ? 1 : 0, width: "100%" }}
+              transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
             />
 
-            {/* Shimmer Effect on Expand */}
-            {isExpanded && (
-              <motion.div
-                className="absolute inset-0 rounded-full pointer-events-none"
-                initial={{ x: "-100%" }}
-                animate={{ x: "100%" }}
-                transition={{ duration: 1.2, ease: "easeInOut" }}
-                style={{
-                  background: `linear-gradient(90deg, transparent, ${item.color} / 0.1, transparent)`,
-                }}
-              />
-            )}
           </motion.a>
         );
       })}
