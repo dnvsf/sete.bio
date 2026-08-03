@@ -164,7 +164,6 @@ export function KickCard({ handle = "setexxl" }: { handle?: string }) {
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 0.7, delay: 0.3, type: "spring", stiffness: 150, damping: 12 }}
         >
-          <div className="absolute inset-0 rounded-full bg-black/5 border border-black/10" />
           <motion.div
             animate={live ? { rotate: [0, -4, 4, -3, 0] } : { rotate: 0 }}
             transition={{ duration: 1.2, repeat: live ? Infinity : 0, repeatDelay: 5 }}
