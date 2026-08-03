@@ -63,7 +63,7 @@ export function ProjectCard({
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={handleMouseLeave}
-      className="hover-white-border group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm w-full text-left select-none"
+      className="hover-white-border group relative block overflow-hidden rounded-2xl border border-black/8 bg-card/60 backdrop-blur-sm w-full text-left select-none"
       style={{
         transform: `perspective(1000px) rotateX(${springTiltX.get()}deg) rotateY(${springTiltY.get()}deg)`,
       }}

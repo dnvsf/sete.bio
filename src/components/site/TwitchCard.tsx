@@ -18,12 +18,12 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
 
   // Estilos baseados no estado live
   const bgClass = live
-    ? "bg-card/80"
-    : "bg-card/40";
+    ? "bg-card shadow-[0_10px_30px_-12px_rgba(0,0,0,0.25)]"
+    : "bg-card shadow-[0_8px_24px_-14px_rgba(0,0,0,0.2)]";
   const borderClass = live
-    ? "border-white/20 shadow-[0_0_30px_rgba(255,0,0,0.1)]"
-    : "border-white/10";
-  const pulseClass = live ? "animate-red-pulse" : "";
+    ? "border-black/15 shadow-[0_0_30px_rgba(255,0,0,0.1)]"
+    : "border-black/10";
+  const pulseClass = live ? "animate-black-pulse" : "";
 
   // 3D tilt
   const tiltX = useMotionValue(0);
@@ -112,7 +112,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
       animate={{ opacity: 1, y: 0, filter: "blur(0px)", scale: 1 }}
       transition={{ duration: 0.8, delay: 0, type: "spring" as const, stiffness: 50, damping: 15 }}
       whileTap={{ scale: 0.98 }}
-      className={`hover-red-border group relative block overflow-hidden rounded-2xl border backdrop-blur-md transition-all duration-500 ${bgClass} ${borderClass} ${pulseClass}`}
+      className={`hover-black-border group relative block overflow-hidden rounded-2xl border backdrop-blur-md transition-all duration-500 ${bgClass} ${borderClass} ${pulseClass}`}
       style={{
         transform: `perspective(1000px) rotateX(${springTiltX.get()}deg) rotateY(${springTiltY.get()}deg)`,
       }}
@@ -125,7 +125,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
       <motion.div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(circle 300px at ${glowX.get()}% ${glowY.get()}%, oklch(0.55 0.22 25 / 0.1), transparent 70%)`,
+          background: `radial-gradient(circle 300px at ${glowX.get()}% ${glowY.get()}%, oklch(0.15 0.01 0 / 0.1), transparent 70%)`,
           opacity: isHovered ? 1 : 0.4,
         }}
         animate={{
@@ -144,7 +144,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
             top: ripple.y,
             width: 0,
             height: 0,
-            background: "radial-gradient(circle, oklch(0.55 0.22 25 / 0.3), transparent 70%)",
+            background: "radial-gradient(circle, oklch(0.15 0.01 0 / 0.3), transparent 70%)",
             transform: "translate(-50%, -50%)",
           }}
           animate={{
@@ -164,19 +164,18 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 0.7, delay: 0.3, type: "spring", stiffness: 150, damping: 12 }}
         >
-          <div className="absolute inset-0 rounded-full bg-white/5 border border-white/10" />
           <motion.div
             animate={live ? { rotate: [0, -4, 4, -3, 0] } : { rotate: 0 }}
             transition={{ duration: 1.2, repeat: live ? Infinity : 0, repeatDelay: 5 }}
             whileHover={{ scale: 1.15, rotate: 5 }}
-            className="relative z-10 text-white"
+            className="relative z-10 text-foreground"
           >
             <TwitchIcon size={26} />
           </motion.div>
         </motion.div>
 
         <motion.span
-          className="text-lg font-bold tracking-tight leading-none text-white/90"
+          className="text-lg font-bold tracking-tight leading-none text-foreground"
           initial={{ opacity: 0, x: -12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
@@ -207,14 +206,14 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
               >
                 {live && (
                   <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-red opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-red shadow-[0_0_10px_var(--accent-red)]"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-black opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent-black shadow-[0_0_10px_var(--accent-black)]"></span>
                   </span>
                 )}
                 <span
                   className="text-[11px] font-bold uppercase tracking-widest"
                   style={{
-                    color: live ? "var(--accent-red)" : "var(--muted-foreground)",
+                    color: live ? "var(--accent-black)" : "var(--muted-foreground)",
                   }}
                 >
                   {live ? "Ao vivo" : "Offline"}

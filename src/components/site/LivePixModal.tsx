@@ -63,7 +63,7 @@ export function LivePixModal({ open, onClose }: { open: boolean; onClose: () => 
   const handleSend = async () => {
     setIsProcessing(true);
     try {
-      const result = await createPayment({ amount: selectedAmount });
+      const result = await createPayment({ data: { amount: selectedAmount } });
       if (result.success && result.redirectUrl) {
         setPaymentUrl(result.redirectUrl);
       } else {
@@ -96,11 +96,11 @@ export function LivePixModal({ open, onClose }: { open: boolean; onClose: () => 
             exit={{ y: 40, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-md max-h-[85vh] overflow-y-auto rounded-t-3xl border border-white/10 bg-[oklch(0.14_0.008_260)] p-6 sm:rounded-3xl"
+            className="relative w-full max-w-md max-h-[85vh] overflow-y-auto rounded-t-3xl border border-black/10 bg-background p-6 sm:rounded-3xl"
           >
             {/* Header */}
             <div className="mb-5 flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[oklch(0.55_0.18_280)] text-white">
+              <div className="grid h-10 w-10 place-items-center rounded-xl text-foreground">
                 <LivePixIcon size={22} />
               </div>
               <div>
@@ -123,8 +123,8 @@ export function LivePixModal({ open, onClose }: { open: boolean; onClose: () => 
                         onClick={() => setSelectedAmount(a.value)}
                         className={`rounded-xl border px-3 py-2.5 text-sm font-semibold transition-all ${
                           selectedAmount === a.value
-                            ? "border-[oklch(0.70_0.18_280)] bg-[oklch(0.70_0.18_280/0.15)] text-white"
-                            : "border-white/10 bg-white/[0.03] text-muted-foreground hover:text-white hover:border-white/20"
+                            ? "border-[oklch(0.70_0.18_280)] bg-[oklch(0.70_0.18_280/0.15)] text-foreground"
+                            : "border-black/10 bg-black/[0.03] text-muted-foreground hover:text-foreground hover:border-black/15"
                         }`}
                       >
                         {a.label}
@@ -137,7 +137,7 @@ export function LivePixModal({ open, onClose }: { open: boolean; onClose: () => 
                   type="button"
                   onClick={handleSend}
                   disabled={isProcessing}
-                  className="w-full rounded-xl py-3 text-sm font-bold uppercase tracking-wider text-white transition-all disabled:opacity-60"
+                  className="w-full rounded-xl py-3 text-sm font-bold uppercase tracking-wider text-foreground transition-all disabled:opacity-60"
                   style={{
                     background: "linear-gradient(135deg, oklch(0.55 0.18 280), oklch(0.45 0.20 300))",
                   }}
@@ -150,13 +150,13 @@ export function LivePixModal({ open, onClose }: { open: boolean; onClose: () => 
               </>
             ) : (
               <div className="space-y-3">
-                <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+                <div className="rounded-xl border border-black/10 bg-black/[0.03] p-4">
                   <div className="text-xs text-muted-foreground mb-2">Seu QR Code / Link está pronto:</div>
                   <motion.a
                     href={paymentUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="block w-full rounded-lg py-3 text-center text-sm font-bold text-white"
+                    className="block w-full rounded-lg py-3 text-center text-sm font-bold text-foreground"
                     style={{
                       background: "linear-gradient(135deg, oklch(0.55 0.18 280), oklch(0.45 0.20 300))",
                     }}
@@ -197,11 +197,11 @@ export function LivePixModal({ open, onClose }: { open: boolean; onClose: () => 
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.08 }}
-                        className="rounded-xl border border-white/8 bg-white/[0.02] p-3"
+                        className="rounded-xl border border-black/8 bg-white/[0.02] p-3"
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">
-                            <div className="text-sm font-semibold text-white truncate">
+                            <div className="text-sm font-semibold text-foreground truncate">
                               {msg.username || "Anônimo"}
                             </div>
                             {msg.message && (
@@ -229,7 +229,7 @@ export function LivePixModal({ open, onClose }: { open: boolean; onClose: () => 
             {/* Close */}
             <button
               onClick={onClose}
-              className="mt-5 w-full rounded-xl border border-white/10 py-2 text-sm text-muted-foreground hover:text-foreground"
+              className="mt-5 w-full rounded-xl border border-black/10 py-2 text-sm text-muted-foreground hover:text-foreground"
             >
               Fechar
             </button>

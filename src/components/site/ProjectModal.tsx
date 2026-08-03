@@ -94,7 +94,7 @@ export function ProjectModal({ open, project, onClose }: ProjectModalProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3, type: "spring", stiffness: 300, damping: 25 }}
-            className="relative w-full max-w-sm rounded-2xl border border-white/10 bg-[oklch(0.16_0.008_260_/0.95)] backdrop-blur-md overflow-hidden"
+            className="relative w-full max-w-sm rounded-2xl border border-black/10 bg-[oklch(0.16_0.008_260_/0.95)] backdrop-blur-md overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Ambient glow */}
@@ -115,7 +115,7 @@ export function ProjectModal({ open, project, onClose }: ProjectModalProps) {
                 onClick={onClose}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="grid h-8 w-8 place-items-center rounded-full border border-white/10 text-muted-foreground hover:text-foreground transition-colors"
+                className="grid h-8 w-8 place-items-center rounded-full border border-black/10 text-muted-foreground hover:text-foreground transition-colors"
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="18" y1="6" x2="6" y2="18" />
@@ -144,7 +144,7 @@ export function ProjectModal({ open, project, onClose }: ProjectModalProps) {
                   transition={{ duration: 0.3, delay: 0.15 + i * 0.05 }}
                   whileHover={{ scale: 1.02, x: 2 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group flex items-center gap-3 rounded-xl border border-white/8 bg-white/5 px-4 py-3 transition-all hover:border-white/20 hover:bg-white/[0.08]"
+                  className="group flex items-center gap-3 rounded-xl border border-black/8 bg-black/5 px-4 py-3 transition-all hover:border-black/15 hover:bg-white/[0.08]"
                 >
                   <span className="text-foreground opacity-70 group-hover:opacity-100 transition-opacity">
                     <PlatformIcon type={link.type} />

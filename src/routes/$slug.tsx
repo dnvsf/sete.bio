@@ -47,7 +47,7 @@ export const Route = createFileRoute("/$slug")({
     <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-3 px-4 text-center">
       <div className="text-lg font-semibold">Algo deu errado</div>
       <div className="text-sm text-muted-foreground">{error.message}</div>
-      <Link to="/" className="mono text-xs text-accent-red-glow underline">
+      <Link to="/" className="mono text-xs text-accent-black underline">
         voltar para sete.bio
       </Link>
     </div>
@@ -58,7 +58,7 @@ export const Route = createFileRoute("/$slug")({
         <SevenGlyph size={140} outline />
       </span>
       <div className="text-xl font-bold">Nada aqui</div>
-      <Link to="/" className="mono text-xs text-accent-red-glow underline">
+      <Link to="/" className="mono text-xs text-accent-black underline">
         voltar para sete.bio
       </Link>
     </div>
@@ -88,7 +88,7 @@ function PartnerPage() {
           transition={{ duration: 0.7 }}
           className="mt-6"
         >
-          <div className="mono text-[10px] uppercase tracking-widest text-accent-red-glow">
+          <div className="mono text-[10px] uppercase tracking-widest text-accent-black">
             Sete × parceiro
           </div>
           <h1 className="mt-1 text-5xl font-bold tracking-tight">
@@ -106,7 +106,7 @@ function PartnerPage() {
           {partner.contact_url && (
             <RippleButton
               onClick={() => window.open(partner.contact_url!, "_blank")}
-              className="red-border-glow animate-cta-pulse rounded-xl bg-accent-red px-5 py-3 text-sm font-bold uppercase tracking-wider text-white"
+              className="black-border-glow animate-cta-pulse rounded-xl bg-accent-black px-5 py-3 text-sm font-bold uppercase tracking-wider text-foreground"
             >
               Contato do parceiro
             </RippleButton>
@@ -116,7 +116,7 @@ function PartnerPage() {
               href={`https://instagram.com/${partner.instagram}`}
               target="_blank"
               rel="noreferrer"
-              className="hover-red-border inline-flex items-center gap-2 rounded-xl border border-white/10 px-4 py-3 text-sm font-medium"
+              className="hover-black-border inline-flex items-center gap-2 rounded-xl border border-black/10 px-4 py-3 text-sm font-medium"
             >
               <InstagramIcon size={18} />
               <span className="mono">@{partner.instagram}</span>
@@ -127,7 +127,7 @@ function PartnerPage() {
         <SectionDivider label="Programação" />
 
         {events.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-white/10 py-12 text-center text-muted-foreground">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-black/10 py-12 text-center text-muted-foreground">
             <span className="animate-seven-respire inline-block">
               <SevenGlyph size={56} outline />
             </span>

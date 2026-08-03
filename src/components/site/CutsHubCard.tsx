@@ -108,7 +108,7 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
         animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
         transition={{ duration: 0.7, delay, type: "spring" as const, stiffness: 60, damping: 18 }}
         whileTap={{ scale: 0.98 }}
-        className="hover-red-border group relative block overflow-hidden rounded-2xl border border-white/10 bg-card backdrop-blur-md w-full text-left shadow-2xl"
+        className="hover-black-border group relative block overflow-hidden rounded-2xl border border-black/10 bg-card backdrop-blur-md w-full text-left shadow-2xl"
         style={{
           transform: `perspective(1000px) rotateX(${springTiltX.get()}deg) rotateY(${springTiltY.get()}deg)`,
         }}
@@ -118,7 +118,7 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
           className="absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-500"
           style={{
             opacity: isHovered ? 1 : 0,
-            background: `radial-gradient(circle 250px at ${glowX.get()}% ${glowY.get()}%, oklch(0.55 0.22 25 / 0.08), transparent)`,
+            background: `radial-gradient(circle 250px at ${glowX.get()}% ${glowY.get()}%, oklch(0.15 0.01 0 / 0.08), transparent)`,
           }}
         />
 
@@ -132,7 +132,7 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
               top: ripple.y,
               width: 0,
               height: 0,
-              background: "radial-gradient(circle, oklch(0.55 0.22 25 / 0.3), transparent 70%)",
+              background: "radial-gradient(circle, oklch(0.15 0.01 0 / 0.3), transparent 70%)",
               transform: "translate(-50%, -50%)",
             }}
             animate={{
@@ -150,37 +150,28 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: delay + 0.1, type: "spring", stiffness: 120 }}
-            className="grid h-12 w-12 shrink-0 place-items-center text-white relative"
+            className="grid h-12 w-12 shrink-0 place-items-center text-foreground relative"
           >
             <motion.div
-              className="absolute inset-0 rounded-full bg-white/5 border border-white/10"
-              animate={{
-                borderColor: isHovered ? "oklch(0.55 0.22 25 / 0.4)" : "oklch(1 0 0 / 10%)",
-              }}
-            />
-            <div className="relative z-10">
+              animate={{ scale: isHovered ? 1.1 : 1 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10"
+            >
               <ScissorsIcon size={26} />
-            </div>
+            </motion.div>
           </motion.div>
 
           <motion.div className="min-w-0 flex-1 self-center relative z-10">
             <motion.span
-              className="text-lg font-bold tracking-tight leading-none text-white/90 group-hover:text-white transition-colors"
+              className="text-lg font-bold tracking-tight leading-none text-foreground/80 group-hover:text-foreground transition-colors"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: delay + 0.2 }}
             >
-              Cortes / Lives
-            </motion.span>
-            <motion.span
-              className="block mt-1 mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: delay + 0.35 }}
-            >
-              @setelives — IG · TikTok · YouTube
+              Cortes de Lives
             </motion.span>
           </motion.div>
+
 
           {/* Arrow */}
           <motion.div
@@ -191,7 +182,7 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
             }}
             transition={{ duration: 0.3 }}
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/60">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
               <path d="M5 12h14" />
               <path d="m12 5 7 7-7 7" />
             </svg>

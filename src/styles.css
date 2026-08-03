@@ -30,11 +30,11 @@
   --radius: 1.25rem;
   --background: oklch(0.98 0.002 0); /* Off-White puro e suave */
   --foreground: oklch(0.15 0.01 0); /* Preto profundo */
-  --card: oklch(0.96 0.003 0 / 0.7); /* Card semi-transparente Off-White */
+  --card: oklch(1 0 0 / 0.96); /* Card claro e sólido para destacar do fundo */
   --card-foreground: oklch(0.15 0.01 0);
   --muted: oklch(0.88 0.002 0); /* Cinza muito claro */
-  --muted-foreground: oklch(0.45 0.01 0); /* Cinza médio */
-  --border: oklch(0.90 0.002 0); /* Borda muito sutil */
+  --muted-foreground: oklch(0.42 0.01 0); /* Cinza médio */
+  --border: oklch(0.84 0.003 0); /* Borda visível porém discreta */
   --accent-black: oklch(0.15 0.01 0); /* Preto para acentos */
   --accent-black-glow: oklch(0.15 0.01 0 / 0.3);
 }
