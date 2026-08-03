@@ -18,8 +18,8 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
 
   // Estilos baseados no estado live
   const bgClass = live
-    ? "bg-card/80"
-    : "bg-card/40";
+    ? "bg-card shadow-[0_10px_30px_-12px_rgba(0,0,0,0.25)]"
+    : "bg-card shadow-[0_8px_24px_-14px_rgba(0,0,0,0.2)]";
   const borderClass = live
     ? "border-black/15 shadow-[0_0_30px_rgba(255,0,0,0.1)]"
     : "border-black/10";

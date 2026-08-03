@@ -22,7 +22,7 @@ function Pill({
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
-      className="hover-black-border group inline-flex items-center gap-1.5 rounded-full border border-black/8 bg-card/50 px-3 py-1.5 text-xs text-foreground/80 backdrop-blur-sm transition-colors hover:text-foreground"
+      className="hover-black-border group inline-flex items-center gap-1.5 rounded-full border border-black/8 bg-card px-3 py-1.5 text-xs text-foreground/80 backdrop-blur-sm transition-colors hover:text-foreground"
     >
       <span className="text-accent-black">{icon}</span>
       <span className="mono uppercase tracking-wider text-[10px]">{label}</span>
