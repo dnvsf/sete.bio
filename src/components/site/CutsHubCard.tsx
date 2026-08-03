@@ -153,34 +153,25 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
             className="grid h-12 w-12 shrink-0 place-items-center text-foreground relative"
           >
             <motion.div
-              className="absolute inset-0 rounded-full bg-black/5 border border-black/10"
-              animate={{
-                borderColor: isHovered ? "oklch(0.15 0.01 0 / 0.4)" : "oklch(1 0 0 / 10%)",
-              }}
-            />
-            <div className="relative z-10">
+              animate={{ scale: isHovered ? 1.1 : 1 }}
+              transition={{ duration: 0.3 }}
+              className="relative z-10"
+            >
               <ScissorsIcon size={26} />
-            </div>
+            </motion.div>
           </motion.div>
 
           <motion.div className="min-w-0 flex-1 self-center relative z-10">
             <motion.span
-              className="text-lg font-bold tracking-tight leading-none text-foreground group-hover:text-foreground transition-colors"
+              className="text-lg font-bold tracking-tight leading-none text-foreground/80 group-hover:text-foreground transition-colors"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: delay + 0.2 }}
             >
-              Cortes / Lives
-            </motion.span>
-            <motion.span
-              className="block mt-1 mono text-[10px] uppercase tracking-widest text-muted-foreground font-bold"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: delay + 0.35 }}
-            >
-              @setelives — IG · TikTok · YouTube
+              Cortes de Lives
             </motion.span>
           </motion.div>
+
 
           {/* Arrow */}
           <motion.div
