@@ -14,7 +14,7 @@ export function SectionDivider({ label }: { label?: string }) {
         variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }}
         transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
         style={{ transformOrigin: "right center" }}
-        className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        className="h-px flex-1 bg-gradient-to-r from-transparent via-black/10 to-transparent"
       />
       <motion.div
         variants={{
@@ -36,7 +36,7 @@ export function SectionDivider({ label }: { label?: string }) {
         variants={{ hidden: { scaleX: 0 }, visible: { scaleX: 1 } }}
         transition={{ duration: 0.8, ease: [0.2, 0.8, 0.2, 1] }}
         style={{ transformOrigin: "left center" }}
-        className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+        className="h-px flex-1 bg-gradient-to-r from-transparent via-black/10 to-transparent"
       />
     </motion.div>
   );
