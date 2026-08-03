@@ -86,10 +86,7 @@ export function CutsHubModal({ open, onClose }: CutsHubModalProps) {
                   transition={{ delay: i * 0.08, duration: 0.3 }}
                 >
                   <div className="flex items-center gap-3">
-                    <div
-                      className="grid h-10 w-10 place-items-center text-foreground"
-                      style={{ background: p.iconBg }}
-                    >
+                    <div className="grid h-10 w-10 place-items-center text-foreground">
                       {p.icon}
                     </div>
                     <div>
