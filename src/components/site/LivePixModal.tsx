@@ -63,7 +63,7 @@ export function LivePixModal({ open, onClose }: { open: boolean; onClose: () => 
   const handleSend = async () => {
     setIsProcessing(true);
     try {
-      const result = await createPayment({ amount: selectedAmount });
+      const result = await createPayment({ data: { amount: selectedAmount } });
       if (result.success && result.redirectUrl) {
         setPaymentUrl(result.redirectUrl);
       } else {
