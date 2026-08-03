@@ -1,22 +1,22 @@
 export function AuroraBackground() {
   return (
-    <div aria-hidden className="pointer-events-none fixed inset-0 -z-20 overflow-hidden bg-black">
-      {/* Aurora Primária - Vermelho Quente Superior */}
+    <div aria-hidden className="pointer-events-none fixed inset-0 -z-20 overflow-hidden bg-white">
+      {/* Gradient Light Superior - Cinza muito suave */}
       <div
         className="absolute animate-aurora-a"
         style={{
-          top: "-15%",
+          top: "-20%",
           left: "-10%",
           width: "80vw",
           height: "80vw",
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, oklch(0.58 0.25 28 / 0.35), oklch(0.45 0.18 25 / 0.15), oklch(0.10 0.02 20 / 0) 75%)",
+            "radial-gradient(circle, oklch(0.92 0.002 0 / 0.4), oklch(0.98 0.002 0 / 0.15), oklch(0.98 0.002 0 / 0) 75%)",
           filter: "blur(100px)",
         }}
       />
 
-      {/* Aurora Secundária - Vermelho Escuro Inferior */}
+      {/* Gradient Light Inferior - Cinza muito suave */}
       <div
         className="absolute animate-aurora-b"
         style={{
@@ -26,16 +26,16 @@ export function AuroraBackground() {
           height: "75vw",
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, oklch(0.45 0.20 25 / 0.25), oklch(0.35 0.15 25 / 0.10), oklch(0.10 0.02 20 / 0) 75%)",
+            "radial-gradient(circle, oklch(0.90 0.002 0 / 0.3), oklch(0.95 0.002 0 / 0.12), oklch(0.98 0.002 0 / 0) 75%)",
           filter: "blur(110px)",
         }}
       />
 
-      {/* Glow Central Sutil - Profundidade */}
+      {/* Glow Central Sutil - Luz suave no centro */}
       <div
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vh]"
         style={{
-          background: "radial-gradient(circle at center, oklch(0.58 0.25 28 / 0.12), transparent 70%)",
+          background: "radial-gradient(circle at center, oklch(0.92 0.002 0 / 0.15), transparent 70%)",
           filter: "blur(140px)",
         }}
       />
@@ -48,19 +48,19 @@ export function AuroraBackground() {
           height: "40vw",
           borderRadius: "50%",
           background:
-            "radial-gradient(circle, oklch(0.58 0.25 28 / 0.08), transparent 60%)",
+            "radial-gradient(circle, oklch(0.88 0.002 0 / 0.1), transparent 60%)",
           filter: "blur(80px)",
           animation: "aurora-a 50s ease-in-out infinite",
           animationDelay: "5s",
         }}
       />
 
-      {/* Vignette Suave - Bordas mais escuras */}
+      {/* Vignette Suave - Bordas com leve sombra */}
       <div
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, transparent 0%, oklch(0.08 0.008 20 / 0.4) 100%)",
+            "radial-gradient(ellipse at center, transparent 0%, oklch(0.92 0.002 0 / 0.2) 100%)",
           pointerEvents: "none",
         }}
       />

@@ -18,7 +18,7 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
       handle: "@setexxl",
       href: youtube?.url || `https://youtube.com/@${youtube?.handle || "setexxl"}`,
       icon: <YouTubeIcon size={20} />,
-      color: "oklch(0.55 0.22 25)",
+      color: "oklch(0.15 0.01 0)",
     },
     {
       key: "instagram",
@@ -26,7 +26,7 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
       handle: "@setexxl",
       href: instagram?.url || `https://instagram.com/${instagram?.handle || "setexxl"}`,
       icon: <InstagramIcon size={20} />,
-      color: "oklch(0.55 0.22 25)",
+      color: "oklch(0.15 0.01 0)",
     },
     {
       key: "tiktok",
@@ -34,7 +34,7 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
       handle: "@setexxl",
       href: tiktok?.url || `https://tiktok.com/@${tiktok?.handle || "setexxl"}`,
       icon: <TikTokIcon size={20} />,
-      color: "oklch(0.55 0.22 25)",
+      color: "oklch(0.15 0.01 0)",
     },
   ];
 
@@ -77,15 +77,15 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
             href={item.href}
             target="_blank"
             rel="noreferrer"
-            className="relative flex items-center h-12 bg-card/40 border border-white/10 backdrop-blur-xl rounded-full overflow-hidden cursor-pointer"
+            className="relative flex items-center h-12 bg-white/40 border border-black/8 backdrop-blur-xl rounded-full overflow-hidden cursor-pointer"
             initial={false}
             animate={{
               width: isExpanded ? "160px" : "48px",
-              backgroundColor: isExpanded ? "oklch(0.20 0.03 20 / 0.9)" : "oklch(0.14 0.02 20 / 0.5)",
-              borderColor: isExpanded ? "oklch(0.55 0.22 25 / 0.5)" : "oklch(1 0 0 / 12%)",
+              backgroundColor: isExpanded ? "oklch(0.96 0.003 0 / 0.95)" : "oklch(0.96 0.003 0 / 0.5)",
+              borderColor: isExpanded ? "oklch(0.15 0.01 0 / 0.4)" : "oklch(0 0 0 / 8%)",
               boxShadow: isExpanded 
-                ? "0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 20px oklch(0.55 0.22 25 / 0.1)"
-                : "0 4px 12px rgba(0, 0, 0, 0.2)",
+                ? "0 8px 32px rgba(0, 0, 0, 0.08), inset 0 0 20px oklch(0.15 0.01 0 / 0.05)"
+                : "0 4px 12px rgba(0, 0, 0, 0.06)",
             }}
             transition={{
               type: "spring",
@@ -95,14 +95,14 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
             }}
             whileHover={{ 
               scale: 1.08, 
-              backgroundColor: "oklch(0.18 0.03 20 / 0.9)",
-              boxShadow: "0 12px 40px rgba(0, 0, 0, 0.3)",
+              backgroundColor: "oklch(0.96 0.003 0 / 0.95)",
+              boxShadow: "0 12px 40px rgba(0, 0, 0, 0.1)",
             }}
             whileTap={{ scale: 0.92 }}
           >
             {/* Icon Container */}
             <motion.div 
-              className="flex-shrink-0 grid h-12 w-12 place-items-center text-white/85"
+              className="flex-shrink-0 grid h-12 w-12 place-items-center text-black/80"
               animate={{
                 scale: isExpanded ? 1 : 1,
               }}
@@ -125,10 +125,10 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
                   }}
                   className="flex flex-col justify-center pr-5 overflow-hidden whitespace-nowrap"
                 >
-                  <span className="text-[9px] uppercase tracking-widest text-white/60 font-bold leading-none">
+                  <span className="text-[9px] uppercase tracking-widest text-black/50 font-bold leading-none">
                     {item.label}
                   </span>
-                  <span className="text-xs font-semibold text-white leading-tight mt-0.5">
+                  <span className="text-xs font-semibold text-black leading-tight mt-0.5">
                     {item.handle}
                   </span>
                 </motion.div>
@@ -143,7 +143,7 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
               }}
               transition={{ duration: 0.6, ease: "easeInOut" }}
               style={{
-                background: `radial-gradient(circle at center, ${item.color} / 0.2, transparent 65%)`,
+                background: `radial-gradient(circle at center, ${item.color} / 0.08, transparent 65%)`,
               }}
             />
 
@@ -155,7 +155,7 @@ export function SocialIconsBar({ instagram, tiktok, youtube }: SocialIconsBarPro
                 animate={{ x: "100%" }}
                 transition={{ duration: 1.2, ease: "easeInOut" }}
                 style={{
-                  background: `linear-gradient(90deg, transparent, ${item.color} / 0.3, transparent)`,
+                  background: `linear-gradient(90deg, transparent, ${item.color} / 0.1, transparent)`,
                 }}
               />
             )}

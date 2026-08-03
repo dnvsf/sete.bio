@@ -122,7 +122,7 @@ export function SocialCard({
         className="absolute inset-0 opacity-0 pointer-events-none transition-opacity duration-500"
         style={{
           opacity: isHovered ? 1 : 0,
-          background: `radial-gradient(circle 300px at ${glowX.get()}% ${glowY.get()}%, oklch(0.58 0.25 28 / 0.15), transparent)`,
+          background: `radial-gradient(circle 300px at ${glowX.get()}% ${glowY.get()}%, oklch(0.15 0.01 0 / 0.08), transparent)`,
         }}
       />
 
@@ -136,7 +136,7 @@ export function SocialCard({
             top: ripple.y,
             width: 0,
             height: 0,
-            background: "radial-gradient(circle, oklch(0.58 0.25 28 / 0.4), transparent 70%)",
+            background: "radial-gradient(circle, oklch(0.15 0.01 0 / 0.15), transparent 70%)",
             transform: "translate(-50%, -50%)",
           }}
           animate={{
@@ -153,15 +153,15 @@ export function SocialCard({
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: delay + 0.1, type: "spring", stiffness: 120 }}
-        className="grid h-12 w-12 shrink-0 place-items-center text-white relative"
+        className="grid h-12 w-12 shrink-0 place-items-center text-black relative"
       >
         <motion.div
-          className="absolute inset-0 rounded-full bg-white/8 border border-white/15 shadow-lg"
+          className="absolute inset-0 rounded-full bg-black/5 border border-black/12 shadow-lg"
           animate={{
-            borderColor: isHovered ? "oklch(0.58 0.25 28 / 0.6)" : "oklch(1 0 0 / 15%)",
+            borderColor: isHovered ? "oklch(0.15 0.01 0 / 0.3)" : "oklch(0 0 0 / 12%)",
             boxShadow: isHovered 
-              ? "0 0 20px oklch(0.58 0.25 28 / 0.3), inset 0 0 15px oklch(0.58 0.25 28 / 0.1)" 
-              : "0 0 0px oklch(0.58 0.25 28 / 0)",
+              ? "0 0 20px oklch(0.15 0.01 0 / 0.12), inset 0 0 15px oklch(0.15 0.01 0 / 0.05)" 
+              : "0 0 0px oklch(0.15 0.01 0 / 0)",
           }}
           transition={{ duration: 0.4 }}
         />
@@ -170,7 +170,7 @@ export function SocialCard({
 
       <div className="min-w-0 flex-1 self-center relative z-10">
         <motion.span
-          className="text-lg font-bold tracking-tight text-white/90 group-hover:text-white transition-colors"
+          className="text-lg font-bold tracking-tight text-black/80 group-hover:text-black transition-colors"
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: delay + 0.2 }}
@@ -188,7 +188,7 @@ export function SocialCard({
         }}
         transition={{ duration: 0.3 }}
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/60">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-black/40">
           <path d="M5 12h14" />
           <path d="m12 5 7 7-7 7" />
         </svg>
@@ -196,7 +196,7 @@ export function SocialCard({
     </div>
   );
 
-  const cls = "hover-red-border group relative block overflow-hidden rounded-2xl border border-white/12 bg-card backdrop-blur-xl shadow-2xl transition-all duration-300";
+  const cls = "hover-black-border group relative block overflow-hidden rounded-2xl border border-black/8 bg-card backdrop-blur-xl shadow-2xl transition-all duration-300";
   const anim = {
     initial: { opacity: 0, y: 20, filter: "blur(8px)" },
     animate: { opacity: 1, y: 0, filter: "blur(0px)" },

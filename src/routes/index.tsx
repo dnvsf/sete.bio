@@ -59,7 +59,7 @@ function FloatingParticles() {
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
-            background: "var(--accent-red)",
+            background: "var(--accent-black)",
             opacity: p.opacity,
           }}
           animate={{
@@ -131,7 +131,7 @@ function CursorGlow() {
         width: 400,
         height: 400,
         borderRadius: "50%",
-        background: "radial-gradient(circle, oklch(0.55 0.22 25 / 0.04), transparent 70%)",
+        background: "radial-gradient(circle, oklch(0.15 0.01 0 / 0.04), transparent 70%)",
         transform: "translate(-50%, -50%)",
       }}
       transition={{ type: "spring", stiffness: 500, damping: 50 }}
@@ -143,14 +143,14 @@ function AnimatedSeparator({ delay = 0.6 }: { delay?: number }) {
   return (
     <div className="relative h-px my-4 overflow-hidden">
       <motion.div
-        className="absolute inset-0 bg-white/5"
+        className="absolute inset-0 bg-black/5"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: 1 }}
         transition={{ duration: 1, delay, ease: [0.2, 0.8, 0.2, 1] }}
         style={{ originX: 0 }}
       />
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-accent-red/20 to-transparent"
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-accent-black/10 to-transparent"
         initial={{ x: "-100%" }}
         animate={{ x: "100%" }}
         transition={{ duration: 3, delay: delay + 0.5, ease: "easeInOut", repeat: Infinity, repeatDelay: 5 }}
@@ -277,7 +277,7 @@ function Home() {
       </div>
 
       {/* Botão flutuante do LivePix */}
-      <LivePixFloating onClick={() => setLivePixOpen(true)} />
+      <LivePixFloating onClick={() => setLivePixOpen(true)} isModalOpen={livePixOpen} />
 
       {/* Modal LivePix */}
       <LivePixModal open={livePixOpen} onClose={() => setLivePixOpen(false)} />

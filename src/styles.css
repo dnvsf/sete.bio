@@ -19,9 +19,8 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
-  --color-accent-red: var(--accent-red);
-  --color-accent-red-glow: var(--accent-red-glow);
-  --color-live: var(--live);
+  --color-accent-black: var(--accent-black);
+  --color-accent-black-glow: var(--accent-black-glow);
 
   --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   --font-mono: ui-monospace, "SF Mono", "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
@@ -29,16 +28,15 @@
 
 :root {
   --radius: 1.25rem;
-  --background: oklch(0.08 0.008 20); /* Preto profundo quase puro */
-  --foreground: oklch(0.98 0.005 20);
-  --card: oklch(0.13 0.015 20 / 0.65); /* Card mais sofisticado */
-  --card-foreground: oklch(0.98 0.005 20);
-  --muted: oklch(0.20 0.02 20);
-  --muted-foreground: oklch(0.65 0.02 20);
-  --border: oklch(1 0 0 / 14%);
-  --accent-red: oklch(0.58 0.25 28); /* Vermelho mais vibrante e quente */
-  --accent-red-glow: oklch(0.58 0.25 28 / 0.5);
-  --live: oklch(0.68 0.28 28); /* Vermelho vivo mais saturado */
+  --background: oklch(0.98 0.002 0); /* Off-White puro e suave */
+  --foreground: oklch(0.15 0.01 0); /* Preto profundo */
+  --card: oklch(0.96 0.003 0 / 0.7); /* Card semi-transparente Off-White */
+  --card-foreground: oklch(0.15 0.01 0);
+  --muted: oklch(0.88 0.002 0); /* Cinza muito claro */
+  --muted-foreground: oklch(0.45 0.01 0); /* Cinza médio */
+  --border: oklch(0.90 0.002 0); /* Borda muito sutil */
+  --accent-black: oklch(0.15 0.01 0); /* Preto para acentos */
+  --accent-black-glow: oklch(0.15 0.01 0 / 0.3);
 }
 
 @layer base {
@@ -58,7 +56,7 @@
     overflow-x: hidden;
   }
   ::selection {
-    background: var(--accent-red);
+    background: var(--accent-black);
     color: white;
   }
 }
@@ -75,25 +73,25 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.02;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
   }
 }
 
-@utility red-border-glow {
+@utility black-border-glow {
   box-shadow:
-    0 0 0 1px var(--accent-red-glow),
-    0 0 24px -4px var(--accent-red-glow),
-    inset 0 0 24px -12px var(--accent-red-glow);
+    0 0 0 1px var(--accent-black-glow),
+    0 0 24px -4px var(--accent-black-glow),
+    inset 0 0 24px -12px var(--accent-black-glow);
 }
 
 @keyframes seven-float {
-  0%, 100% { transform: translateY(0) rotate(-2deg); opacity: 0.06; }
-  50% { transform: translateY(-8px) rotate(2deg); opacity: 0.12; }
+  0%, 100% { transform: translateY(0) rotate(-2deg); opacity: 0.08; }
+  50% { transform: translateY(-8px) rotate(2deg); opacity: 0.15; }
 }
 @keyframes seven-fade {
-  0%, 100% { opacity: 0.45; }
+  0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
 @keyframes border-sweep {
@@ -109,12 +107,12 @@
   50% { opacity: 0.5; transform: scale(0.85); }
 }
 @keyframes live-halo {
-  0% { box-shadow: 0 0 0 0 var(--accent-red-glow), 0 0 20px var(--accent-red-glow); }
-  100% { box-shadow: 0 0 0 14px oklch(0.55 0.22 25 / 0), 0 0 20px var(--accent-red-glow); }
+  0% { box-shadow: 0 0 0 0 var(--accent-black-glow), 0 0 20px var(--accent-black-glow); }
+  100% { box-shadow: 0 0 0 14px oklch(0.15 0.01 0 / 0), 0 0 20px var(--accent-black-glow); }
 }
 @keyframes cta-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 var(--accent-red-glow); }
-  50% { box-shadow: 0 0 0 10px oklch(0.55 0.22 25 / 0); }
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-black-glow); }
+  50% { box-shadow: 0 0 0 10px oklch(0.15 0.01 0 / 0); }
 }
 @keyframes seven-respire {
   0%, 100% { transform: scale(1); opacity: 0.9; }
@@ -158,18 +156,18 @@
 @utility animate-draw-line { animation: draw-line 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 
 @keyframes card-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 oklch(0.55 0.22 25 / 0); }
-  50% { box-shadow: 0 0 24px -6px oklch(0.55 0.22 25 / 0.35); }
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.15 0.01 0 / 0); }
+  50% { box-shadow: 0 0 24px -6px oklch(0.15 0.01 0 / 0.15); }
 }
 @utility animate-card-pulse { animation: card-pulse 3.6s ease-in-out infinite; }
 
-@keyframes red-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 oklch(0.55 0.22 25 / 0), 0 0 0 0 oklch(0.55 0.22 25 / 0); }
-  50% { box-shadow: 0 0 20px -4px oklch(0.55 0.22 25 / 0.35), 0 0 0 1px oklch(0.55 0.22 25 / 0.2); }
+@keyframes black-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 oklch(0.15 0.01 0 / 0), 0 0 0 0 oklch(0.15 0.01 0 / 0); }
+  50% { box-shadow: 0 0 20px -4px oklch(0.15 0.01 0 / 0.2), 0 0 0 1px oklch(0.15 0.01 0 / 0.1); }
 }
-@utility animate-red-pulse { animation: red-pulse 2.5s ease-in-out infinite; }
+@utility animate-black-pulse { animation: black-pulse 2.5s ease-in-out infinite; }
 
-@utility hover-red-border {
+@utility hover-black-border {
   position: relative;
   isolation: isolate;
   &::before {
@@ -181,9 +179,9 @@
     background: linear-gradient(
       120deg,
       transparent 0%,
-      oklch(0.55 0.22 25 / 0) 38%,
-      oklch(0.55 0.22 25 / 0.9) 50%,
-      oklch(0.55 0.22 25 / 0) 62%,
+      oklch(0.15 0.01 0 / 0) 38%,
+      oklch(0.15 0.01 0 / 0.6) 50%,
+      oklch(0.15 0.01 0 / 0) 62%,
       transparent 100%
     );
     background-size: 200% 100%;
@@ -191,7 +189,7 @@
     mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    opacity: 0.4;
+    opacity: 0.3;
     transition: opacity 0.35s ease;
     pointer-events: none;
     z-index: 1;
@@ -199,7 +197,7 @@
     animation-delay: var(--led-offset, 0s);
   }
   &:hover::before {
-    opacity: 1;
+    opacity: 0.6;
   }
 }
 
