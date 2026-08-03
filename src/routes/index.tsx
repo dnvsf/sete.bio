@@ -267,7 +267,7 @@ function Home() {
                 label="Discord"
                 handle="Em breve"
                 icon={<DiscordIcon size={26} />}
-                iconBgColor="var(--accent-red)"
+                iconBgColor="var(--accent-black)"
                 delay={0.3}
               />
             </div>

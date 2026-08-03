@@ -24,11 +24,11 @@ export function SectionDivider({ label }: { label?: string }) {
         transition={{ duration: 0.5, delay: 0.4 }}
         className="flex items-center gap-4 text-[10px] font-bold uppercase tracking-[0.4em] text-muted-foreground/60"
       >
-        <span className="animate-seven-fade text-accent-red">
+        <span className="animate-seven-fade text-accent-black">
           <SevenGlyph size={12} />
         </span>
-        {label && <span className="text-white/40">{label}</span>}
-        <span className="animate-seven-fade text-accent-red" style={{ animationDelay: "1.2s" }}>
+        {label && <span className="text-foreground/40">{label}</span>}
+        <span className="animate-seven-fade text-accent-black" style={{ animationDelay: "1.2s" }}>
           <SevenGlyph size={12} />
         </span>
       </motion.div>

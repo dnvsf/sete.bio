@@ -59,11 +59,11 @@ export function CutsHubModal({ open, onClose }: CutsHubModalProps) {
             exit={{ y: 40, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
             onClick={(e) => e.stopPropagation()}
-            className="red-border-glow relative w-full max-w-md rounded-t-3xl border border-white/10 bg-[oklch(0.14_0.008_260)] p-6 sm:rounded-3xl"
+            className="black-border-glow relative w-full max-w-md rounded-t-3xl border border-black/10 bg-[oklch(0.14_0.008_260)] p-6 sm:rounded-3xl"
           >
             {/* Header */}
             <div className="mb-5 flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[oklch(0.50 0.20 30)] text-white">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[oklch(0.50 0.20 30)] text-foreground">
                 <ScissorsIcon size={22} />
               </div>
               <div>
@@ -80,14 +80,14 @@ export function CutsHubModal({ open, onClose }: CutsHubModalProps) {
                   href={p.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="hover-red-border group flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                  className="hover-black-border group flex items-center justify-between rounded-xl border border-black/10 bg-black/[0.03] p-4"
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.08, duration: 0.3 }}
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className="grid h-10 w-10 place-items-center rounded-xl text-white"
+                      className="grid h-10 w-10 place-items-center rounded-xl text-foreground"
                       style={{ background: p.iconBg }}
                     >
                       {p.icon}
@@ -107,7 +107,7 @@ export function CutsHubModal({ open, onClose }: CutsHubModalProps) {
             {/* Close */}
             <button
               onClick={onClose}
-              className="mt-5 w-full rounded-xl border border-white/10 py-2 text-sm text-muted-foreground hover:text-foreground"
+              className="mt-5 w-full rounded-xl border border-black/10 py-2 text-sm text-muted-foreground hover:text-foreground"
             >
               Fechar
             </button>

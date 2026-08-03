@@ -107,7 +107,7 @@ export function LivePixCard({ onClick, delay = 0 }: LivePixCardProps) {
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{ duration: 0.7, delay, type: "spring" as const, stiffness: 60, damping: 18 }}
       whileTap={{ scale: 0.98 }}
-      className="hover-red-border group relative block overflow-hidden rounded-2xl border border-white/8 bg-card/60 backdrop-blur-sm w-full text-left"
+      className="hover-black-border group relative block overflow-hidden rounded-2xl border border-black/8 bg-card/60 backdrop-blur-sm w-full text-left"
       style={{
         transform: `perspective(1000px) rotateX(${springTiltX.get()}deg) rotateY(${springTiltY.get()}deg)`,
       }}
@@ -149,7 +149,7 @@ export function LivePixCard({ onClick, delay = 0 }: LivePixCardProps) {
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: delay + 0.1, type: "spring", stiffness: 120 }}
-          className="grid h-12 w-12 shrink-0 place-items-center text-white relative"
+          className="grid h-12 w-12 shrink-0 place-items-center text-foreground relative"
         >
           <motion.div
             className="absolute inset-0 rounded-full"

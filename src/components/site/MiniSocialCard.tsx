@@ -17,7 +17,7 @@ export function MiniSocialCard({
   delay?: number;
 }) {
   const inner = (
-    <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-white/8 bg-card/60 p-4 backdrop-blur-sm transition-colors group-hover:bg-card/80">
+    <div className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-black/8 bg-card/60 p-4 backdrop-blur-sm transition-colors group-hover:bg-card/80">
       <div className="text-foreground/90">{icon}</div>
       <div className="flex flex-col items-center gap-0.5 text-center">
         <div className="text-base font-bold leading-tight tracking-tight">{label}</div>
@@ -25,7 +25,7 @@ export function MiniSocialCard({
       </div>
     </div>
   );
-  const cls = "hover-red-border group block h-full rounded-2xl";
+  const cls = "hover-black-border group block h-full rounded-2xl";
   const anim = {
     initial: { opacity: 0, y: 10 },
     animate: { opacity: 1, y: 0 },

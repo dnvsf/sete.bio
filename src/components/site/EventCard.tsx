@@ -13,12 +13,12 @@ export function EventCard({ event, index = 0 }: { event: EventDTO; index?: numbe
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.06 }}
-      className="hover-red-border rounded-2xl border border-white/8 bg-card/60 p-4 backdrop-blur-sm"
+      className="hover-black-border rounded-2xl border border-black/8 bg-card/60 p-4 backdrop-blur-sm"
       style={{ ["--led-offset" as never]: `${(index * 0.75) % 6}s` }}
     >
       <div className="flex gap-4">
-        <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-white/10 bg-black/40 p-2 text-center">
-          <div className="mono text-[10px] uppercase text-accent-red-glow">{DIAS[d.getDay()]}</div>
+        <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-black/10 bg-black/40 p-2 text-center">
+          <div className="mono text-[10px] uppercase text-accent-black">{DIAS[d.getDay()]}</div>
           <div className="mono text-2xl font-bold leading-none">
             {String(d.getDate()).padStart(2, "0")}
           </div>
@@ -37,7 +37,7 @@ export function EventCard({ event, index = 0 }: { event: EventDTO; index?: numbe
             <div className="mt-3 flex flex-wrap gap-2">
               <RippleButton
                 onClick={() => window.open(event.list_url!, "_blank")}
-                className="rounded-lg bg-accent-red px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-white"
+                className="rounded-lg bg-accent-black px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-foreground"
               >
                 Entrar na lista
               </RippleButton>

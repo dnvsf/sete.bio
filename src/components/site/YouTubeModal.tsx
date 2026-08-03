@@ -30,10 +30,10 @@ export function YouTubeModal({ open, onClose }: { open: boolean; onClose: () => 
             exit={{ y: 40, opacity: 0 }}
             transition={{ type: "spring", stiffness: 260, damping: 24 }}
             onClick={(e) => e.stopPropagation()}
-            className="red-border-glow relative w-full max-w-md rounded-t-3xl border border-white/10 bg-[oklch(0.14_0.008_260)] p-6 sm:rounded-3xl"
+            className="black-border-glow relative w-full max-w-md rounded-t-3xl border border-black/10 bg-[oklch(0.14_0.008_260)] p-6 sm:rounded-3xl"
           >
             <div className="mb-5 flex items-center gap-3">
-              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[oklch(0.5_0.22_28)] text-white">
+              <div className="grid h-10 w-10 place-items-center rounded-xl bg-[oklch(0.5_0.22_28)] text-foreground">
                 <YouTubeIcon size={22} />
               </div>
               <div>
@@ -47,7 +47,7 @@ export function YouTubeModal({ open, onClose }: { open: boolean; onClose: () => 
                 href="https://youtube.com/@setexxl"
                 target="_blank"
                 rel="noreferrer"
-                className="hover-red-border group flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                className="hover-black-border group flex items-center justify-between rounded-xl border border-black/10 bg-black/[0.03] p-4"
               >
                 <div>
                   <div className="text-base font-bold">Canal Principal</div>
@@ -59,7 +59,7 @@ export function YouTubeModal({ open, onClose }: { open: boolean; onClose: () => 
                 href="https://youtube.com/@seteclipes"
                 target="_blank"
                 rel="noreferrer"
-                className="hover-red-border group flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.03] p-4"
+                className="hover-black-border group flex items-center justify-between rounded-xl border border-black/10 bg-black/[0.03] p-4"
               >
                 <div>
                   <div className="text-base font-bold">Cortes</div>
@@ -71,7 +71,7 @@ export function YouTubeModal({ open, onClose }: { open: boolean; onClose: () => 
 
             <button
               onClick={onClose}
-              className="mt-5 w-full rounded-xl border border-white/10 py-2 text-sm text-muted-foreground hover:text-foreground"
+              className="mt-5 w-full rounded-xl border border-black/10 py-2 text-sm text-muted-foreground hover:text-foreground"
             >
               Fechar
             </button>
