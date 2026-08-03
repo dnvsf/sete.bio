@@ -155,16 +155,6 @@ export function SocialCard({
         transition={{ duration: 0.6, delay: delay + 0.1, type: "spring", stiffness: 120 }}
         className="grid h-12 w-12 shrink-0 place-items-center text-black relative"
       >
-        <motion.div
-          className="absolute inset-0 rounded-full bg-black/5 border border-black/12 shadow-lg"
-          animate={{
-            borderColor: isHovered ? "oklch(0.15 0.01 0 / 0.3)" : "oklch(0 0 0 / 12%)",
-            boxShadow: isHovered 
-              ? "0 0 20px oklch(0.15 0.01 0 / 0.12), inset 0 0 15px oklch(0.15 0.01 0 / 0.05)" 
-              : "0 0 0px oklch(0.15 0.01 0 / 0)",
-          }}
-          transition={{ duration: 0.4 }}
-        />
         <div className="relative z-10">{icon}</div>
       </motion.div>
 
