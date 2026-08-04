@@ -94,7 +94,7 @@ function BikerPage() {
           className="mono text-fluid-meta tap-target mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-foreground px-4 py-3 text-center font-bold uppercase tracking-widest text-background"
         >
           <InstagramIcon size={14} />
-          <span className="truncate">Fechar parceria — direct @setexxl</span>
+          <span className="truncate">Fechar parceria · @setexxl</span>
         </motion.a>
       </motion.section>
 

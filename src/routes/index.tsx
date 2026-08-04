@@ -12,6 +12,8 @@ import { SocialIconsBar } from "@/components/site/SocialIconsBar";
 import { LivePixFloating } from "@/components/site/LivePixFloating";
 import { DiscordIcon } from "@/components/site/icons";
 import { PageShell, PageStack } from "@/components/site/PageShell";
+import { PageHeader } from "@/components/site/PageHeader";
+import { TopContactBar } from "@/components/site/TopContactBar";
 import { listSocials, type SocialDTO } from "@/lib/publicData.functions";
 import { getTwitchLive } from "@/lib/getTwitchLive.functions";
 import { getKickLive } from "@/lib/getKickLive.functions";
@@ -108,6 +110,10 @@ function Home() {
 
   return (
     <PageShell>
+      <PageHeader title="Sete.">
+        <TopContactBar />
+      </PageHeader>
+
       {/* ===== ÍCONES DAS REDES PESSOAIS (TOPO) ===== */}
       <SocialIconsBar
         youtube={{ handle: yt?.handle || "setexxl", url: yt?.url || "" }}
