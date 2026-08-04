@@ -1,10 +1,22 @@
 import { motion } from "framer-motion";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 
-/** Partículas sutis no fundo. Reduzidas automaticamente em telas pequenas. */
+type Particle = {
+  id: number;
+  x: number;
+  y: number;
+  size: number;
+  duration: number;
+  delay: number;
+  opacity: number;
+};
+
+/** Partículas sutis no fundo. Só no cliente (evita mismatch de hidratação) e ocultas no mobile. */
 export function FloatingParticles({ count = 15 }: { count?: number }) {
-  const particles = useMemo(
-    () =>
+  const [particles, setParticles] = useState<Particle[]>([]);
+
+  useEffect(() => {
+    setParticles(
       Array.from({ length: count }, (_, i) => ({
         id: i,
         x: Math.random() * 100,
@@ -13,9 +25,10 @@ export function FloatingParticles({ count = 15 }: { count?: number }) {
         duration: Math.random() * 20 + 15,
         delay: Math.random() * 10,
         opacity: Math.random() * 0.1 + 0.05,
-      })),
-    [count]
-  );
+      }))
+    );
+  }, [count]);
+
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 z-0 hidden overflow-hidden sm:block">
