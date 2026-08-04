@@ -3,12 +3,13 @@ import { motion } from "framer-motion";
 import { EventCard } from "@/components/site/EventCard";
 import { SectionDivider } from "@/components/site/SectionDivider";
 import { RippleButton } from "@/components/site/RippleButton";
-import { BackgroundSevens, SevenGlyph } from "@/components/site/SevenGlyph";
-import { CursorGlow } from "@/components/site/CursorGlow";
-import { AuroraBackground } from "@/components/site/AuroraBackground";
+import { SevenGlyph } from "@/components/site/SevenGlyph";
+import { PageShell } from "@/components/site/PageShell";
+import { PageHeader } from "@/components/site/PageHeader";
 import { SplitText } from "@/components/site/SplitText";
 import { InstagramIcon } from "@/components/site/icons";
 import { getPartnerBundle } from "@/lib/publicData.functions";
+
 
 export const Route = createFileRoute("/$slug")({
   loader: async ({ params }) => {
