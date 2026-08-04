@@ -156,10 +156,10 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
         />
       ))}
 
-      <div className="relative flex items-center gap-5 p-6 z-10">
+      <div className="card-pad tap-target relative z-10 flex items-center gap-[clamp(0.875rem,3.5vw,1.25rem)]">
         {/* Twitch icon */}
         <motion.div
-          className="grid h-12 w-12 shrink-0 place-items-center relative"
+          className="relative grid h-11 w-11 shrink-0 place-items-center sm:h-12 sm:w-12"
           initial={{ opacity: 0, scale: 0, rotate: -15 }}
           animate={{ opacity: 1, scale: 1, rotate: 0 }}
           transition={{ duration: 0.7, delay: 0.3, type: "spring", stiffness: 150, damping: 12 }}
@@ -175,7 +175,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
         </motion.div>
 
         <motion.span
-          className="text-lg font-bold tracking-tight leading-none text-foreground"
+          className="text-fluid-title truncate font-bold leading-none tracking-tight text-foreground"
           initial={{ opacity: 0, x: -12 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
@@ -211,7 +211,7 @@ export function TwitchCard({ handle = "setexxl" }: { handle?: string }) {
                   </span>
                 )}
                 <span
-                  className="text-[11px] font-bold uppercase tracking-widest"
+                  className="text-fluid-meta font-bold uppercase tracking-widest"
                   style={{
                     color: live ? "var(--accent-black)" : "var(--muted-foreground)",
                   }}

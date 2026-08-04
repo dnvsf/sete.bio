@@ -1,14 +1,15 @@
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+
 import { EventCard } from "@/components/site/EventCard";
 import { SectionDivider } from "@/components/site/SectionDivider";
 import { RippleButton } from "@/components/site/RippleButton";
-import { BackgroundSevens, SevenGlyph } from "@/components/site/SevenGlyph";
-import { CursorGlow } from "@/components/site/CursorGlow";
-import { AuroraBackground } from "@/components/site/AuroraBackground";
+import { SevenGlyph } from "@/components/site/SevenGlyph";
+import { PageShell } from "@/components/site/PageShell";
+import { PageHeader } from "@/components/site/PageHeader";
 import { SplitText } from "@/components/site/SplitText";
 import { InstagramIcon } from "@/components/site/icons";
 import { getPartnerBundle } from "@/lib/publicData.functions";
+
 
 export const Route = createFileRoute("/$slug")({
   loader: async ({ params }) => {
@@ -69,85 +70,67 @@ function PartnerPage() {
   const { partner, events } = Route.useLoaderData();
 
   return (
-    <div className="relative min-h-screen grain">
-      <AuroraBackground />
-      <BackgroundSevens />
-      <CursorGlow />
+    <PageShell>
+      <Link
+        to="/"
+        className="mono text-fluid-meta inline-flex items-center gap-1 uppercase tracking-[0.3em] text-muted-foreground transition-colors hover:text-foreground"
+      >
+        ← sete.bio
+      </Link>
 
-      <div className="mx-auto max-w-xl px-4 py-10">
-        <Link
-          to="/"
-          className="mono inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-        >
-          ← sete.bio
-        </Link>
-
-        <motion.header
-          initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.7 }}
-          className="mt-6"
-        >
-          <div className="mono text-[10px] uppercase tracking-widest text-accent-black">
-            Sete × parceiro
-          </div>
-          <h1 className="mt-1 text-5xl font-bold tracking-tight">
-            <SplitText text={partner.name} />
-          </h1>
-          {partner.tagline && (
-            <p className="mt-2 text-sm text-muted-foreground">{partner.tagline}</p>
-          )}
-          {partner.city && (
-            <div className="mono mt-1 text-xs text-muted-foreground">{partner.city}</div>
-          )}
-        </motion.header>
-
-        <div className="mt-6 flex flex-wrap gap-3">
-          {partner.contact_url && (
-            <RippleButton
-              onClick={() => window.open(partner.contact_url!, "_blank")}
-              className="black-border-glow animate-cta-pulse rounded-xl bg-accent-black px-5 py-3 text-sm font-bold uppercase tracking-wider text-foreground"
-            >
-              Contato do parceiro
-            </RippleButton>
-          )}
-          {partner.instagram && (
-            <a
-              href={`https://instagram.com/${partner.instagram}`}
-              target="_blank"
-              rel="noreferrer"
-              className="hover-black-border inline-flex items-center gap-2 rounded-xl border border-black/10 px-4 py-3 text-sm font-medium"
-            >
-              <InstagramIcon size={18} />
-              <span className="mono">@{partner.instagram}</span>
-            </a>
-          )}
-        </div>
-
-        <SectionDivider label="Programação" />
-
-        {events.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-black/10 py-12 text-center text-muted-foreground">
-            <span className="animate-seven-respire inline-block">
-              <SevenGlyph size={56} outline />
-            </span>
-            <div className="text-sm">Sem programação por enquanto.</div>
-          </div>
-        ) : (
-          <div className="grid gap-3">
-            {events.map((e: typeof events[number], i: number) => (
-              <EventCard key={e.id} event={e} index={i} />
-            ))}
-          </div>
+      <PageHeader
+        title={<SplitText text={partner.name} />}
+        eyebrow="Sete × parceiro"
+        subtitle={partner.tagline || undefined}
+      >
+        {partner.city && (
+          <div className="mono text-fluid-meta mt-1 text-muted-foreground">{partner.city}</div>
         )}
+      </PageHeader>
 
-        <footer className="mt-16 flex items-center justify-center gap-2 text-xs text-muted-foreground">
-          <span className="mono">sete.bio/{partner.slug}</span>
-          <span className="animate-seven-fade">
-            <SevenGlyph size={14} />
-          </span>
-        </footer>
+      <div className="grid gap-3 sm:grid-cols-2">
+        {partner.contact_url && (
+          <RippleButton
+            onClick={() => window.open(partner.contact_url!, "_blank")}
+            className="tap-target text-fluid-meta w-full rounded-xl bg-foreground px-4 py-3 font-bold uppercase tracking-widest text-background"
+          >
+            Contato do parceiro
+          </RippleButton>
+        )}
+        {partner.instagram && (
+          <a
+            href={`https://instagram.com/${partner.instagram}`}
+            target="_blank"
+            rel="noreferrer"
+            className="hover-black-border tap-target inline-flex items-center justify-center gap-2 rounded-xl border border-black/8 bg-card px-4 py-3 text-sm font-medium"
+          >
+            <InstagramIcon size={18} />
+            <span className="mono truncate">@{partner.instagram}</span>
+          </a>
+        )}
       </div>
-    </div>
+
+      <SectionDivider label="Programação" />
+
+      {events.length === 0 ? (
+        <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-black/10 py-12 text-center text-muted-foreground">
+          <span className="animate-seven-respire inline-block">
+            <SevenGlyph size={56} outline />
+          </span>
+          <div className="text-fluid-body">Sem programação por enquanto.</div>
+        </div>
+      ) : (
+        <div className="grid gap-3">
+          {events.map((e: (typeof events)[number], i: number) => (
+            <EventCard key={e.id} event={e} index={i} />
+          ))}
+        </div>
+      )}
+
+      <footer className="mono text-fluid-meta mt-16 flex items-center justify-center gap-2 text-muted-foreground">
+        <span>sete.bio/{partner.slug}</span>
+      </footer>
+    </PageShell>
   );
 }
+
