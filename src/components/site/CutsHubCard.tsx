@@ -144,13 +144,13 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
           />
         ))}
 
-        <div className="card-pad tap-target relative flex items-center gap-[clamp(0.875rem,3.5vw,1.25rem)] overflow-hidden">
+        <div className="relative flex items-center gap-5 p-6 overflow-hidden">
           {/* Icon Container */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: delay + 0.1, type: "spring", stiffness: 120 }}
-            className="relative grid h-11 w-11 shrink-0 place-items-center text-foreground sm:h-12 sm:w-12"
+            className="grid h-12 w-12 shrink-0 place-items-center text-foreground relative"
           >
             <motion.div
               animate={{ scale: isHovered ? 1.1 : 1 }}
@@ -163,7 +163,7 @@ export function CutsHubCard({ delay = 0 }: CutsHubCardProps) {
 
           <motion.div className="min-w-0 flex-1 self-center relative z-10">
             <motion.span
-              className="text-fluid-title truncate font-bold leading-none tracking-tight text-foreground/80 transition-colors group-hover:text-foreground"
+              className="text-lg font-bold tracking-tight leading-none text-foreground/80 group-hover:text-foreground transition-colors"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.4, delay: delay + 0.2 }}

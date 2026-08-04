@@ -9,16 +9,15 @@ interface Ripple {
 
 export function SocialCard({
   label,
-  handle,
   icon,
   onClick,
   href,
   delay = 0,
 }: {
   label: string;
-  handle?: string;
+  handle: string;
   icon: ReactNode;
-  iconBgColor?: string;
+  iconBgColor: string;
   onClick?: () => void;
   href?: string;
   delay?: number;
@@ -112,7 +111,7 @@ export function SocialCard({
   const inner = (
     <div
       ref={cardRef}
-      className="card-pad tap-target relative flex items-center gap-[clamp(0.875rem,3.5vw,1.25rem)] overflow-hidden rounded-2xl"
+      className="relative flex items-center gap-5 p-6 overflow-hidden rounded-2xl"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       onMouseEnter={handleMouseEnter}
@@ -154,38 +153,32 @@ export function SocialCard({
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: delay + 0.1, type: "spring", stiffness: 120 }}
-        className="relative grid h-11 w-11 shrink-0 place-items-center text-foreground sm:h-12 sm:w-12"
+        className="grid h-12 w-12 shrink-0 place-items-center text-black relative"
       >
         <div className="relative z-10">{icon}</div>
       </motion.div>
 
-      <div className="relative z-10 min-w-0 flex-1 self-center pr-8">
-        <motion.div
+      <div className="min-w-0 flex-1 self-center relative z-10">
+        <motion.span
+          className="text-lg font-bold tracking-tight text-black/80 group-hover:text-black transition-colors"
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.4, delay: delay + 0.2 }}
         >
-          <div className="text-fluid-title truncate font-bold tracking-tight text-foreground/85 transition-colors group-hover:text-foreground">
-            {label}
-          </div>
-          {handle && (
-            <div className="mono text-fluid-meta mt-1 truncate tracking-wide text-muted-foreground">
-              {handle}
-            </div>
-          )}
-        </motion.div>
+          {label}
+        </motion.span>
       </div>
 
       {/* Arrow */}
       <motion.div
-        className="absolute right-[clamp(1rem,4.5vw,1.5rem)]"
+        className="absolute right-6"
         animate={{
           opacity: isHovered ? 0.8 : 0,
           x: isHovered ? 0 : -8,
         }}
         transition={{ duration: 0.3 }}
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-foreground/40">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-black/40">
           <path d="M5 12h14" />
           <path d="m12 5 7 7-7 7" />
         </svg>
