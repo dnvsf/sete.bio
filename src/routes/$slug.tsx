@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+
 import { EventCard } from "@/components/site/EventCard";
 import { SectionDivider } from "@/components/site/SectionDivider";
 import { RippleButton } from "@/components/site/RippleButton";
