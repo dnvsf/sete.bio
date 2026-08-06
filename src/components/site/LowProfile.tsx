@@ -13,6 +13,8 @@ import { Lock } from "lucide-react";
 
 type Phase = "idle" | "arming" | "engaged";
 
+const STORAGE_KEY = "sete:low-profile";
+
 const LowProfileContext = createContext<{ phase: Phase }>({ phase: "idle" });
 
 export function useLowProfile() {
@@ -39,11 +41,11 @@ function LockPop({ x, y }: { x: number; y: number }) {
       }}
       transition={{ duration: 1, times: [0, 0.2, 0.75, 1], ease: "easeOut" }}
     >
-      <div className="grid h-12 w-12 place-items-center rounded-full border border-black/10 bg-white/85 shadow-[0_10px_30px_rgba(0,0,0,0.15)] backdrop-blur-md">
-        <Lock size={20} className="text-black/80" />
+      <div className="grid h-12 w-12 place-items-center rounded-full border border-white/10 bg-black/70 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-md">
+        <Lock size={20} className="text-white/80" />
       </div>
       <motion.div
-        className="absolute inset-0 rounded-full border border-black/20"
+        className="absolute inset-0 rounded-full border border-white/20"
         initial={{ opacity: 0.6, scale: 1 }}
         animate={{ opacity: 0, scale: 2.2 }}
         transition={{ duration: 0.9, ease: "easeOut" }}
@@ -52,28 +54,18 @@ function LockPop({ x, y }: { x: number; y: number }) {
   );
 }
 
-/* ===== Interruptor LOW PROFILE ===== */
+/* ===== Interruptor LOW PROFILE (sem card) ===== */
 function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => void }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 18, filter: "blur(10px)" }}
+      initial={{ opacity: 0, y: 14, filter: "blur(10px)" }}
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{ duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
-      className="pointer-events-auto flex flex-col items-center gap-5 rounded-3xl border border-black/10 bg-white/70 px-8 py-7 shadow-[0_30px_80px_rgba(0,0,0,0.12)] backdrop-blur-2xl"
+      className="pointer-events-auto flex flex-col items-center gap-3"
     >
-      <div className="flex flex-col items-center gap-1">
-        <span className="mono text-[10px] font-bold uppercase tracking-[0.35em] text-black/45">
-          Low Profile
-        </span>
-        <motion.span
-          key={on ? "on" : "off"}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mono text-[11px] font-bold uppercase tracking-[0.2em] text-black"
-        >
-          {on ? "ON" : "OFF"}
-        </motion.span>
-      </div>
+      <span className="mono text-[10px] font-bold uppercase tracking-[0.35em] text-white/70 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]">
+        Low Profile
+      </span>
 
       <button
         type="button"
@@ -81,22 +73,24 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
         onClick={onActivate}
         className="relative h-11 w-[92px] rounded-full border transition-colors duration-700"
         style={{
-          borderColor: on ? "oklch(0.15 0.01 0 / 0.9)" : "oklch(0.15 0.01 0 / 0.15)",
+          borderColor: on ? "oklch(0.72 0.19 150 / 0.7)" : "oklch(0.62 0.23 27 / 0.7)",
           background: on
-            ? "linear-gradient(135deg, oklch(0.18 0.01 0), oklch(0.10 0.01 0))"
-            : "linear-gradient(135deg, oklch(0.96 0.003 0), oklch(0.90 0.003 0))",
+            ? "linear-gradient(135deg, oklch(0.55 0.17 150), oklch(0.42 0.14 150))"
+            : "linear-gradient(135deg, oklch(0.55 0.22 27), oklch(0.40 0.18 27))",
+          boxShadow: on
+            ? "0 0 28px oklch(0.62 0.19 150 / 0.45)"
+            : "0 0 28px oklch(0.58 0.22 27 / 0.35)",
         }}
       >
         <motion.span
-          className="absolute top-1/2 h-8 w-8 rounded-full shadow-[0_6px_16px_rgba(0,0,0,0.25)]"
-          style={{ background: on ? "#fff" : "oklch(0.15 0.01 0)" }}
+          className="absolute top-1/2 h-8 w-8 rounded-full bg-white shadow-[0_6px_16px_rgba(0,0,0,0.35)]"
           animate={{ left: on ? 52 : 6, y: "-50%" }}
           transition={{ type: "spring", stiffness: 320, damping: 26 }}
         />
         <AnimatePresence>
           {on && (
             <motion.span
-              className="absolute inset-0 rounded-full border border-black/40"
+              className="absolute inset-0 rounded-full border border-white/50"
               initial={{ opacity: 0.7, scale: 1 }}
               animate={{ opacity: 0, scale: 1.8 }}
               transition={{ duration: 1.1, ease: "easeOut" }}
@@ -104,35 +98,6 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
           )}
         </AnimatePresence>
       </button>
-
-      <span className="mono max-w-[220px] text-center text-[10px] uppercase tracking-[0.18em] text-black/40">
-        {on ? "encerrando…" : "ficando quieto"}
-      </span>
-    </motion.div>
-  );
-}
-
-/* ===== Overlay final ===== */
-function FinalOverlay() {
-  return (
-    <motion.div
-      className="pointer-events-none fixed inset-0 z-[60] grid place-items-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1.6, delay: 1.2 }}
-    >
-      <div className="flex flex-col items-center gap-4 px-6 text-center">
-        <motion.span
-          className="text-5xl font-bold text-black"
-          animate={{ opacity: [1, 0.25, 1], scale: [1, 1.04, 1] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        >
-          𝟕
-        </motion.span>
-        <span className="mono text-[10px] font-bold uppercase tracking-[0.35em] text-black/70">
-          Modo Low Profile ativo · sete.bio
-        </span>
-      </div>
     </motion.div>
   );
 }
@@ -140,22 +105,45 @@ function FinalOverlay() {
 export function LowProfileProvider({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
   const [phase, setPhase] = useState<Phase>("idle");
+  const [restored, setRestored] = useState(false);
   const [locks, setLocks] = useState<LockPopState[]>([]);
+
+  // Restaura estado salvo no navegador
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(STORAGE_KEY) === "on") {
+        setRestored(true);
+        setPhase("engaged");
+      }
+    } catch {
+      /* noop */
+    }
+  }, []);
 
   const engage = useCallback(() => {
     setPhase((p) => (p === "idle" ? "arming" : p));
   }, []);
 
-  // O interruptor vira sozinho depois de ~1,5s
+  // O interruptor vira sozinho depois de ~1,5s (só na primeira visita)
   useEffect(() => {
+    if (restored) return;
     const t = setTimeout(engage, 1500);
     return () => clearTimeout(t);
-  }, [engage]);
+  }, [engage, restored]);
 
   useEffect(() => {
     if (phase !== "arming") return;
     const t = setTimeout(() => setPhase("engaged"), 2600);
     return () => clearTimeout(t);
+  }, [phase]);
+
+  useEffect(() => {
+    if (phase !== "engaged") return;
+    try {
+      localStorage.setItem(STORAGE_KEY, "on");
+    } catch {
+      /* noop */
+    }
   }, [phase]);
 
   useEffect(() => {
@@ -165,6 +153,36 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
       document.body.style.overflow = "";
     };
   }, [phase]);
+
+  // Bloqueia cópia, seleção, menu de contexto e atalhos de inspeção
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const block = (e: Event) => e.preventDefault();
+    const keys = (e: KeyboardEvent) => {
+      const k = e.key.toLowerCase();
+      if (
+        k === "f12" ||
+        ((e.ctrlKey || e.metaKey) && ["c", "u", "s", "a", "p"].includes(k)) ||
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && ["i", "j", "c"].includes(k))
+      ) {
+        e.preventDefault();
+      }
+    };
+    document.addEventListener("copy", block);
+    document.addEventListener("cut", block);
+    document.addEventListener("selectstart", block);
+    document.addEventListener("dragstart", block);
+    document.addEventListener("contextmenu", block);
+    document.addEventListener("keydown", keys);
+    return () => {
+      document.removeEventListener("copy", block);
+      document.removeEventListener("cut", block);
+      document.removeEventListener("selectstart", block);
+      document.removeEventListener("dragstart", block);
+      document.removeEventListener("contextmenu", block);
+      document.removeEventListener("keydown", keys);
+    };
+  }, []);
 
   const blockClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -182,9 +200,11 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
       <div
         onClickCapture={blockClick}
         className="select-none"
-        style={{ cursor: "not-allowed" }}
+        aria-hidden={phase === "engaged"}
+        style={{ cursor: "not-allowed", WebkitUserSelect: "none", userSelect: "none" }}
       >
         <motion.div
+          initial={false}
           animate={
             reduced
               ? { filter: `blur(${phase === "idle" ? 0 : 10}px)` }
@@ -193,7 +213,10 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
                   scale: phase === "engaged" ? 1.02 : 1,
                 }
           }
-          transition={{ duration: phase === "engaged" ? 2.4 : 1.6, ease: [0.2, 0.8, 0.2, 1] }}
+          transition={{
+            duration: restored ? 0 : phase === "engaged" ? 2.4 : 1.6,
+            ease: [0.2, 0.8, 0.2, 1],
+          }}
           style={{ pointerEvents: "none" }}
         >
           {children}
@@ -204,26 +227,15 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
       <motion.div
         className="pointer-events-none fixed inset-0 z-[55]"
         style={{ background: "oklch(0.15 0.01 0)" }}
+        initial={false}
         animate={{ opacity: phase === "engaged" ? 0.12 : phase === "arming" ? 0.05 : 0 }}
-        transition={{ duration: 2.4 }}
+        transition={{ duration: restored ? 0 : 2.4 }}
       />
 
-      {/* Painel do interruptor */}
+      {/* Interruptor sempre visível */}
       <div className="pointer-events-none fixed inset-0 z-[65] grid place-items-center px-6">
-        <AnimatePresence>
-          {phase !== "engaged" && (
-            <motion.div
-              key="switch"
-              exit={{ opacity: 0, scale: 0.94, filter: "blur(12px)" }}
-              transition={{ duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
-            >
-              <LowProfileSwitch on={phase === "arming"} onActivate={engage} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <LowProfileSwitch on={phase !== "idle"} onActivate={engage} />
       </div>
-
-      {phase === "engaged" && <FinalOverlay />}
 
       <AnimatePresence>
         {locks.map((l) => (
