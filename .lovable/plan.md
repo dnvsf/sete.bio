@@ -1,36 +1,33 @@
-## Objetivo
+# Modo Low Profile — animação de encerramento
 
-Deixar o site legível e limpo: textos com contraste correto no tema claro, cards visíveis sobre o fundo, e ícones de plataforma sem círculos.
+Uma cena de "fechamento" do sete.bio: um interruptor OFF → ON que desliga o site, borra tudo permanentemente e bloqueia qualquer interação.
 
-## 1. Cores das fontes (conflito com fundo)
+## Como vai funcionar
 
-O tema é claro (`--background` off-white), mas `TwitchCard`, `KickCard` e `CutsHubCard` ainda usam classes herdadas do tema escuro (`text-white`, `text-white/90`, `border-white/10`, `bg-white/5`). Isso deixa títulos quase invisíveis.
+1. Ao abrir a página, o site aparece normalmente por ~1,5s.
+2. Um painel central surge com um interruptor físico rotulado `LOW PROFILE`, estado `OFF`, e um subtítulo curto ("ficando quieto").
+3. O interruptor desliza sozinho para `ON` (também clicável antes disso, para quem quiser acelerar).
+4. Na virada: pulso de luz, o "𝟕" respira uma última vez, o fundo escurece e todo o conteúdo entra em desfoque progressivo (0 → 14px) até congelar borrado, com saturação reduzida.
+5. Estado final permanente: site borrado, sem scroll, com uma linha nítida por cima — "MODO LOW PROFILE ATIVO · sete.bio" e um 𝟕 apagando devagar. Nada mais é clicável.
 
-- Substituir todos os `text-white*` por tokens semânticos (`text-foreground`, `text-foreground/80`, `text-muted-foreground`).
-- Substituir `border-white/10|20` e `bg-white/5` por equivalentes escuros sutis (`border-border`, `bg-foreground/5`).
-- Mesma varredura em `MiniSocialCard`, `CutsHubModal` e `TopContactBar` para manter consistência.
+## Bloqueio de cliques
 
-## 2. Cards mais destacados
+- Antes da ativação: todos os cards, ícones do topo, barra de contato e o botão flutuante do LivePix já estão inertes.
+- Ao tentar clicar em qualquer um deles: aparece um cadeado animado (fecha + treme) sobre o elemento clicado, ele fica momentaneamente borrado, e some em ~1s.
+- Durante e depois da animação: nenhuma interação, nenhum link abre, modais desativados.
 
-- Aumentar a opacidade do token `--card` (de ~0.7 para sólido/quase sólido) em `src/styles.css`.
-- Reforçar borda (`--border` um pouco mais escura) e sombra dos cards para separá-los do fundo.
-- Reduzir a intensidade do fundo animado (partículas / sevens / cursor glow) atrás dos cards, mantendo os efeitos.
+## Escopo
 
-## 3. Card Cortes de Lives
+- A rota `/biker` será removida.
+- O botão flutuante do LivePix e seu modal entram na mesma camada de blur/bloqueio — nada fica de fora.
+- As rotas de parceiro `/$slug` recebem o mesmo overlay, para o site inteiro estar coerente.
 
-Em `CutsHubCard.tsx`:
-- Remover a linha "@setelives — IG · TikTok · YouTube".
-- Trocar o título "Cortes / Lives" por "Cortes de Lives".
-- Reajustar espaçamento vertical para o card ficar equilibrado sem a segunda linha.
+## Detalhes técnicos
 
-## 4. Ícones sem círculo
-
-- Remover os `div` circulares de fundo dos ícones em `SocialCard`, `TwitchCard`, `KickCard` e `CutsHubCard` — o ícone fica solto, com a cor do texto.
-- No `SocialIconsBar` (3 ícones do topo): tirar o container circular (fundo, borda, sombra, `rounded-full`), mantendo a animação de expansão que revela nome + @handle. Como a pílula deixa de existir:
-  - a animação passa a expandir um bloco transparente (sem borda/fundo), com o texto entrando em fade/slide como hoje;
-  - largura animada continua, mas sem `overflow-hidden` circular que causaria corte;
-  - shimmer e glow radiais viram um brilho suave atrás do ícone em vez de dentro da pílula, para não "bugar".
-
-## Verificação
-
-Após as mudanças, checar no preview em mobile (432px) e desktop que nenhum texto some, que os cards têm contraste claro sobre o fundo e que a sequência de animação dos ícones do topo continua rodando sem corte.
+- Novo `LowProfileProvider` (contexto) em `src/components/site/LowProfile.tsx`, montado no `__root.tsx`, com estados `idle → arming → engaged`.
+- O provider envolve o `<Outlet />` num wrapper com `filter: blur()` animado via framer-motion, mais `pointer-events: none` global (aplicado no wrapper, não em cada componente — nenhum card precisa ser alterado).
+- Um `onClickCapture` no wrapper intercepta o clique, guarda as coordenadas e renderiza `<LockPop />` (ícone de cadeado com animação de fechar/tremer) naquela posição.
+- Novo componente `LowProfileSwitch`: trilho + knob, transição de cor OFF (neutro) → ON (preto profundo), com glow e ripple no instante da virada.
+- Overlay final em camada acima do blur com `backdrop-filter` leve, texto em mono maiúsculo e o 𝟕 com fade lento (respeitando `prefers-reduced-motion`).
+- Remoção de `src/routes/biker.tsx` (e do `LinkCard` se ficar sem uso).
+- `head()` da index atualizado para refletir o encerramento.
