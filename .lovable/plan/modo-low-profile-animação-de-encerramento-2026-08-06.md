@@ -5,7 +5,7 @@ Uma cena de "fechamento" do sete.bio: um interruptor OFF → ON que desliga o si
 ## Como vai funcionar
 
 1. Ao abrir a página, o site aparece normalmente por ~1,5s.
-2. Um painel central surge com um interruptor físico rotulado `LOW PROFILE`, estado `OFF`, e um subtítulo curto ("ficando quieto").
+2. Um painel central surge com um interruptor físico rotulado `LOW PROFILE`, estado `OFF`.
 3. O interruptor desliza sozinho para `ON` (também clicável antes disso, para quem quiser acelerar).
 4. Na virada: pulso de luz, o "𝟕" respira uma última vez, o fundo escurece e todo o conteúdo entra em desfoque progressivo (0 → 14px) até congelar borrado, com saturação reduzida.
 5. Estado final permanente: site borrado, sem scroll, com uma linha nítida por cima — "MODO LOW PROFILE ATIVO · sete.bio" e um 𝟕 apagando devagar. Nada mais é clicável.
