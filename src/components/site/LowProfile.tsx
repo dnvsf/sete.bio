@@ -273,14 +273,18 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
         </motion.div>
       </div>
 
-      {/* Escurecimento suave */}
+      {/* Escurecimento até o preto, em sincronia com o borrão */}
       <motion.div
         className="pointer-events-none fixed inset-0 z-[55]"
-        style={{ background: "oklch(0.15 0.01 0)" }}
+        style={{ background: "oklch(0.05 0 0)" }}
         initial={false}
-        animate={{ opacity: phase === "engaged" ? 0.12 : phase === "arming" ? 0.05 : 0 }}
-        transition={{ duration: restored ? 0 : 2.4 }}
+        animate={{ opacity: phase === "engaged" ? 0.92 : phase === "arming" ? 0.45 : 0 }}
+        transition={{
+          duration: restored ? 0 : phase === "engaged" ? 2.4 : 1.6,
+          ease: [0.2, 0.8, 0.2, 1],
+        }}
       />
+
 
       {/* Interruptor sempre visível */}
       <div className="pointer-events-none fixed inset-0 z-[65] grid place-items-center px-6">
