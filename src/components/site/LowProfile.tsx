@@ -241,7 +241,7 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
                 }
           }
           transition={{
-            duration: restored ? 0 : phase === "engaged" ? 2.4 : 1.6,
+            duration: phase === "engaged" ? 2.4 : 1.6,
             ease: [0.2, 0.8, 0.2, 1],
           }}
           style={{ pointerEvents: "none" }}
@@ -257,7 +257,7 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
         initial={false}
         animate={{ opacity: phase === "engaged" ? 0.92 : phase === "arming" ? 0.45 : 0 }}
         transition={{
-          duration: restored ? 0 : phase === "engaged" ? 2.4 : 1.6,
+          duration: phase === "engaged" ? 2.4 : 1.6,
           ease: [0.2, 0.8, 0.2, 1],
         }}
       />
