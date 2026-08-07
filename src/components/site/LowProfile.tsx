@@ -13,8 +13,6 @@ import { Lock } from "lucide-react";
 
 type Phase = "idle" | "arming" | "engaged";
 
-const STORAGE_KEY = "sete:low-profile";
-
 const LowProfileContext = createContext<{ phase: Phase }>({ phase: "idle" });
 
 export function useLowProfile() {
