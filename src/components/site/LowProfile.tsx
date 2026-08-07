@@ -13,8 +13,6 @@ import { Lock } from "lucide-react";
 
 type Phase = "idle" | "arming" | "engaged";
 
-const STORAGE_KEY = "sete:low-profile";
-
 const LowProfileContext = createContext<{ phase: Phase }>({ phase: "idle" });
 
 export function useLowProfile() {
@@ -157,45 +155,22 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
 export function LowProfileProvider({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
   const [phase, setPhase] = useState<Phase>("idle");
-  const [restored, setRestored] = useState(false);
   const [locks, setLocks] = useState<LockPopState[]>([]);
-
-  // Restaura estado salvo no navegador
-  useEffect(() => {
-    try {
-      if (localStorage.getItem(STORAGE_KEY) === "on") {
-        setRestored(true);
-        setPhase("engaged");
-      }
-    } catch {
-      /* noop */
-    }
-  }, []);
 
   const engage = useCallback(() => {
     setPhase((p) => (p === "idle" ? "arming" : p));
   }, []);
 
-  // O interruptor vira sozinho depois de ~1,5s (só na primeira visita)
+  // O interruptor vira sozinho depois de ~1,5s em toda entrada
   useEffect(() => {
-    if (restored) return;
     const t = setTimeout(engage, 1500);
     return () => clearTimeout(t);
-  }, [engage, restored]);
+  }, [engage]);
 
   useEffect(() => {
     if (phase !== "arming") return;
     const t = setTimeout(() => setPhase("engaged"), 2600);
     return () => clearTimeout(t);
-  }, [phase]);
-
-  useEffect(() => {
-    if (phase !== "engaged") return;
-    try {
-      localStorage.setItem(STORAGE_KEY, "on");
-    } catch {
-      /* noop */
-    }
   }, [phase]);
 
   useEffect(() => {
@@ -266,7 +241,7 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
                 }
           }
           transition={{
-            duration: restored ? 0 : phase === "engaged" ? 2.4 : 1.6,
+            duration: phase === "engaged" ? 2.4 : 1.6,
             ease: [0.2, 0.8, 0.2, 1],
           }}
           style={{ pointerEvents: "none" }}
@@ -282,7 +257,7 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
         initial={false}
         animate={{ opacity: phase === "engaged" ? 0.92 : phase === "arming" ? 0.45 : 0 }}
         transition={{
-          duration: restored ? 0 : phase === "engaged" ? 2.4 : 1.6,
+          duration: phase === "engaged" ? 2.4 : 1.6,
           ease: [0.2, 0.8, 0.2, 1],
         }}
       />
