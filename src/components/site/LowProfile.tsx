@@ -55,34 +55,37 @@ function LockPop({ x, y }: { x: number; y: number }) {
 }
 
 /* ===== Interruptor LOW PROFILE (sem card) ===== */
-const TRACK_W = 128;
-const KNOB_W = 54;
-const PAD = 6;
-const KNOB_ON = TRACK_W - KNOB_W - PAD;
+const TRACK_W = 188;
+const TRACK_H = 34;
+const KNOB = 26;
+const PAD = 4;
+const KNOB_ON = TRACK_W - KNOB - PAD;
+const EASE = [0.22, 1, 0.36, 1] as const;
 
 function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => void }) {
   const reduced = useReducedMotion();
   const target = on ? KNOB_ON : PAD;
-  const color = on ? "oklch(0.62 0.19 150)" : "oklch(0.58 0.22 27)";
+  const color = on ? "oklch(0.66 0.16 150)" : "oklch(0.60 0.20 27)";
+  const duration = reduced ? 0.001 : 0.85;
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 14, filter: "blur(10px)" }}
       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      transition={{ duration: 0.9, ease: [0.2, 0.8, 0.2, 1] }}
-      className="pointer-events-auto flex flex-col items-center gap-4"
+      transition={{ duration: 0.9, ease: EASE }}
+      className="pointer-events-auto flex flex-col items-center gap-5"
     >
-      <div className="relative h-4">
+      <div className="relative h-3">
         <AnimatePresence mode="wait">
           <motion.span
             key={on ? "on" : "off"}
-            initial={{ opacity: 0, filter: "blur(6px)", y: 4 }}
-            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            exit={{ opacity: 0, filter: "blur(6px)", y: -4 }}
-            transition={{ duration: 0.45, ease: "easeOut" }}
-            className="mono block whitespace-nowrap text-[10px] font-bold uppercase tracking-[0.35em] text-white/75 drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)]"
+            initial={{ opacity: 0, filter: "blur(4px)" }}
+            animate={{ opacity: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, filter: "blur(4px)" }}
+            transition={{ duration: 0.4, ease: EASE }}
+            className="mono block whitespace-nowrap text-[9px] font-medium uppercase tracking-[0.5em] text-white/45"
           >
-            {on ? "Low Profile" : "Influencer"}
+            {on ? "Modo Low Profile" : "Modo Público"}
           </motion.span>
         </AnimatePresence>
       </div>
@@ -92,62 +95,61 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
         aria-label="Ativar modo low profile"
         aria-pressed={on}
         onClick={onActivate}
-        className="relative rounded-full border bg-transparent transition-colors duration-700"
+        className="relative rounded-full border bg-transparent"
         style={{
           width: TRACK_W,
-          height: KNOB_W + PAD * 2,
-          borderColor: on ? "oklch(0.72 0.19 150 / 0.35)" : "oklch(0.70 0.20 27 / 0.35)",
+          height: TRACK_H,
+          borderColor: on ? "oklch(0.72 0.16 150 / 0.28)" : "oklch(0.70 0.18 27 / 0.28)",
+          transition: "border-color 900ms cubic-bezier(0.22,1,0.36,1)",
         }}
       >
+        <div className="absolute inset-0 grid place-items-center">
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={on ? "on" : "off"}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.35, ease: EASE }}
+              className="mono text-[9px] font-medium uppercase tracking-[0.4em] text-white/40"
+            >
+              {on ? "Ativo" : "Ativar"}
+            </motion.span>
+          </AnimatePresence>
+        </div>
+
         {/* rastro */}
         {!reduced &&
-          [0.28, 0.16, 0.08].map((o, i) => (
+          [0.22, 0.12, 0.06].map((o, i) => (
             <motion.span
               key={i}
               className="pointer-events-none absolute top-1/2 rounded-full"
               style={{
-                width: KNOB_W,
-                height: KNOB_W,
+                width: KNOB,
+                height: KNOB,
                 background: color,
                 opacity: o,
-                filter: "blur(6px)",
+                filter: "blur(7px)",
               }}
               animate={{ left: target, y: "-50%" }}
-              transition={{
-                type: "spring",
-                stiffness: 300,
-                damping: 28,
-                delay: 0.05 * (i + 1),
-              }}
+              transition={{ duration: duration + 0.08 * (i + 1), ease: EASE }}
             />
           ))}
 
         <motion.span
-          className="absolute top-1/2 grid place-items-center rounded-full"
-          style={{ width: KNOB_W, height: KNOB_W }}
+          className="absolute top-1/2 rounded-full"
+          style={{ width: KNOB, height: KNOB }}
           animate={{
             left: target,
             y: "-50%",
             background: color,
-            boxShadow: `0 0 24px ${on ? "oklch(0.62 0.19 150 / 0.5)" : "oklch(0.58 0.22 27 / 0.45)"}`,
+            boxShadow: `0 0 18px ${on ? "oklch(0.66 0.16 150 / 0.45)" : "oklch(0.60 0.20 27 / 0.4)"}`,
           }}
-          transition={{ type: "spring", stiffness: 320, damping: 26 }}
-        >
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={on ? "on" : "off"}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.25 }}
-              className="mono text-[11px] font-bold uppercase tracking-[0.12em] text-white"
-            >
-              {on ? "On" : "Off"}
-            </motion.span>
-          </AnimatePresence>
-        </motion.span>
+          transition={{ duration, ease: EASE }}
+        />
       </button>
     </motion.div>
+
   );
 }
 
