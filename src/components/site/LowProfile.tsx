@@ -66,7 +66,13 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
   const target = on ? KNOB_ON : PAD;
   const color = on ? "oklch(0.66 0.16 150)" : "oklch(0.60 0.20 27)";
   const duration = reduced ? 0.001 : SWITCH_DURATION;
+  const [pressed, setPressed] = useState(false);
+  const [pulse, setPulse] = useState(0);
 
+  const handleClick = () => {
+    setPulse((p) => p + 1);
+    onActivate();
+  };
 
   return (
     <motion.div
@@ -90,11 +96,14 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
         </AnimatePresence>
       </div>
 
-      <button
+      <motion.button
         type="button"
         aria-label="Ativar modo low profile"
         aria-pressed={on}
-        onClick={onActivate}
+        onClick={handleClick}
+        onPointerDown={() => setPressed(true)}
+        onPointerUp={() => setPressed(false)}
+        onPointerLeave={() => setPressed(false)}
         className="relative rounded-full border bg-transparent"
         style={{
           width: TRACK_W,
@@ -102,14 +111,23 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
           borderColor: on ? "oklch(0.72 0.16 150 / 0.28)" : "oklch(0.70 0.18 27 / 0.28)",
           transition: "border-color 900ms cubic-bezier(0.22,1,0.36,1)",
         }}
+        animate={{
+          scale: pressed ? 0.965 : 1,
+          boxShadow: pressed
+            ? `0 0 0 ${on ? "oklch(0.66 0.16 150 / 0.10)" : "oklch(0.60 0.20 27 / 0.10)"}`
+            : `0 8px 24px -8px ${on ? "oklch(0.66 0.16 150 / 0.22)" : "oklch(0.60 0.20 27 / 0.18)"}`,
+        }}
+        transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+        whileHover={reduced ? {} : { scale: 1.02 }}
+        whileTap={reduced ? {} : { scale: 0.96 }}
       >
         <div className="absolute inset-0 grid place-items-center">
           <AnimatePresence mode="wait">
             <motion.span
               key={on ? "on" : "off"}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{ opacity: 0, y: 3 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -3 }}
               transition={{ duration: 0.35, ease: EASE }}
               className="mono text-[9px] font-medium uppercase tracking-[0.4em] text-white/40"
             >
@@ -117,6 +135,20 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
             </motion.span>
           </AnimatePresence>
         </div>
+
+        {/* Ripple de clique sutil */}
+        {!reduced && (
+          <motion.span
+            key={pulse}
+            className="pointer-events-none absolute inset-0 rounded-full"
+            style={{
+              border: `1px solid ${on ? "oklch(0.66 0.16 150 / 0.45)" : "oklch(0.60 0.20 27 / 0.4)"}`,
+            }}
+            initial={{ opacity: 0.7, scale: 0.92 }}
+            animate={{ opacity: 0, scale: 1.18 }}
+            transition={{ duration: 0.65, ease: EASE }}
+          />
+        )}
 
         {/* rastro */}
         {!reduced &&
@@ -142,12 +174,13 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
           animate={{
             left: target,
             y: "-50%",
+            scale: pressed ? 0.88 : 1,
             background: color,
             boxShadow: `0 0 18px ${on ? "oklch(0.66 0.16 150 / 0.45)" : "oklch(0.60 0.20 27 / 0.4)"}`,
           }}
           transition={{ duration, ease: EASE }}
         />
-      </button>
+      </motion.button>
     </motion.div>
 
   );
