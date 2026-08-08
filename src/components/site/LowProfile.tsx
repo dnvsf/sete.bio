@@ -187,8 +187,27 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
 }
 
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const check = () => {
+      const coarse = window.matchMedia("(pointer: coarse)").matches;
+      const small = window.innerWidth < 768;
+      setIsMobile(coarse || small);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  return isMobile;
+}
+
 export function LowProfileProvider({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
+  const isMobile = useIsMobile();
   const [phase, setPhase] = useState<Phase>("idle");
   const [locks, setLocks] = useState<LockPopState[]>([]);
 
@@ -254,7 +273,9 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
     setTimeout(() => setLocks((prev) => prev.filter((l) => l.id !== id)), 1000);
   }, []);
 
-  const blur = phase === "idle" ? 0 : phase === "arming" ? 11 : 14;
+  // Em mobile reduzimos blur e saturacao para evitar travamentos
+  const blur = phase === "idle" ? 0 : phase === "arming" ? (isMobile ? 4 : 11) : isMobile ? 6 : 14;
+  const overlayBlur = phase === "idle" ? 0 : isMobile ? 4 : 8;
   const dark = phase === "idle" ? 0 : phase === "arming" ? 0.82 : 0.94;
   // Mesma curva e duração da bola do interruptor
   const sync = {
@@ -278,11 +299,11 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
               ? { filter: `blur(${phase === "idle" ? 0 : 10}px)` }
               : {
                   filter: `blur(${blur}px) saturate(${phase === "engaged" ? 0.5 : 1})`,
-                  scale: phase === "engaged" ? 1.02 : 1,
+                  scale: isMobile ? 1 : phase === "engaged" ? 1.02 : 1,
                 }
           }
           transition={sync}
-          style={{ pointerEvents: "none" }}
+          style={{ pointerEvents: "none", willChange: "transform, opacity" }}
         >
           {children}
         </motion.div>
@@ -291,7 +312,7 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
       {/* Escurecimento até o preto, em sincronia com a bola do interruptor */}
       <motion.div
         className="pointer-events-none fixed inset-0 z-[55]"
-        style={{ background: "oklch(0.05 0 0)" }}
+        style={{ background: "oklch(0.05 0 0)", willChange: "opacity" }}
         initial={false}
         animate={{ opacity: dark }}
         transition={sync}
@@ -300,7 +321,7 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
       {/* Overlay de blur unificado para manter cards e conteúdo com visual consistente */}
       <motion.div
         className="pointer-events-none fixed inset-0 z-[58]"
-        style={{ backdropFilter: "blur(8px) saturate(0.6)" }}
+        style={{ backdropFilter: `blur(${overlayBlur}px) saturate(0.6)`, willChange: "opacity" }}
         initial={false}
         animate={{ opacity: phase === "idle" ? 0 : phase === "arming" ? 0.65 : 1 }}
         transition={sync}
