@@ -59,12 +59,14 @@ const KNOB = 26;
 const PAD = 4;
 const KNOB_ON = TRACK_W - KNOB - PAD;
 const EASE = [0.22, 1, 0.36, 1] as const;
+const SWITCH_DURATION = 0.85;
 
 function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => void }) {
   const reduced = useReducedMotion();
   const target = on ? KNOB_ON : PAD;
   const color = on ? "oklch(0.66 0.16 150)" : "oklch(0.60 0.20 27)";
-  const duration = reduced ? 0.001 : 0.85;
+  const duration = reduced ? 0.001 : SWITCH_DURATION;
+
 
   return (
     <motion.div
@@ -219,7 +221,13 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
     setTimeout(() => setLocks((prev) => prev.filter((l) => l.id !== id)), 1000);
   }, []);
 
-  const blur = phase === "idle" ? 0 : phase === "arming" ? 6 : 14;
+  const blur = phase === "idle" ? 0 : phase === "arming" ? 11 : 14;
+  const dark = phase === "idle" ? 0 : phase === "arming" ? 0.82 : 0.94;
+  // Mesma curva e duração da bola do interruptor
+  const sync = {
+    duration: reduced ? 0.001 : SWITCH_DURATION,
+    ease: EASE,
+  } as const;
   const value = useMemo(() => ({ phase }), [phase]);
 
   return (
@@ -240,27 +248,22 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
                   scale: phase === "engaged" ? 1.02 : 1,
                 }
           }
-          transition={{
-            duration: phase === "engaged" ? 2.4 : 1.6,
-            ease: [0.2, 0.8, 0.2, 1],
-          }}
+          transition={sync}
           style={{ pointerEvents: "none" }}
         >
           {children}
         </motion.div>
       </div>
 
-      {/* Escurecimento até o preto, em sincronia com o borrão */}
+      {/* Escurecimento até o preto, em sincronia com a bola do interruptor */}
       <motion.div
         className="pointer-events-none fixed inset-0 z-[55]"
         style={{ background: "oklch(0.05 0 0)" }}
         initial={false}
-        animate={{ opacity: phase === "engaged" ? 0.92 : phase === "arming" ? 0.45 : 0 }}
-        transition={{
-          duration: phase === "engaged" ? 2.4 : 1.6,
-          ease: [0.2, 0.8, 0.2, 1],
-        }}
+        animate={{ opacity: dark }}
+        transition={sync}
       />
+
 
 
       {/* Interruptor sempre visível */}
