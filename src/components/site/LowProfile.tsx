@@ -300,7 +300,7 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
       {/* Overlay de blur unificado para manter cards e conteúdo com visual consistente */}
       <motion.div
         className="pointer-events-none fixed inset-0 z-[58]"
-        style={{ backdropFilter: "blur(8px) saturate(0.6)", WebkitBackdropFilter: "blur(8px) saturate(0.6)" }}
+        style={{ backdropFilter: "blur(8px) saturate(0.6)" }}
         initial={false}
         animate={{ opacity: phase === "idle" ? 0 : phase === "arming" ? 0.65 : 1 }}
         transition={sync}
