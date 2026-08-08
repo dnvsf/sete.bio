@@ -59,12 +59,14 @@ const KNOB = 26;
 const PAD = 4;
 const KNOB_ON = TRACK_W - KNOB - PAD;
 const EASE = [0.22, 1, 0.36, 1] as const;
+const SWITCH_DURATION = 0.85;
 
 function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => void }) {
   const reduced = useReducedMotion();
   const target = on ? KNOB_ON : PAD;
   const color = on ? "oklch(0.66 0.16 150)" : "oklch(0.60 0.20 27)";
-  const duration = reduced ? 0.001 : 0.85;
+  const duration = reduced ? 0.001 : SWITCH_DURATION;
+
 
   return (
     <motion.div
