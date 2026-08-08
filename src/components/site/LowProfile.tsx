@@ -187,8 +187,27 @@ function LowProfileSwitch({ on, onActivate }: { on: boolean; onActivate: () => v
 }
 
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const check = () => {
+      const coarse = window.matchMedia("(pointer: coarse)").matches;
+      const small = window.innerWidth < 768;
+      setIsMobile(coarse || small);
+    };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  return isMobile;
+}
+
 export function LowProfileProvider({ children }: { children: ReactNode }) {
   const reduced = useReducedMotion();
+  const isMobile = useIsMobile();
   const [phase, setPhase] = useState<Phase>("idle");
   const [locks, setLocks] = useState<LockPopState[]>([]);
 
@@ -254,7 +273,9 @@ export function LowProfileProvider({ children }: { children: ReactNode }) {
     setTimeout(() => setLocks((prev) => prev.filter((l) => l.id !== id)), 1000);
   }, []);
 
-  const blur = phase === "idle" ? 0 : phase === "arming" ? 11 : 14;
+  // Em mobile reduzimos blur e saturacao para evitar travamentos
+  const blur = phase === "idle" ? 0 : phase === "arming" ? (isMobile ? 4 : 11) : isMobile ? 6 : 14;
+  const overlayBlur = phase === "idle" ? 0 : isMobile ? 4 : 8;
   const dark = phase === "idle" ? 0 : phase === "arming" ? 0.82 : 0.94;
   // Mesma curva e duração da bola do interruptor
   const sync = {
