@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep all public site content, live status, social links, partners, events, and redirects in local typed files committed to GitHub because this project intentionally has no backend or cloud data source.
