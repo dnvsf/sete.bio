@@ -11,7 +11,6 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { LowProfileProvider } from "../components/site/LowProfile";
 
 function NotFoundComponent() {
   return (
@@ -92,11 +91,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "theme-color", content: "#08080A" },
+      { name: "theme-color", content: "#0A0A0A" },
       { name: "twitter:title", content: "Sete | sete.bio" },
       { name: "twitter:description", content: "Todas as redes sociais do Sete." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/24abd2b4-bf09-4464-aaed-a743b76a59ea/id-preview-89820cdb--510edd41-b553-4c57-9015-20863570bbc5.lovable.app-1783747407751.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/24abd2b4-bf09-4464-aaed-a743b76a59ea/id-preview-89820cdb--510edd41-b553-4c57-9015-20863570bbc5.lovable.app-1783747407751.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -110,7 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>
@@ -127,10 +124,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <LowProfileProvider>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-      </LowProfileProvider>
+      <Outlet />
     </QueryClientProvider>
   );
 }
