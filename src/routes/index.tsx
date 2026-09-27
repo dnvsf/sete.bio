@@ -51,7 +51,7 @@ function Home() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="pb-8 pt-20 sm:pt-24"
+          className="pb-8 pt-10 sm:pt-12"
           aria-labelledby="partnerships-heading"
         >
           <div className="flex items-center gap-5">

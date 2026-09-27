@@ -33,12 +33,12 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
         <div
           className={`mono flex h-7 items-center gap-2 rounded-full border px-3 text-[9px] font-semibold uppercase tracking-[0.18em] backdrop-blur-md ${
             online
-              ? "border-primary/35 bg-primary/12 text-primary"
+              ? "border-transparent bg-emerald-500 text-white"
               : "border-border bg-background/55 text-muted-foreground"
           }`}
         >
-          <span className={`relative h-1.5 w-1.5 rounded-full ${online ? "bg-primary" : "bg-muted-foreground/50"}`}>
-            {online && <span className="absolute inset-0 animate-live-halo rounded-full bg-primary" />}
+          <span className={`relative h-1.5 w-1.5 rounded-full ${online ? "bg-white" : "bg-muted-foreground/50"}`}>
+            {online && <span className="absolute inset-0 animate-live-halo rounded-full bg-white" />}
           </span>
           {online ? "Online" : "Offline"}
         </div>
