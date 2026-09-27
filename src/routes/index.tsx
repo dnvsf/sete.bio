@@ -78,7 +78,7 @@ function Home() {
             className="group mt-3 flex h-10 w-full items-center justify-center gap-2 border-y border-border/70 text-xs text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             <Mail size={14} />
-            <span className="mono text-[10px] tracking-[0.08em]">
+            <span className="mono text-[11px] font-medium tracking-[0.06em]">
               {siteConfig.partnershipEmail}
             </span>
           </a>
