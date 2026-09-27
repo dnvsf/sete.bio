@@ -27,13 +27,12 @@ export const siteConfig = {
   liveOnline: true,
   liveUrl: "https://www.tiktok.com/@setexxl/live",
   partnershipEmail: "contact@sete.cc",
-  partnershipInstagram: "https://ig.me/m/setexxl",
   socials: [
     { platform: "Instagram", handle: "@setexxl", href: "https://instagram.com/setexxl" },
     { platform: "YouTube", handle: "@canaldosete", href: "https://youtube.com/@canaldosete" },
     { platform: "TikTok", handle: "@setexxl", href: "https://tiktok.com/@setexxl" },
     { platform: "Facebook", handle: "setexxl", href: "https://facebook.com/setexxl" },
-    { platform: "Discord", handle: "Comunidade Sete", href: "https://discord.gg/YtFk3QCSFv" },
+    { platform: "Discord", handle: "Comunidade", href: "https://discord.gg/YtFk3QCSFv" },
   ] satisfies SocialLink[],
 } as const;
 

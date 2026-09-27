@@ -47,7 +47,7 @@ export function LiveBanner({
             online
               ? "border-red-400/30 bg-red-600 text-white shadow-[0_4px_18px_-6px_rgba(220,38,38,0.9)]"
               : "border-border bg-background/55 text-muted-foreground"
-          }`}
+          } ${online && !reducedMotion ? "animate-live-pill" : ""}`}
         >
           {online ? "AO VIVO" : "OFFLINE"}
         </div>

@@ -73,6 +73,16 @@ function Home() {
             onReady={releaseLoader}
           />
 
+          <a
+            href={`mailto:${siteConfig.partnershipEmail}`}
+            className="group mt-3 flex h-10 w-full items-center justify-center gap-2 border-y border-border/70 text-xs text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <Mail size={14} />
+            <span className="mono text-[10px] tracking-[0.08em]">
+              {siteConfig.partnershipEmail}
+            </span>
+          </a>
+
           <section aria-label="Redes sociais" className="mt-5 grid gap-3">
             {siteConfig.socials.map((social, index) => (
               <SocialLinkCard
@@ -101,31 +111,6 @@ function Home() {
                 Parcerias
               </h2>
               <span className="h-px flex-1 bg-gradient-to-l from-transparent to-border" />
-            </div>
-
-            <div className="mt-10 divide-y divide-border border-y border-border">
-              <a
-                href={`mailto:${siteConfig.partnershipEmail}`}
-                className="group flex min-h-16 items-center justify-between gap-4 text-sm text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:text-primary"
-              >
-                <span className="flex items-center gap-3">
-                  <Mail size={16} /> E-mail
-                </span>
-                <span className="mono truncate text-[10px] text-muted-foreground">
-                  {siteConfig.partnershipEmail}
-                </span>
-              </a>
-              <a
-                href={siteConfig.partnershipInstagram}
-                target="_blank"
-                rel="noreferrer"
-                className="group flex min-h-16 items-center justify-between gap-4 text-sm text-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:text-primary"
-              >
-                <span className="flex items-center gap-3">
-                  <InstagramIcon size={17} /> Instagram
-                </span>
-                <span className="mono text-[10px] text-muted-foreground">@setexxl</span>
-              </a>
             </div>
 
             <div
