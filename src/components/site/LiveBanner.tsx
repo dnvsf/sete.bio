@@ -1,7 +1,15 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { TikTokIcon } from "./icons";
 
-export function LiveBanner({ online, href }: { online: boolean; href: string }) {
+export function LiveBanner({
+  online,
+  href,
+  onReady,
+}: {
+  online: boolean;
+  href: string;
+  onReady?: () => void;
+}) {
   const reducedMotion = useReducedMotion();
 
   return (
@@ -24,6 +32,8 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
         muted
         playsInline
         preload="auto"
+        onCanPlay={onReady}
+        onError={onReady}
         className="absolute inset-0 h-full w-full object-cover"
         animate={reducedMotion ? undefined : { scale: [1.01, 1.035, 1.01] }}
         transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}

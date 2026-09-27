@@ -1,8 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Mail } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { LiveBanner } from "@/components/site/LiveBanner";
 import { SocialLinkCard } from "@/components/site/SocialLinkCard";
+import { SiteLoader } from "@/components/site/SiteLoader";
 import { InstagramIcon, TikTokIcon, YouTubeIcon } from "@/components/site/icons";
 import { siteConfig } from "@/data/site";
 
@@ -23,6 +25,28 @@ export const Route = createFileRoute("/")({
 });
 
 function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+  const loadingStartedAt = useRef(Date.now());
+  const releaseTimer = useRef<number | null>(null);
+
+  useEffect(() => {
+    const fallbackTimer = window.setTimeout(() => setIsLoading(false), 3500);
+    return () => {
+      window.clearTimeout(fallbackTimer);
+      if (releaseTimer.current !== null) window.clearTimeout(releaseTimer.current);
+    };
+  }, []);
+
+  const releaseLoader = () => {
+    if (releaseTimer.current !== null) return;
+    const minimumDuration = 760;
+    const elapsed = Date.now() - loadingStartedAt.current;
+    releaseTimer.current = window.setTimeout(
+      () => setIsLoading(false),
+      Math.max(0, minimumDuration - elapsed),
+    );
+  };
+
   const iconByPlatform = {
     Instagram: <InstagramIcon size={22} />,
     YouTube: <YouTubeIcon size={23} />,
@@ -30,10 +54,16 @@ function Home() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-hidden grain">
+    <>
+      <AnimatePresence>{isLoading && <SiteLoader />}</AnimatePresence>
+      <main className="relative min-h-screen overflow-hidden grain">
       <div aria-hidden className="ambient-wine fixed inset-0 pointer-events-none" />
       <div className="relative z-10 mx-auto w-full max-w-2xl px-4 pb-20 pt-8 sm:px-6 sm:pb-28 sm:pt-14">
-        <LiveBanner online={siteConfig.liveOnline} href={siteConfig.liveUrl} />
+        <LiveBanner
+          online={siteConfig.liveOnline}
+          href={siteConfig.liveUrl}
+          onReady={releaseLoader}
+        />
 
         <section aria-label="Redes sociais" className="mt-5 grid gap-3">
           {siteConfig.socials.map((social, index) => (
@@ -84,6 +114,7 @@ function Home() {
           <div aria-label="Espaço reservado para futuros parceiros" className="mt-12 h-16 border-y border-dashed border-border/60" />
         </motion.section>
       </div>
-    </main>
+      </main>
+    </>
   );
 }
