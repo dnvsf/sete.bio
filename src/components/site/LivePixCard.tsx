@@ -184,6 +184,14 @@ export function LivePixCard({ onClick, delay = 0 }: LivePixCardProps) {
           >
             LivePix
           </motion.span>
+          <motion.span
+            className="mono mt-1 block text-[10px] text-muted-foreground"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: delay + 0.28 }}
+          >
+            setexxl
+          </motion.span>
         </motion.div>
 
         {/* Arrow */}
