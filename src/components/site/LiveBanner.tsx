@@ -1,5 +1,4 @@
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import { TikTokIcon } from "./icons";
 
 export function LiveBanner({ online, href }: { online: boolean; href: string }) {
@@ -44,7 +43,7 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-7">
+      <div className="absolute inset-x-0 bottom-0 flex items-end gap-4 p-5 sm:p-7">
         <div className="flex min-w-0 items-center gap-3">
           <motion.div
             aria-hidden
@@ -55,9 +54,9 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
                 ? { duration: 0 }
                 : { delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }
             }
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md"
+            className="shrink-0 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]"
           >
-            <TikTokIcon size={22} />
+            <TikTokIcon size={34} />
           </motion.div>
           <motion.div
             initial={reducedMotion ? false : { opacity: 0, clipPath: "inset(0 100% 0 0)" }}
@@ -69,17 +68,9 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
             }
             className="min-w-0 text-xl font-black uppercase tracking-[0.02em] text-foreground sm:text-2xl"
           >
-            AO VIVO NO TIKTOK
+            LIVE NO TIKTOK
           </motion.div>
         </div>
-        <motion.span
-          aria-hidden
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-border bg-background/45 text-foreground backdrop-blur-md"
-          animate={reducedMotion ? undefined : { x: [0, 2, 0] }}
-          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <ArrowUpRight size={16} />
-        </motion.span>
       </div>
     </motion.a>
   );
