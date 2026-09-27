@@ -33,9 +33,9 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
 
       <div className="absolute right-4 top-4 sm:right-5 sm:top-5">
         <div
-          className={`mono flex h-7 items-center gap-2 rounded-full border px-3 text-[9px] font-semibold uppercase tracking-[0.18em] backdrop-blur-md ${
+          className={`mono flex h-7 items-center gap-2 rounded-full border px-3 text-[9px] font-extrabold uppercase tracking-[0.18em] backdrop-blur-md ${
             online
-              ? "border-transparent bg-emerald-500 text-white"
+              ? "border-red-400/30 bg-red-600 text-white shadow-[0_4px_18px_-6px_rgba(220,38,38,0.9)]"
               : "border-border bg-background/55 text-muted-foreground"
           }`}
         >
@@ -46,7 +46,7 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
               <span className="absolute inset-0 animate-live-halo rounded-full bg-white" />
             )}
           </span>
-          {online ? "Online" : "Offline"}
+          {online ? "AO VIVO" : "OFFLINE"}
         </div>
       </div>
 
