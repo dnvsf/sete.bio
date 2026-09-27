@@ -8,16 +8,15 @@ import { CursorGlow } from "@/components/site/CursorGlow";
 import { AuroraBackground } from "@/components/site/AuroraBackground";
 import { SplitText } from "@/components/site/SplitText";
 import { InstagramIcon } from "@/components/site/icons";
-import { getPartnerBundle } from "@/lib/publicData.functions";
+import { getPartner, shortLinks } from "@/data/site";
 
 export const Route = createFileRoute("/$slug")({
   loader: async ({ params }) => {
-    const result = await getPartnerBundle({ data: { slug: params.slug } });
-    if (result.kind === "redirect") {
-      throw redirect({ href: result.url });
-    }
-    if (result.kind === "notfound") throw notFound();
-    return { partner: result.partner, events: result.events };
+    const destination = shortLinks[params.slug];
+    if (destination) throw redirect({ href: destination });
+    const partner = getPartner(params.slug);
+    if (!partner) throw notFound();
+    return { partner, events: partner.events };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
@@ -36,9 +35,13 @@ export const Route = createFileRoute("/$slug")({
               loaderData.partner.tagline ||
               `Programação e contato do Sete na ${loaderData.partner.name}.`,
           },
-          ...(loaderData.partner.logo_url
-            ? [{ property: "og:image", content: loaderData.partner.logo_url }]
-            : []),
+          { property: "og:type", content: "website" },
+          { name: "twitter:card", content: "summary" },
+          { name: "twitter:title", content: `Sete × ${loaderData.partner.name}` },
+          {
+            name: "twitter:description",
+            content: loaderData.partner.tagline || `Programação e contato do Sete na ${loaderData.partner.name}.`,
+          },
         ]
       : [{ title: "Parceiro não encontrado — sete.bio" }, { name: "robots", content: "noindex" }],
   }),
@@ -103,10 +106,10 @@ function PartnerPage() {
         </motion.header>
 
         <div className="mt-6 flex flex-wrap gap-3">
-          {partner.contact_url && (
+          {partner.contactUrl && (
             <RippleButton
-              onClick={() => window.open(partner.contact_url!, "_blank")}
-              className="black-border-glow animate-cta-pulse rounded-xl bg-accent-black px-5 py-3 text-sm font-bold uppercase tracking-wider text-foreground"
+              onClick={() => partner.contactUrl && window.open(partner.contactUrl, "_blank")}
+              className="black-border-glow animate-cta-pulse rounded-md bg-primary px-5 py-3 text-sm font-bold uppercase tracking-wider text-primary-foreground"
             >
               Contato do parceiro
             </RippleButton>
@@ -116,7 +119,7 @@ function PartnerPage() {
               href={`https://instagram.com/${partner.instagram}`}
               target="_blank"
               rel="noreferrer"
-              className="hover-black-border inline-flex items-center gap-2 rounded-xl border border-black/10 px-4 py-3 text-sm font-medium"
+              className="wine-border inline-flex items-center gap-2 rounded-md px-4 py-3 text-sm font-medium"
             >
               <InstagramIcon size={18} />
               <span className="mono">@{partner.instagram}</span>
@@ -127,7 +130,7 @@ function PartnerPage() {
         <SectionDivider label="Programação" />
 
         {events.length === 0 ? (
-          <div className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-black/10 py-12 text-center text-muted-foreground">
+          <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-border py-12 text-center text-muted-foreground">
             <span className="animate-seven-respire inline-block">
               <SevenGlyph size={56} outline />
             </span>
