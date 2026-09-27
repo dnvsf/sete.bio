@@ -19,6 +19,12 @@
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --color-accent-black: var(--accent-black);
   --color-accent-black-glow: var(--accent-black-glow);
 
@@ -27,16 +33,23 @@
 }
 
 :root {
-  --radius: 1.25rem;
-  --background: oklch(0.98 0.002 0); /* Off-White puro e suave */
-  --foreground: oklch(0.15 0.01 0); /* Preto profundo */
-  --card: oklch(1 0 0 / 0.96); /* Card claro e sólido para destacar do fundo */
-  --card-foreground: oklch(0.15 0.01 0);
-  --muted: oklch(0.88 0.002 0); /* Cinza muito claro */
-  --muted-foreground: oklch(0.42 0.01 0); /* Cinza médio */
-  --border: oklch(0.84 0.003 0); /* Borda visível porém discreta */
-  --accent-black: oklch(0.15 0.01 0); /* Preto para acentos */
-  --accent-black-glow: oklch(0.15 0.01 0 / 0.3);
+  --radius: 0.5rem;
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.94 0.006 20);
+  --card: oklch(0.19 0.008 20 / 0.92);
+  --card-foreground: oklch(0.94 0.006 20);
+  --muted: oklch(0.23 0.009 20);
+  --muted-foreground: oklch(0.67 0.012 20);
+  --border: oklch(0.32 0.018 20 / 0.72);
+  --primary: oklch(0.53 0.17 15);
+  --primary-foreground: oklch(0.97 0.005 20);
+  --accent: oklch(0.25 0.035 15);
+  --accent-foreground: oklch(0.94 0.006 20);
+  --input: oklch(0.27 0.012 20);
+  --ring: oklch(0.53 0.17 15);
+  --accent-black: var(--primary);
+  --accent-black-glow: oklch(0.53 0.17 15 / 0.28);
+  --wine-glow: oklch(0.53 0.17 15 / 0.32);
 }
 
 @layer base {
@@ -48,7 +61,7 @@
     color: var(--color-foreground);
     font-family: var(--font-display);
     -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.02em; /* Estilo Apple */
+    letter-spacing: 0;
   }
   body {
     background: var(--color-background);
@@ -56,8 +69,8 @@
     overflow-x: hidden;
   }
   ::selection {
-    background: var(--accent-black);
-    color: white;
+    background: var(--primary);
+    color: var(--primary-foreground);
   }
 }
 
@@ -86,6 +99,38 @@
     inset 0 0 24px -12px var(--accent-black-glow);
 }
 
+@utility wine-border {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid var(--border);
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 2;
+    border-radius: inherit;
+    padding: 1px;
+    pointer-events: none;
+    background: linear-gradient(115deg, transparent 18%, oklch(0.53 0.17 15 / 0.08) 34%, oklch(0.62 0.16 18 / 0.58) 50%, oklch(0.53 0.17 15 / 0.08) 66%, transparent 82%);
+    background-size: 220% 100%;
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.48;
+    animation: border-sweep 8s linear infinite;
+    animation-delay: var(--led-offset, 0s);
+    transition: opacity 350ms ease;
+  }
+  &:hover::before { opacity: 0.82; }
+}
+
+@utility ambient-wine {
+  background:
+    radial-gradient(ellipse 70% 40% at 50% -12%, oklch(0.37 0.11 15 / 0.2), transparent 72%),
+    linear-gradient(to bottom, oklch(0.16 0.01 15 / 0.35), transparent 42%);
+}
+
 @keyframes seven-float {
   0%, 100% { transform: translateY(0) rotate(-2deg); opacity: 0.08; }
   50% { transform: translateY(-8px) rotate(2deg); opacity: 0.15; }
@@ -108,7 +153,7 @@
 }
 @keyframes live-halo {
   0% { box-shadow: 0 0 0 0 var(--accent-black-glow), 0 0 20px var(--accent-black-glow); }
-  100% { box-shadow: 0 0 0 14px oklch(0.15 0.01 0 / 0), 0 0 20px var(--accent-black-glow); }
+  100% { box-shadow: 0 0 0 10px oklch(0.53 0.17 15 / 0), 0 0 18px var(--accent-black-glow); }
 }
 @keyframes cta-pulse {
   0%, 100% { box-shadow: 0 0 0 0 var(--accent-black-glow); }
@@ -179,9 +224,9 @@
     background: linear-gradient(
       120deg,
       transparent 0%,
-      oklch(0.15 0.01 0 / 0) 38%,
-      oklch(0.15 0.01 0 / 0.6) 50%,
-      oklch(0.15 0.01 0 / 0) 62%,
+      oklch(0.53 0.17 15 / 0) 38%,
+      oklch(0.53 0.17 15 / 0.55) 50%,
+      oklch(0.53 0.17 15 / 0) 62%,
       transparent 100%
     );
     background-size: 200% 100%;

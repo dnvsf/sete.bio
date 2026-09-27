@@ -21,8 +21,7 @@ export function SplitText({
           key={i}
           aria-hidden
           initial={{ opacity: 0, y }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-10%" }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{
             duration: 0.5,
             delay: delay + i * stagger,

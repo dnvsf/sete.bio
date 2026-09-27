@@ -1,11 +1,11 @@
 import { motion } from "framer-motion";
 import { RippleButton } from "./RippleButton";
-import type { EventDTO } from "@/lib/publicData.functions";
+import type { PartnerEvent } from "@/data/site";
 
 const DIAS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 const MESES = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 
-export function EventCard({ event, index = 0 }: { event: EventDTO; index?: number }) {
+export function EventCard({ event, index = 0 }: { event: PartnerEvent; index?: number }) {
   const d = new Date(event.date);
   return (
     <motion.div
@@ -13,11 +13,11 @@ export function EventCard({ event, index = 0 }: { event: EventDTO; index?: numbe
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.06 }}
-      className="hover-black-border rounded-2xl border border-black/8 bg-card/60 p-4 backdrop-blur-sm"
+      className="wine-border rounded-lg bg-card p-4"
       style={{ ["--led-offset" as never]: `${(index * 0.75) % 6}s` }}
     >
       <div className="flex gap-4">
-        <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-xl border border-black/10 bg-black/40 p-2 text-center">
+        <div className="flex w-16 shrink-0 flex-col items-center justify-center rounded-md border border-border bg-background/60 p-2 text-center">
           <div className="mono text-[10px] uppercase text-accent-black">{DIAS[d.getDay()]}</div>
           <div className="mono text-2xl font-bold leading-none">
             {String(d.getDate()).padStart(2, "0")}
@@ -33,11 +33,11 @@ export function EventCard({ event, index = 0 }: { event: EventDTO; index?: numbe
               {String(d.getHours()).padStart(2, "0")}:{String(d.getMinutes()).padStart(2, "0")}
             </span>
           </div>
-          {event.list_url && (
+          {event.listUrl && (
             <div className="mt-3 flex flex-wrap gap-2">
               <RippleButton
-                onClick={() => window.open(event.list_url!, "_blank")}
-                className="rounded-lg bg-accent-black px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-foreground"
+                onClick={() => event.listUrl && window.open(event.listUrl, "_blank")}
+                className="rounded-md bg-primary px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-primary-foreground"
               >
                 Entrar na lista
               </RippleButton>
