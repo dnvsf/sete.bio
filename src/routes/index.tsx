@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { LiveBanner } from "@/components/site/LiveBanner";
-import { LivePixCard } from "@/components/site/LivePixCard";
 import { SocialLinkCard } from "@/components/site/SocialLinkCard";
 import { SiteLoader } from "@/components/site/SiteLoader";
 import {
@@ -83,11 +82,6 @@ function Home() {
               {siteConfig.partnershipEmail}
             </span>
           </a>
-
-          <LivePixCard
-            delay={0.08}
-            onClick={() => window.open(siteConfig.livePixUrl, "_blank", "noopener,noreferrer")}
-          />
 
           <section aria-label="Redes sociais" className="mt-5 grid gap-3">
             {siteConfig.socials.map((social, index) => (
