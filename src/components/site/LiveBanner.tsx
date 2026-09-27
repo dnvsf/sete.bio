@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import { TikTokIcon } from "./icons";
 
 export function LiveBanner({ online, href }: { online: boolean; href: string }) {
   const reducedMotion = useReducedMotion();
@@ -44,11 +45,32 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
       </div>
 
       <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-7">
-        <div>
-          <div className="mono text-[9px] font-medium uppercase tracking-[0.22em] text-muted-foreground">
-            TikTok Live
-          </div>
-          <div className="mt-1 text-xl font-semibold text-foreground sm:text-2xl">Sete ao vivo</div>
+        <div className="flex min-w-0 items-center gap-3">
+          <motion.div
+            aria-hidden
+            initial={reducedMotion ? false : { opacity: 0, rotate: -180, scale: 0.35 }}
+            animate={{ opacity: 1, rotate: 0, scale: 1 }}
+            transition={
+              reducedMotion
+                ? { duration: 0 }
+                : { delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }
+            }
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md"
+          >
+            <TikTokIcon size={22} />
+          </motion.div>
+          <motion.div
+            initial={reducedMotion ? false : { opacity: 0, clipPath: "inset(0 100% 0 0)" }}
+            animate={{ opacity: 1, clipPath: "inset(0 0% 0 0)" }}
+            transition={
+              reducedMotion
+                ? { duration: 0 }
+                : { delay: 0.75, duration: 0.65, ease: [0.22, 1, 0.36, 1] }
+            }
+            className="min-w-0 text-xl font-black uppercase tracking-[0.02em] text-foreground sm:text-2xl"
+          >
+            AO VIVO NO TIKTOK
+          </motion.div>
         </div>
         <motion.span
           aria-hidden
