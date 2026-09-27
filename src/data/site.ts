@@ -1,5 +1,5 @@
 export type SocialLink = {
-  platform: "Instagram" | "YouTube" | "TikTok";
+  platform: "Instagram" | "YouTube" | "TikTok" | "Facebook" | "Discord";
   handle: string;
   href: string;
 };
@@ -32,6 +32,8 @@ export const siteConfig = {
     { platform: "Instagram", handle: "@setexxl", href: "https://instagram.com/setexxl" },
     { platform: "YouTube", handle: "@canaldosete", href: "https://youtube.com/@canaldosete" },
     { platform: "TikTok", handle: "@setexxl", href: "https://tiktok.com/@setexxl" },
+    { platform: "Facebook", handle: "setexxl", href: "https://facebook.com/setexxl" },
+    { platform: "Discord", handle: "Comunidade Sete", href: "https://discord.gg/YtFk3QCSFv" },
   ] satisfies SocialLink[],
 } as const;
 
