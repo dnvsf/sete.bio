@@ -4,5 +4,5 @@
 - [x] Reformular a página inicial com banner TikTok e três redes
 - [x] Adicionar seção de parcerias e reserva de logos
 - [x] Migrar parceiros e eventos para configuração local
-- [ ] Remover integrações Supabase sem uso
-- [ ] Validar celular, desktop, navegação e erros
+- [x] Remover integrações Supabase sem uso
+- [x] Validar celular, desktop, navegação e erros

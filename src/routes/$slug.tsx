@@ -43,7 +43,15 @@ export const Route = createFileRoute("/$slug")({
             content: loaderData.partner.tagline || `Programação e contato do Sete na ${loaderData.partner.name}.`,
           },
         ]
-      : [{ title: "Parceiro não encontrado — sete.bio" }, { name: "robots", content: "noindex" }],
+      : [
+          { title: "Parceiro não encontrado — sete.bio" },
+          { name: "description", content: "Este endereço não está disponível no sete.bio." },
+          { property: "og:title", content: "Parceiro não encontrado — sete.bio" },
+          { property: "og:description", content: "Este endereço não está disponível no sete.bio." },
+          { property: "og:type", content: "website" },
+          { name: "twitter:card", content: "summary" },
+          { name: "robots", content: "noindex" },
+        ],
   }),
   component: PartnerPage,
   errorComponent: ({ error }) => (
