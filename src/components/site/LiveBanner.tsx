@@ -1,6 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
-import liveBanner from "@/assets/live-banner.jpg";
 
 export function LiveBanner({ online, href }: { online: boolean; href: string }) {
   const reducedMotion = useReducedMotion();
@@ -17,11 +16,14 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
       whileTap={reducedMotion ? undefined : { scale: 0.992 }}
       className="wine-border group relative block aspect-video w-full overflow-hidden rounded-lg bg-card shadow-[0_28px_70px_-42px_var(--wine-glow)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
     >
-      <motion.img
-        src={liveBanner}
-        alt=""
-        width={1600}
-        height={900}
+      <motion.video
+        src="/live-banner.mp4"
+        aria-hidden="true"
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
         className="absolute inset-0 h-full w-full object-cover"
         animate={reducedMotion ? undefined : { scale: [1.01, 1.035, 1.01] }}
         transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
@@ -37,8 +39,12 @@ export function LiveBanner({ online, href }: { online: boolean; href: string }) 
               : "border-border bg-background/55 text-muted-foreground"
           }`}
         >
-          <span className={`relative h-1.5 w-1.5 rounded-full ${online ? "bg-white" : "bg-muted-foreground/50"}`}>
-            {online && <span className="absolute inset-0 animate-live-halo rounded-full bg-white" />}
+          <span
+            className={`relative h-1.5 w-1.5 rounded-full ${online ? "bg-white" : "bg-muted-foreground/50"}`}
+          >
+            {online && (
+              <span className="absolute inset-0 animate-live-halo rounded-full bg-white" />
+            )}
           </span>
           {online ? "Online" : "Offline"}
         </div>
