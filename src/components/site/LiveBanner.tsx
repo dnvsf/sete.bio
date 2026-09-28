@@ -41,20 +41,8 @@ export function LiveBanner({
       <div className="absolute inset-0 bg-gradient-to-b from-background/55 via-background/15 to-background/40" />
       <div className="absolute inset-0 bg-gradient-to-r from-background/50 via-transparent to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-55" />
 
-      <div className="absolute right-4 top-4 sm:right-5 sm:top-5">
-        <div
-          className={`font-display flex h-7 items-center rounded-full border px-3 text-[10px] font-black uppercase tracking-[0.12em] backdrop-blur-md ${
-            online
-              ? "border-red-400/30 bg-red-600 text-white shadow-[0_4px_18px_-6px_rgba(220,38,38,0.9)]"
-              : "border-border bg-background/55 text-muted-foreground"
-          } ${online && !reducedMotion ? "animate-live-pill" : ""}`}
-        >
-          {online ? "AO VIVO" : "OFFLINE"}
-        </div>
-      </div>
-
-      <div className="absolute inset-x-0 top-0 flex items-start gap-4 p-5 sm:p-7">
-        <div className="flex min-w-0 items-center gap-3">
+      <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-3 p-4 sm:p-6">
+        <div className="flex min-w-0 items-center gap-2.5">
           <motion.div
             aria-hidden
             initial={reducedMotion ? false : { opacity: 0, rotate: -180, scale: 0.35 }}
@@ -66,7 +54,7 @@ export function LiveBanner({
             }
             className="shrink-0 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]"
           >
-            <TikTokIcon size={34} />
+            <TikTokIcon size={27} />
           </motion.div>
           <motion.div
             initial={reducedMotion ? false : { opacity: 0, clipPath: "inset(0 100% 0 0)" }}
@@ -76,10 +64,19 @@ export function LiveBanner({
                 ? { duration: 0 }
                 : { delay: 0.75, duration: 0.65, ease: [0.22, 1, 0.36, 1] }
             }
-            className="min-w-0 text-xl font-black tracking-[0.02em] text-foreground sm:text-2xl"
+            className="min-w-0 text-lg font-black tracking-[0.02em] text-foreground sm:text-xl"
           >
             Live no TikTok
           </motion.div>
+        </div>
+        <div
+          className={`font-display flex h-6 shrink-0 items-center rounded-full border px-2.5 text-[10px] font-black uppercase tracking-[0.12em] backdrop-blur-md ${
+            online
+              ? "border-red-400/30 bg-red-600 text-white shadow-[0_4px_18px_-6px_rgba(220,38,38,0.9)]"
+              : "border-border bg-background/55 text-muted-foreground"
+          } ${online && !reducedMotion ? "animate-live-pill" : ""}`}
+        >
+          {online ? "AO VIVO" : "OFFLINE"}
         </div>
       </div>
     </motion.a>
