@@ -53,7 +53,7 @@ export function LiveBanner({
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 flex items-end gap-4 p-5 sm:p-7">
+      <div className="absolute inset-x-0 top-0 flex items-start gap-4 p-5 sm:p-7">
         <div className="flex min-w-0 items-center gap-3">
           <motion.div
             aria-hidden
@@ -76,9 +76,9 @@ export function LiveBanner({
                 ? { duration: 0 }
                 : { delay: 0.75, duration: 0.65, ease: [0.22, 1, 0.36, 1] }
             }
-            className="min-w-0 text-xl font-black uppercase tracking-[0.02em] text-foreground sm:text-2xl"
+            className="min-w-0 text-xl font-black tracking-[0.02em] text-foreground sm:text-2xl"
           >
-            LIVE NO TIKTOK
+            Live no TikTok
           </motion.div>
         </div>
       </div>
