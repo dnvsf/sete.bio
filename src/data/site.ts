@@ -26,7 +26,7 @@ export type Partner = {
 export const siteConfig = {
   liveOnline: true,
   liveUrl: "https://www.tiktok.com/@setexxl/live",
-  partnershipEmail: "contact@sete.cc",
+  partnershipEmail: "contato@sete.cc",
   socials: [
     { platform: "Instagram", handle: "@setexxl", href: "https://instagram.com/setexxl" },
     { platform: "YouTube", handle: "@canaldosete", href: "https://youtube.com/@canaldosete" },
