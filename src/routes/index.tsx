@@ -3,15 +3,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { LiveBanner } from "@/components/site/LiveBanner";
-import { SocialLinkCard } from "@/components/site/SocialLinkCard";
+import { SocialLogoLink } from "@/components/site/SocialLogoLink";
 import { SiteLoader } from "@/components/site/SiteLoader";
-import {
-  DiscordIcon,
-  FacebookIcon,
-  InstagramIcon,
-  TikTokIcon,
-  YouTubeIcon,
-} from "@/components/site/icons";
 import { siteConfig } from "@/data/site";
 
 export const Route = createFileRoute("/")({
@@ -53,14 +46,6 @@ function Home() {
     );
   };
 
-  const iconByPlatform = {
-    Instagram: <InstagramIcon size={22} />,
-    YouTube: <YouTubeIcon size={23} />,
-    TikTok: <TikTokIcon size={22} />,
-    Facebook: <FacebookIcon size={22} />,
-    Discord: <DiscordIcon size={22} />,
-  };
-
   return (
     <>
       <AnimatePresence>{isLoading && <SiteLoader />}</AnimatePresence>
@@ -83,14 +68,9 @@ function Home() {
             </span>
           </a>
 
-          <section aria-label="Redes sociais" className="mt-5 grid gap-3">
+          <section aria-label="Redes sociais" className="mt-5 flex flex-col items-center gap-2">
             {siteConfig.socials.map((social, index) => (
-              <SocialLinkCard
-                key={social.platform}
-                {...social}
-                index={index}
-                icon={iconByPlatform[social.platform]}
-              />
+              <SocialLogoLink key={social.platform} social={social} index={index} />
             ))}
           </section>
 

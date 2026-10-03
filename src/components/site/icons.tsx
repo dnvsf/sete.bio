@@ -17,6 +17,24 @@ export function InstagramIcon({ size = 24, className }: P) {
     </svg>
   );
 }
+export function InstagramColorIcon({ size = 24, className }: P) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="none" className={className}>
+      <defs>
+        <linearGradient id="instagram-logo-gradient" x1="3" y1="21" x2="21" y2="3" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#ffdc80" />
+          <stop offset="0.35" stopColor="#fcaf45" />
+          <stop offset="0.62" stopColor="#e1306c" />
+          <stop offset="0.82" stopColor="#c13584" />
+          <stop offset="1" stopColor="#405de6" />
+        </linearGradient>
+      </defs>
+      <rect x="3" y="3" width="18" height="18" rx="5" stroke="url(#instagram-logo-gradient)" strokeWidth="2" />
+      <circle cx="12" cy="12" r="4" stroke="url(#instagram-logo-gradient)" strokeWidth="2" />
+      <circle cx="17.5" cy="6.5" r="1.2" fill="#e1306c" />
+    </svg>
+  );
+}
 export function YouTubeIcon({ size = 24, className }: P) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
@@ -28,6 +46,16 @@ export function TikTokIcon({ size = 24, className }: P) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
       <path d="M16.5 3c.4 2 1.7 3.6 3.5 4.2v2.6c-1.4 0-2.7-.4-3.9-1.1v5.9a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.1v2.8a2.9 2.9 0 1 0 2 2.7V3h3.1z" />
+    </svg>
+  );
+}
+export function TikTokColorIcon({ size = 24, className }: P) {
+  const path = "M16.5 3c.4 2 1.7 3.6 3.5 4.2v2.6c-1.4 0-2.7-.4-3.9-1.1v5.9a5.6 5.6 0 1 1-5.6-5.6c.3 0 .6 0 .9.1v2.8a2.9 2.9 0 1 0 2 2.7V3h3.1z";
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" className={className}>
+      <path d={path} fill="#25f4ee" transform="translate(-0.7 0.7)" />
+      <path d={path} fill="#fe2c55" transform="translate(0.7 -0.7)" />
+      <path d={path} fill="#111111" />
     </svg>
   );
 }
@@ -98,4 +126,3 @@ export function ScissorsIcon({ size = 24, className }: P) {
     </svg>
   );
 }
-
