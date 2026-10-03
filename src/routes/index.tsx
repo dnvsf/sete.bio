@@ -68,7 +68,10 @@ function Home() {
             </span>
           </a>
 
-          <section aria-label="Redes sociais" className="mt-5 flex flex-col items-center gap-2">
+          <section
+            aria-label="Redes sociais"
+            className="mt-5 flex flex-row flex-wrap items-center justify-center gap-2"
+          >
             {siteConfig.socials.map((social, index) => (
               <SocialLogoLink key={social.platform} social={social} index={index} />
             ))}
