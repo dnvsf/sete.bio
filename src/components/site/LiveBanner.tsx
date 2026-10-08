@@ -52,7 +52,7 @@ export function LiveBanner({
                 ? { duration: 0 }
                 : { delay: 0.2, duration: 0.7, ease: [0.22, 1, 0.36, 1] }
             }
-            className="shrink-0 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]"
+            className="shrink-0 text-[#f1eee7] drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]"
           >
             <TikTokIcon size={27} />
           </motion.div>
@@ -72,7 +72,7 @@ export function LiveBanner({
         <div
           className={`font-display flex h-6 shrink-0 items-center rounded-full border px-2.5 text-[10px] font-black uppercase tracking-[0.12em] backdrop-blur-md ${
             online
-              ? "border-red-400/30 bg-red-600 text-white shadow-[0_4px_18px_-6px_rgba(220,38,38,0.9)]"
+              ? "border-[#f1eee7]/45 bg-[#f1eee7] text-black shadow-[0_4px_18px_-6px_rgba(241,238,231,0.45)]"
               : "border-border bg-background/55 text-muted-foreground"
           } ${online && !reducedMotion ? "animate-live-pill" : ""}`}
         >

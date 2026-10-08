@@ -1,22 +1,16 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { SocialLink } from "@/data/site";
-import {
-  DiscordIcon,
-  FacebookIcon,
-  InstagramColorIcon,
-  TikTokColorIcon,
-  YouTubeIcon,
-} from "./icons";
+import { DiscordIcon, FacebookIcon, InstagramIcon, TikTokIcon, YouTubeIcon } from "./icons";
 
 export function SocialLogoLink({ social, index }: { social: SocialLink; index: number }) {
   const reducedMotion = useReducedMotion();
 
   const logoByPlatform = {
-    Instagram: <InstagramColorIcon size={32} />,
-    YouTube: <YouTubeIcon size={34} className="text-[#ff0000]" />,
-    TikTok: <TikTokColorIcon size={34} />,
-    Facebook: <FacebookIcon size={34} className="text-[#1877f2]" />,
-    Discord: <DiscordIcon size={34} className="text-[#5865f2]" />,
+    Instagram: <InstagramIcon size={32} />,
+    YouTube: <YouTubeIcon size={34} />,
+    TikTok: <TikTokIcon size={34} />,
+    Facebook: <FacebookIcon size={34} />,
+    Discord: <DiscordIcon size={34} />,
   };
 
   return (

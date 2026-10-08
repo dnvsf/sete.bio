@@ -17,7 +17,7 @@ export function SiteLoader() {
         initial={reducedMotion ? false : { opacity: 0, scale: 0.45 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={reducedMotion ? { duration: 0 } : { duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
-        className="font-display flex items-center gap-3 text-7xl font-black tracking-[0.16em] text-primary drop-shadow-[0_0_18px_rgba(160,20,35,0.55)] sm:text-8xl"
+        className="font-display flex items-center gap-3 text-7xl font-black tracking-[0.16em] text-primary drop-shadow-[0_0_18px_rgba(241,238,231,0.28)] sm:text-8xl"
         aria-label="SETE"
       >
         <span aria-hidden>S</span>

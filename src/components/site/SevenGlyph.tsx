@@ -20,7 +20,7 @@ export function SevenGlyph({
         lineHeight: 0.9,
         letterSpacing: "-0.05em",
         color: outline ? "transparent" : "currentColor",
-        WebkitTextStroke: outline ? "1px oklch(0.53 0.17 15 / 0.18)" : undefined,
+        WebkitTextStroke: outline ? "1px oklch(0.82 0.012 90 / 0.16)" : undefined,
         userSelect: "none",
         display: "inline-block",
       }}
